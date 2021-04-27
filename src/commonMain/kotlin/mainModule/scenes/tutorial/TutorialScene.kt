@@ -14,7 +14,7 @@ import exceptions.UnknownUnitException
 
 import mainModule.MainModule
 import mainModule.scenes.abstracts.AssetsManager
-import gameObjects.GameObjectsIds
+import gameObjects.GameObjectId
 import gameObjects.gameObject.GameObject
 import gameObjects.player.Player
 import gameObjects.sheep.Sheep
@@ -68,10 +68,10 @@ class TutorialScene : Scene(), AssetsManager {
 
     private fun Container.initGameObjects() {
         tilesManager.forEachObject(Layer.GameObjects) { pos, id ->
-            gameObjects += when (GameObjectsIds.getTypeById(id)) {
-                GameObjectsIds.Player ->
+            gameObjects += when (GameObjectId.getTypeById(id)) {
+                GameObjectId.Player ->
                     Player(stage!!, map, assetsManager.playerBitmap, camera, tilesManager, pos).also { player = it }
-                GameObjectsIds.Sheep ->
+                GameObjectId.Sheep ->
                     Sheep(stage!!, map, assetsManager.sheepBitmap, pos)
                 else ->
                     throw UnknownUnitException()
