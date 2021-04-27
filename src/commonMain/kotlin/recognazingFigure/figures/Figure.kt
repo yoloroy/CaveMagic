@@ -23,7 +23,7 @@ interface Figure {
 }
 
 enum class AreaFigure : Figure {
-    Triangle() {
+    Triangle {
         override val path = "figures/triangle_mask.png"
 
         override lateinit var area: ClosedRange<Point>

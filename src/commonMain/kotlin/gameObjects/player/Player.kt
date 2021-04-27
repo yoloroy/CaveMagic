@@ -16,7 +16,7 @@ class Player(
     bitmap: Bitmap,
     private val camera: Camera,
     private val tilesManager: MapTilesManager,
-    val pos: Point = tilesManager.playerPos
+    override val pos: Point = tilesManager.playerPos
 ) : GameObject() {
     private var view: Image = stage.image(bitmap) {
         smoothing = false

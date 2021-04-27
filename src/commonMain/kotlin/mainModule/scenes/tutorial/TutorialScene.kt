@@ -10,17 +10,20 @@ import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korim.color.Colors.WHITE
 import com.soywiz.korma.geom.Point
-import gameObjects.GameObjectsIds
+import exceptions.UnknownUnitException
+
 import mainModule.MainModule
 import mainModule.scenes.abstracts.AssetsManager
+import gameObjects.GameObjectsIds
+import gameObjects.gameObject.GameObject
 import gameObjects.player.Player
 import gameObjects.sheep.Sheep
 import magic.AreaMagic
 import magic.getMagic
-import utils.*
 import recognazingFigure.figures.AreaFigure
 import recognazingFigure.figures.Figure
 import utils.tiledMapView.*
+import utils.*
 
 class TutorialScene : Scene(), AssetsManager {
     private val assetsManager = TutorialAssetsManager()
@@ -34,7 +37,7 @@ class TutorialScene : Scene(), AssetsManager {
     private lateinit var map: TiledMapView
 
     private lateinit var player: Player
-    internal val sheeps = mutableListOf<Sheep>()
+    internal val gameObjects = mutableListOf<GameObject>()
 
     private val turns = mutableListOf<() -> Unit>()
 
@@ -65,12 +68,13 @@ class TutorialScene : Scene(), AssetsManager {
 
     private fun Container.initGameObjects() {
         tilesManager.forEachObject(Layer.GameObjects) { pos, id ->
-            when(GameObjectsIds.getTypeById(id)) {
+            gameObjects += when (GameObjectsIds.getTypeById(id)) {
                 GameObjectsIds.Player ->
-                    player = Player(stage!!, map, assetsManager.playerBitmap, camera, tilesManager, pos)
+                    Player(stage!!, map, assetsManager.playerBitmap, camera, tilesManager, pos).also { player = it }
                 GameObjectsIds.Sheep ->
-                    sheeps += Sheep(stage!!, map, assetsManager.sheepBitmap, pos)
-                else -> Unit
+                    Sheep(stage!!, map, assetsManager.sheepBitmap, pos)
+                else ->
+                    throw UnknownUnitException()
             }
         }
     }
@@ -83,7 +87,9 @@ class TutorialScene : Scene(), AssetsManager {
             text = "ClickableButton"
             textColor = WHITE
 
-            onUp { figureRecognitionComponent.enableObserving() }
+            onUp {
+                figureRecognitionComponent.enableObserving()
+            }
         }
     }
 
@@ -99,8 +105,10 @@ class TutorialScene : Scene(), AssetsManager {
 
     private fun Container.initUpdaters() {
         addFixedUpdater(1.seconds) {
-            player.makeTurn()
-            sheeps.forEach { it.makeTurn() }
+            gameObjects.forEach {
+                it.makeTurn()
+            }
+
             if (turns.size > 0)
                 turns.removeFirst()()
         }

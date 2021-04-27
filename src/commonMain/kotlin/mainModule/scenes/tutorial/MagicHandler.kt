@@ -18,7 +18,7 @@ class MagicHandler(private val tutorialScene: TutorialScene) {
     }
 
     private fun onSquare(square: ClosedRange<Point>) {
-        tutorialScene.sheeps
+        tutorialScene.gameObjects
             .filter { it.pos in square }
             .forEach { it.delete() } // TODO: move objects work to tiles manager
 
@@ -30,7 +30,7 @@ class MagicHandler(private val tutorialScene: TutorialScene) {
         val radius = abs(square.start.x - center.x)
         val circle = MCircle(center, radius)
 
-        tutorialScene.sheeps
+        tutorialScene.gameObjects
             .filter { it.pos in circle }
             .forEach { it.delete() } // TODO: move to tiles manager
 

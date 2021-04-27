@@ -14,7 +14,7 @@ class Sheep(
     stage: Stage,
     private val map: TiledMapView,
     bitmap: Bitmap,
-    val pos: Point = Point(0, 0)
+    override val pos: Point = Point(0, 0)
 ) : GameObject() {
     private var view: Image = stage.image(bitmap) {
         smoothing = false
