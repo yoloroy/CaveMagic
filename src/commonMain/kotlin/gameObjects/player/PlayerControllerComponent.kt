@@ -1,30 +1,26 @@
 package gameObjects.player
 
+import com.soywiz.korev.Key
 import com.soywiz.korev.KeyEvent
 import com.soywiz.korge.component.KeyComponent
 import com.soywiz.korge.view.View
 import com.soywiz.korge.view.Views
 
 class PlayerControllerComponent(override val view: View) : KeyComponent {
-    var direction: Direction = Direction.Nowhere
+    val direction: Direction get() = pressedKeys.withoutBlocks.lastOrNull()?.direction ?: Direction.Nowhere
+
+    private var pressedKeys = mutableListOf<Key>()
 
     override fun Views.onKeyEvent(event: KeyEvent) {
+        pressedKeys.add(event.key)
         when (event.type) {
-            KeyEvent.Type.DOWN -> onPressed(event.key.direction)
-            KeyEvent.Type.UP -> onUnpressed(event.key.direction)
+            KeyEvent.Type.DOWN -> onPressed(event.key)
+            KeyEvent.Type.UP -> onUnpressed(event.key)
             else -> Unit
         }
     }
 
-    private fun onPressed(direction: Direction) {
-        this.direction = if (direction isOppositeTo this.direction)
-            Direction.Nowhere
-        else
-            direction
-    }
+    private fun onPressed(key: Key) = pressedKeys.add(key)
 
-    private fun onUnpressed(direction: Direction) {
-        if (this.direction == direction)
-            this.direction = Direction.Nowhere
-    }
+    private fun onUnpressed(key: Key) = pressedKeys.remove(key)
 }
