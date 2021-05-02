@@ -38,6 +38,7 @@ class TutorialScene : Scene(), AssetsManager {
 
     private lateinit var player: Player
     internal val gameObjects = mutableListOf<GameObject>()
+    private val teleports = mutableMapOf<Int, Pair<Point, Point>>()
 
     private val turns = mutableListOf<() -> Unit>()
 
@@ -62,8 +63,31 @@ class TutorialScene : Scene(), AssetsManager {
         scale(scale)
 
         initMap()
-        initGameObjects()
         initUI()
+    }
+
+    private fun Container.initMap() {
+        fixedSizeContainer(stage!!.width, stage!!.height, clip = true) {
+            position(0, 0)
+            camera = camera {
+                map = tiledMapView(assetsManager.tiledMap, smoothing = false)
+                tilesManager = MapTilesManager(map)
+            }
+        }
+
+        initGameObjects()
+        initTeleports()
+    }
+
+    private fun initTeleports() {
+        val starts = mutableMapOf<Int, Point>()
+
+        tilesManager.forEachObject(Layer.Teleports) { pos, id ->
+            if (id !in starts)
+                starts[id] = pos
+            else
+                teleports[id] = starts[id]!! to pos
+        }
     }
 
     private fun Container.initGameObjects() {
@@ -93,20 +117,29 @@ class TutorialScene : Scene(), AssetsManager {
         }
     }
 
-    private fun Container.initMap() {
-        fixedSizeContainer(stage!!.width, stage!!.height, clip = true) {
-            position(0, 0)
-            camera = camera {
-                map = tiledMapView(assetsManager.tiledMap, smoothing = false)
-                tilesManager = MapTilesManager(map)
-            }
-        }
-    }
-
     private fun Container.initUpdaters() {
         addFixedUpdater(1.seconds) {
             gameObjects.forEach {
                 it.makeTurn()
+            }
+
+            teleports.forEach { (id, teleportPoints) ->
+                gameObjects.run checkTeleport@{
+                    filter { it.pos == teleportPoints.first }.onNotEmpty {
+                        forEach {
+                            it.teleportTo(teleportPoints.second, id)
+                        }
+
+                        return@checkTeleport
+                    }
+                    filter { it.pos == teleportPoints.second }.onNotEmpty {
+                        forEach {
+                            it.teleportTo(teleportPoints.first, id)
+                        }
+
+                        return@checkTeleport
+                    }
+                }
             }
 
             if (turns.size > 0)

@@ -11,17 +11,17 @@ import utils.*
 
 class Player(
     stage: Stage,
-    map: TiledMapView,
+    private val map: TiledMapView,
     private val camera: Camera,
-    private val tilesManager: MapTilesManager,
-    override val pos: Point = tilesManager.playerPos
-) : GameObject() {
+    override val tilesManager: MapTilesManager,
+    override var pos: Point = tilesManager.playerPos
+) : GameObject(tilesManager) {
     override val tile = GameObjectId.Player
 
     private val controllerComponent = PlayerControllerComponent(map)
 
     init {
-        camera.setPositionRelativeTo(map, (-pos + Point(-0.5)) * tilesManager.tileSize + camera.sizePoint * Point(1.0, 0.5) / 2)
+        updateCamera()
         stage.addComponent(controllerComponent)
     }
 
@@ -29,6 +29,10 @@ class Player(
     }
 
     override fun makeTurn() {
+        println(pos)
+        println(camera.pos)
+        println()
+
         val isMoving = controllerComponent.direction != Direction.Nowhere
         val isMovePossible = (pos + controllerComponent.direction.vector)
             .run {
@@ -37,13 +41,27 @@ class Player(
             }
 
         if (isMoving && isMovePossible) {
+            lastTeleportId = null
             tilesManager.updatePos(pos + controllerComponent.direction.vector)
         }
     }
 
     private fun MapTilesManager.updatePos(newPos: Point) {
+        val deltaPos = newPos - pos
+
         updatePos(pos, newPos, tile)
 
-        camera.pos = camera.pos - tilesManager.tileSize * controllerComponent.direction.vector
+        camera.pos = camera.pos - tilesManager.tileSize * deltaPos
+    }
+
+    override fun teleportTo(point: Point, teleportId: Int) = (lastTeleportId != teleportId).also {
+        if (it) {
+            lastTeleportId = teleportId
+            tilesManager.updatePos(point)
+        }
+    }
+
+    private fun updateCamera() {
+        camera.setPositionRelativeTo(map, (-pos + Point(-0.5)) * tilesManager.tileSize + camera.sizePoint * Point(1.0, 0.5) / 2)
     }
 }

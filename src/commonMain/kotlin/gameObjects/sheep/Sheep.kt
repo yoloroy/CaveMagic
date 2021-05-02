@@ -10,9 +10,9 @@ import kotlin.math.absoluteValue
 import kotlin.math.sign
 
 class Sheep(
-    private val tilesManager: MapTilesManager,
-    override val pos: Point = Point(0, 0)
-) : GameObject() {
+    override val tilesManager: MapTilesManager,
+    override var pos: Point = Point(0, 0)
+) : GameObject(tilesManager) {
     override val tile = GameObjectId.Sheep
 
     private var destination: Point = pos
