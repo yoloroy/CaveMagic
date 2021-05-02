@@ -20,7 +20,11 @@ class PlayerControllerComponent(override val view: View) : KeyComponent {
         }
     }
 
-    private fun onPressed(key: Key) = pressedKeys.add(key)
+    private fun onPressed(key: Key) {
+        pressedKeys = (pressedKeys.distinct() + key).toMutableList()
+    }
 
-    private fun onUnpressed(key: Key) = pressedKeys.remove(key)
+    private fun onUnpressed(key: Key) {
+        pressedKeys = (pressedKeys.distinct() - key).toMutableList()
+    }
 }

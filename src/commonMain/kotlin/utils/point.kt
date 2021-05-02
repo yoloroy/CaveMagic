@@ -33,6 +33,16 @@ operator fun ClosedRange<Point>.iterator() = iterator {
             yield(Point(x, y))
 }
 
+fun ClosedRange<Point>.firstOrNull(predicate: (Point) -> Boolean): Point? = iterator().firstOrNull(predicate)
+
+fun Iterator<Point>.firstOrNull(predicate: (Point) -> Boolean): Point? {
+    forEach {
+        if (predicate(it))
+            return it
+    }
+    return null
+}
+
 val ClosedRange<Point>.x get() = start.x..endInclusive.x
 
 val ClosedRange<Point>.y get() = start.y..endInclusive.y

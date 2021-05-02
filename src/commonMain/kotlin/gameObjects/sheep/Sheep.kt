@@ -1,62 +1,48 @@
 package gameObjects.sheep
 
-import com.soywiz.korge.tiled.TiledMapView
-import com.soywiz.korge.view.*
-import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korma.geom.Point
+import gameObjects.GameObjectId
 import gameObjects.gameObject.GameObject
+import mainModule.scenes.tutorial.MapTilesManager
 import utils.*
-import utils.tiledMapView.tilesArea
+import utils.tiledMapView.Layer
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
 class Sheep(
-    stage: Stage,
-    private val map: TiledMapView,
-    bitmap: Bitmap,
+    private val tilesManager: MapTilesManager,
     override val pos: Point = Point(0, 0)
 ) : GameObject() {
-    private var view: Image = stage.image(bitmap) {
-        smoothing = false
-        size(16, 16)
-        scale(scale)
-        setPositionRelativeTo(map, this@Sheep.pos * size * scale + map.pos)
-    }
-
-    private var isDeleted = false
+    override val tile = GameObjectId.Sheep
 
     private var destination: Point = pos
         get() {
-            return if (field == pos)
-                map.tilesArea.run { // move to controller
-                    (pos + Point((-5..+5).random(), (-5..+5).random()))
-                        .clamp(Point(0, 0)..Point(x, y))
-                }.also {
-                    field = it
+            return if (field == pos) {
+                val newPos = ((Point(-1)..Point(+1)) + pos).firstOrNull {
+                    tilesManager[it.xi, it.yi, Layer.GameObjects] == GameObjectId.Empty.id &&
+                    tilesManager[it.xi, it.yi, Layer.Walls] == GameObjectId.Empty.id
                 }
-            else
+                field = newPos ?: pos
+                return field
+            } else
                 field
         }
 
     override fun delete() {
-        view.removeFromParent()
-        view.removeAllComponents()
-        isDeleted = true
+        tilesManager[pos.xi, pos.yi, Layer.GameObjects] = GameObjectId.Empty.id
+        isAlive = false
     }
 
     override fun makeTurn() {
-        if (!isDeleted) {
+        if (isAlive) {
             val delta = destination - pos
-
-            pos += if (delta.x.absoluteValue > delta.y.absoluteValue) {
+            val dPos = if (delta.x.absoluteValue > delta.y.absoluteValue) {
                 Point.Horizontal * delta.x.sign
             } else {
                 Point.Vertical * delta.y.sign
             }
 
-            view.apply {
-                setPositionRelativeTo(map, this@Sheep.pos * size + map.pos)
-            }
+            tilesManager.updatePos(pos, pos + dPos, tile)
         }
     }
 }

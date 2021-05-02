@@ -2,9 +2,8 @@ package gameObjects.player
 
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.*
-import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korma.geom.Point
-import mainModule.MainModule
+import gameObjects.GameObjectId
 import mainModule.scenes.tutorial.MapTilesManager
 import gameObjects.gameObject.GameObject
 import utils.tiledMapView.Layer
@@ -12,32 +11,39 @@ import utils.*
 
 class Player(
     stage: Stage,
-    private val map: TiledMapView,
-    bitmap: Bitmap,
+    map: TiledMapView,
     private val camera: Camera,
     private val tilesManager: MapTilesManager,
     override val pos: Point = tilesManager.playerPos
 ) : GameObject() {
-    private var view: Image = stage.image(bitmap) {
-        smoothing = false
-        size(16, 16) // TODO
-        setPositionRelativeTo(map, Point(-0.5) * scaledSize + MainModule.size.size.p / 2)
-    }
+    override val tile = GameObjectId.Player
 
-    private val controllerComponent = PlayerControllerComponent(view)
+    private val controllerComponent = PlayerControllerComponent(map)
 
     init {
-        camera.setPositionRelativeTo(view, -pos * view.size)
-        view.addComponent(controllerComponent)
+        camera.setPositionRelativeTo(map, (-pos + Point(-0.5)) * tilesManager.tileSize + camera.sizePoint * Point(1.0, 0.5) / 2)
+        stage.addComponent(controllerComponent)
     }
 
     override fun delete() {
     }
 
     override fun makeTurn() {
-        if ((controllerComponent.direction != Direction.Nowhere) && (pos + controllerComponent.direction.vector).run { tilesManager[xi, yi, Layer.Walls] == 0 }) {
-            pos += controllerComponent.direction.vector
-            camera.setPositionRelativeTo(view, -pos * view.size)
+        val isMoving = controllerComponent.direction != Direction.Nowhere
+        val isMovePossible = (pos + controllerComponent.direction.vector)
+            .run {
+                tilesManager[xi, yi, Layer.Walls] == GameObjectId.Empty.id &&
+                tilesManager[xi, yi, Layer.GameObjects] == GameObjectId.Empty.id
+            }
+
+        if (isMoving && isMovePossible) {
+            tilesManager.updatePos(pos + controllerComponent.direction.vector)
         }
+    }
+
+    private fun MapTilesManager.updatePos(newPos: Point) {
+        updatePos(pos, newPos, tile)
+
+        camera.pos = camera.pos - tilesManager.tileSize * controllerComponent.direction.vector
     }
 }

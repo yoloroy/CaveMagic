@@ -70,9 +70,9 @@ class TutorialScene : Scene(), AssetsManager {
         tilesManager.forEachObject(Layer.GameObjects) { pos, id ->
             gameObjects += when (GameObjectId.getTypeById(id)) {
                 GameObjectId.Player ->
-                    Player(stage!!, map, assetsManager.playerBitmap, camera, tilesManager, pos).also { player = it }
+                    Player(stage!!, map, camera, tilesManager, pos).also { player = it }
                 GameObjectId.Sheep ->
-                    Sheep(stage!!, map, assetsManager.sheepBitmap, pos)
+                    Sheep(tilesManager, pos)
                 else ->
                     throw UnknownUnitException()
             }
