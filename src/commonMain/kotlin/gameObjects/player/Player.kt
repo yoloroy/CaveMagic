@@ -29,10 +29,6 @@ class Player(
     }
 
     override fun makeTurn() {
-        println(pos)
-        println(camera.pos)
-        println()
-
         val isMoving = controllerComponent.direction != Direction.Nowhere
         val isMovePossible = (pos + controllerComponent.direction.vector)
             .run {
