@@ -1,6 +1,7 @@
 package mainModule.scenes.tutorial
 
 import com.soywiz.klock.seconds
+import com.soywiz.korev.MouseButton
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.tiled.TiledMapView
@@ -10,6 +11,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korim.color.Colors.WHITE
 import com.soywiz.korma.geom.Point
+import com.soywiz.korma.geom.int
 import exceptions.UnknownUnitException
 
 import mainModule.MainModule
@@ -19,7 +21,7 @@ import gameObjects.gameObject.GameObject
 import gameObjects.player.Player
 import gameObjects.sheep.Sheep
 import magic.AreaMagic
-import magic.getMagic
+import magic.magic
 import recognazingFigure.figures.AreaFigure
 import recognazingFigure.figures.Figure
 import utils.tiledMapView.*
@@ -90,11 +92,11 @@ class TutorialScene : Scene(), AssetsManager {
         }
     }
 
-    private fun Container.initGameObjects() {
+    private fun initGameObjects() {
         tilesManager.forEachObject(Layer.GameObjects) { pos, id ->
             gameObjects += when (GameObjectId.getTypeById(id)) {
                 GameObjectId.Player ->
-                    Player(stage!!, map, camera, tilesManager, pos).also { player = it }
+                    Player(map, camera, tilesManager, pos).also { player = it }
                 GameObjectId.Sheep ->
                     Sheep(tilesManager, pos)
                 else ->
@@ -153,7 +155,7 @@ class TutorialScene : Scene(), AssetsManager {
                 val square = map.getTilesArea(figure.area) + player.pos
                 square.start.clamp(Point(0)..(map[0] as TileMap).intMap.run { Point(width, height) })
 
-                magicHandler.onAreaMagic(figure.getMagic() as AreaMagic, square)
+                magicHandler.onAreaMagic(figure.magic as AreaMagic, square)
             }
             else -> Unit
         }

@@ -1,16 +1,18 @@
 package gameObjects.player
 
+import com.soywiz.korev.MouseButton
+import com.soywiz.korge.input.onClick
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.Point
+import com.soywiz.korma.geom.int
 import gameObjects.GameObjectId
 import mainModule.scenes.tutorial.MapTilesManager
 import gameObjects.gameObject.GameObject
-import utils.tiledMapView.Layer
 import utils.*
+import utils.tiledMapView.Layer
 
 class Player(
-    stage: Stage,
     private val map: TiledMapView,
     private val camera: Camera,
     override val tilesManager: MapTilesManager,
@@ -18,27 +20,26 @@ class Player(
 ) : GameObject(tilesManager) {
     override val tile = GameObjectId.Player
 
-    private val controllerComponent = PlayerControllerComponent(map)
+    private var path = mutableListOf<Pair<Point, Point>>()
 
     init {
         updateCamera()
-        stage.addComponent(controllerComponent)
+
+        map.onClick {
+            if (it.button == MouseButton.RIGHT) // TODO: refactor
+                path = getPath(pos, (it.currentPosLocal / tilesManager.tileSize).int.p, tilesManager[Layer.Walls]).toMutableList()
+        }
     }
 
     override fun delete() {
     }
 
     override fun makeTurn() {
-        val isMoving = controllerComponent.direction != Direction.Nowhere
-        val isMovePossible = (pos + controllerComponent.direction.vector)
-            .run {
-                tilesManager[xi, yi, Layer.Walls] == GameObjectId.Empty.id &&
-                tilesManager[xi, yi, Layer.GameObjects] == GameObjectId.Empty.id
-            }
+        if (path.isNotEmpty() && path.first().first == pos) {
+            val nextPos = path.removeFirst().second
 
-        if (isMoving && isMovePossible) {
             lastTeleportId = null
-            tilesManager.updatePos(pos + controllerComponent.direction.vector)
+            tilesManager.updatePos(nextPos)
         }
     }
 

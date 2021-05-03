@@ -2,10 +2,13 @@ package gameObjects.gameObject
 
 import com.soywiz.korma.geom.Point
 import gameObjects.GameObjectId
+import gameObjects.logic.MessageHandler
 import gameObjects.logic.Turnable
 import mainModule.scenes.tutorial.MapTilesManager
 
-abstract class GameObject(open val tilesManager: MapTilesManager) : Turnable {
+abstract class GameObject(open val tilesManager: MapTilesManager) : Turnable, MessageHandler {
+    override val messages = mutableListOf<Int>()
+
     abstract val tile: GameObjectId
 
     var lastTeleportId: Int? = null

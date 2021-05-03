@@ -21,6 +21,8 @@ val List<Point>.area: ClosedRange<Point> get() {
 
 fun Point.clamp(range: ClosedRange<Point>): Point = Point(x.clamp(range.x), y.clamp(range.y))
 
+fun Point.setTo(point: Point) = setTo(point.x, point.y)
+
 private fun Double.clamp(pointRange: ClosedRange<Double>): Double = clamp(pointRange.start, pointRange.endInclusive)
 
 operator fun ClosedRange<Point>.minus(pos: Point) = (start - pos)..(endInclusive - pos)
@@ -60,6 +62,10 @@ val Point.Companion.Vertical: Point get() = Point(0, 1)
 val Point.xi get() = x.toInt()
 
 val Point.yi get() = y.toInt()
+
+val Int.x get() = Point(this, 0)
+
+val Int.y get() = Point(0, this)
 
 fun <T: Number> Pair<T, T>.toPoint(): Point {
     if (first is Int && second is Int)
