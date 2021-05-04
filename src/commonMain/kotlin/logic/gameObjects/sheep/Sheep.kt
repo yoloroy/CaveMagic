@@ -1,8 +1,8 @@
-package gameObjects.sheep
+package logic.gameObjects.sheep
 
 import com.soywiz.korma.geom.Point
-import gameObjects.GameObjectId
-import gameObjects.gameObject.GameObject
+import logic.gameObjects.GameObjectId
+import logic.gameObjects.gameObject.GameObject
 import mainModule.scenes.tutorial.MapTilesManager
 import utils.*
 import utils.tiledMapView.Layer

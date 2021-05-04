@@ -1,4 +1,4 @@
-package magic
+package logic.magic
 
 interface Magic
 

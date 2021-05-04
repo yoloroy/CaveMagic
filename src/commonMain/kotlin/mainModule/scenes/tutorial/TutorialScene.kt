@@ -1,7 +1,6 @@
 package mainModule.scenes.tutorial
 
 import com.soywiz.klock.seconds
-import com.soywiz.korev.MouseButton
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.tiled.TiledMapView
@@ -11,17 +10,16 @@ import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korim.color.Colors.WHITE
 import com.soywiz.korma.geom.Point
-import com.soywiz.korma.geom.int
 import exceptions.UnknownUnitException
 
 import mainModule.MainModule
 import mainModule.scenes.abstracts.AssetsManager
-import gameObjects.GameObjectId
-import gameObjects.gameObject.GameObject
-import gameObjects.player.Player
-import gameObjects.sheep.Sheep
-import magic.AreaMagic
-import magic.magic
+import logic.gameObjects.GameObjectId
+import logic.gameObjects.gameObject.GameObject
+import logic.gameObjects.player.Player
+import logic.gameObjects.sheep.Sheep
+import logic.magic.AreaMagic
+import logic.magic.magic
 import recognazingFigure.figures.AreaFigure
 import recognazingFigure.figures.Figure
 import utils.tiledMapView.*

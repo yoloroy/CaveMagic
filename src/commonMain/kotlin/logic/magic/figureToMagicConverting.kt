@@ -1,4 +1,4 @@
-package magic
+package logic.magic
 
 import com.soywiz.korio.lang.UnexpectedException
 import recognazingFigure.figures.AreaFigure

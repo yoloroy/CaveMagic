@@ -1,4 +1,4 @@
-package gameObjects.logic
+package logic.gameObjects.logic
 
 interface MessageHandler {
     val messages: MutableList<Int>

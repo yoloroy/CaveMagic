@@ -1,4 +1,4 @@
-package gameObjects.player
+package logic.gameObjects.player
 
 import com.soywiz.korev.MouseButton
 import com.soywiz.korge.input.onClick
@@ -6,9 +6,10 @@ import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.Point
 import com.soywiz.korma.geom.int
-import gameObjects.GameObjectId
+import logic.gameObjects.GameObjectId
 import mainModule.scenes.tutorial.MapTilesManager
-import gameObjects.gameObject.GameObject
+import logic.gameObjects.gameObject.GameObject
+import logic.pathFinding.getPath
 import utils.*
 import utils.tiledMapView.Layer
 

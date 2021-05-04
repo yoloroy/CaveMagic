@@ -4,7 +4,7 @@ import com.soywiz.kds.IntArray2
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korma.geom.Point
-import gameObjects.GameObjectId
+import logic.gameObjects.GameObjectId
 import utils.tiledMapView.Layer
 import utils.*
 
@@ -15,7 +15,7 @@ class MapTilesManager(private val map: TiledMapView) {
 
     val tileSize get() = map.tileset.run { Point(width, height) }
 
-    val playerPos get() = get(Layer.GameObjects).getPositionsWithValue(1).first().toPoint() // TODO: remove magic value 1
+    val playerPos get() = get(Layer.GameObjects).getPositionsWithValue(1).first().toPoint() // TODO: remove logic.magic value 1
 
     fun forEachObject(layer: Layer, callback: (Point, Int) -> Unit) = get(layer).run {
         repeat(height) { y ->

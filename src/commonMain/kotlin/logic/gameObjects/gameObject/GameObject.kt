@@ -1,9 +1,9 @@
-package gameObjects.gameObject
+package logic.gameObjects.gameObject
 
 import com.soywiz.korma.geom.Point
-import gameObjects.GameObjectId
-import gameObjects.logic.MessageHandler
-import gameObjects.logic.Turnable
+import logic.gameObjects.GameObjectId
+import logic.gameObjects.logic.MessageHandler
+import logic.gameObjects.logic.Turnable
 import mainModule.scenes.tutorial.MapTilesManager
 
 abstract class GameObject(open val tilesManager: MapTilesManager) : Turnable, MessageHandler {

@@ -2,7 +2,7 @@ package mainModule.scenes.tutorial
 
 import com.soywiz.kds.IntArray2
 import com.soywiz.korma.geom.Point
-import magic.AreaMagic
+import logic.magic.AreaMagic
 import utils.*
 import utils.math.MCircle
 import utils.tiledMapView.Layer
