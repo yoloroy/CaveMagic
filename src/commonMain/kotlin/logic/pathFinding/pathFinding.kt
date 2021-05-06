@@ -31,7 +31,7 @@ fun getPath(start: Point, end: Point, walls: IntArray2): List<Pair<Point, Point>
     val path = mutableListOf<Pair<Point, Point>>()
 
     while (index != start) {
-        val previousPoint = index.surroundings.minByOrNull { matrix[it] }!!
+        val previousPoint = index.surroundings.minByOrNull { matrix[it] } ?: return emptyList()//TODO
 
         path.add(previousPoint to index.copy())
         index.setTo(previousPoint)
