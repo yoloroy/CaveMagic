@@ -131,7 +131,14 @@ class TutorialScene : Scene(), AssetsManager {
             it.makeTurn()
         }
 
-        teleports.forEach { (id, teleportPoints) ->
+        checkTeleports()
+
+        if (turns.size > 0)
+            turns.removeFirst()()
+    }
+
+    private fun checkTeleports() = teleports
+        .forEach { (id, teleportPoints) ->
             gameObjects.run checkTeleport@{
                 filter { it.pos == teleportPoints.first }.onNotEmpty {
                     forEach {
@@ -149,10 +156,6 @@ class TutorialScene : Scene(), AssetsManager {
                 }
             }
         }
-
-        if (turns.size > 0)
-            turns.removeFirst()()
-    }
 
     private val onNewFigure get() = { figure: Figure ->
         when (figure) {
