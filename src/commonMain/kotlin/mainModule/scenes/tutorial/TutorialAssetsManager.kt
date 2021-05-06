@@ -16,8 +16,8 @@ class TutorialAssetsManager : AssetsManager {
 
     override suspend fun loadAssets() {
         tiledMap = resourcesVfs["gfx/sampleMap.tmx"].readTiledMap()
-        playerBitmap = resourcesVfs["korge.png"].readBitmap()
-        sheepBitmap = resourcesVfs["sheep.png"].readBitmap()
-        nextTurnBitmap = resourcesVfs["nextTurnButton.png"].readBitmap()
+        playerBitmap = resourcesVfs["gfx/korge.png"].readBitmap()
+        sheepBitmap = resourcesVfs["gfx/sheep.png"].readBitmap()
+        nextTurnBitmap = resourcesVfs["gfx/nextTurnButton.png"].readBitmap()
     }
 }
