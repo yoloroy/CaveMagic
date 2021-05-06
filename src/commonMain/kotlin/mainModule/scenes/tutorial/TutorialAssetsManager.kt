@@ -12,9 +12,12 @@ class TutorialAssetsManager : AssetsManager {
     lateinit var playerBitmap: Bitmap
     lateinit var sheepBitmap: Bitmap
 
+    lateinit var nextTurnBitmap: Bitmap
+
     override suspend fun loadAssets() {
         tiledMap = resourcesVfs["gfx/sampleMap.tmx"].readTiledMap()
         playerBitmap = resourcesVfs["korge.png"].readBitmap()
         sheepBitmap = resourcesVfs["sheep.png"].readBitmap()
+        nextTurnBitmap = resourcesVfs["nextTurnButton.png"].readBitmap()
     }
 }

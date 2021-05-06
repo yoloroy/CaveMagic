@@ -1,6 +1,5 @@
 package mainModule.scenes.tutorial
 
-import com.soywiz.klock.seconds
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.tiled.TiledMapView
@@ -47,7 +46,6 @@ class TutorialScene : Scene(), AssetsManager {
 
         initComponents()
         initGame()
-        initUpdaters()
     }
 
     override suspend fun loadAssets() {
@@ -106,7 +104,7 @@ class TutorialScene : Scene(), AssetsManager {
     private fun Container.initUI() {
         uiTextButton {
             size(28, 4)
-            position(MainModule.size.size.p * Point.Right.point - sizePoint * (Point.Right).point)
+            position(MainModule.size.size.p * Point.Right.point + sizePoint * Point.Left.point * 1.5)
             textSize = 3.8
             text = "ClickableButton"
             textColor = WHITE
@@ -115,36 +113,45 @@ class TutorialScene : Scene(), AssetsManager {
                 figureRecognitionComponent.enableObserving()
             }
         }
+
+        image(assetsManager.nextTurnBitmap) {
+            smoothing = false
+            anchor(0, 0)
+            size(8, 8)
+            position(10,0)
+
+            onUp {
+                makeTurn()
+            }
+        }
     }
 
-    private fun Container.initUpdaters() {
-        addFixedUpdater(1.seconds) {
-            gameObjects.forEach {
-                it.makeTurn()
-            }
+    private fun makeTurn() {
+        gameObjects.forEach {
+            it.makeTurn()
+        }
 
-            teleports.forEach { (id, teleportPoints) ->
-                gameObjects.run checkTeleport@{
-                    filter { it.pos == teleportPoints.first }.onNotEmpty {
-                        forEach {
-                            it.teleportTo(teleportPoints.second, id)
-                        }
-
-                        return@checkTeleport
+        teleports.forEach { (id, teleportPoints) ->
+            gameObjects.run checkTeleport@{
+                filter { it.pos == teleportPoints.first }.onNotEmpty {
+                    forEach {
+                        it.teleportTo(teleportPoints.second, id)
                     }
-                    filter { it.pos == teleportPoints.second }.onNotEmpty {
-                        forEach {
-                            it.teleportTo(teleportPoints.first, id)
-                        }
 
-                        return@checkTeleport
+                    return@checkTeleport
+                }
+                filter { it.pos == teleportPoints.second }.onNotEmpty {
+                    forEach {
+                        it.teleportTo(teleportPoints.first, id)
                     }
+
+                    return@checkTeleport
                 }
             }
-
-            if (turns.size > 0)
-                turns.removeFirst()()
         }
+
+        if (turns.size > 0)
+            turns.removeFirst()()
     }
 
     private val onNewFigure get() = { figure: Figure ->
