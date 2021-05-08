@@ -31,6 +31,10 @@ class SceneFigureRecognitionComponent(
         mouseObservingEnabled = true
     }
 
+    fun unableObserving() {
+        mouseObservingEnabled = false
+    }
+
     fun initFigureDrawing(container: Container) {
         container.mouse.apply {
             onDown {
@@ -46,7 +50,7 @@ class SceneFigureRecognitionComponent(
 
             onUp {
                 if (mouseObserving) {
-                    mouseObservingEnabled = false
+                    unableObserving()
                     mouseObserving = false
 
                     sendResponse(mousePositions.toRecognitionPoints().figure)

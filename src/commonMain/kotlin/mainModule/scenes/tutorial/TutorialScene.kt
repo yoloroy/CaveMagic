@@ -4,10 +4,8 @@ import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.tiled.tiledMapView
-import com.soywiz.korge.ui.uiTextButton
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
-import com.soywiz.korim.color.Colors.WHITE
 import com.soywiz.korma.geom.Point
 import exceptions.UnknownUnitException
 
@@ -15,6 +13,7 @@ import mainModule.MainModule
 import mainModule.scenes.abstracts.AssetsManager
 import logic.gameObjects.GameObjectId
 import logic.gameObjects.gameObject.GameObject
+import logic.gameObjects.player.ActionType
 import logic.gameObjects.player.Player
 import logic.gameObjects.sheep.Sheep
 import logic.magic.AreaMagic
@@ -24,6 +23,7 @@ import recognazingFigure.figures.Figure
 import utils.tiledMapView.*
 import utils.*
 
+@Suppress("FunctionName")
 class TutorialScene : Scene(), AssetsManager {
     private val assetsManager = TutorialAssetsManager()
 
@@ -41,6 +41,20 @@ class TutorialScene : Scene(), AssetsManager {
 
     private val turns = mutableListOf<() -> Unit>()
 
+    private var actionType: ActionType = ActionType.Nothing
+        set(value) {
+            figureRecognitionComponent.unableObserving()
+            player.isAddingMoveEnabled = false
+
+            when (value) {
+                ActionType.Magic -> figureRecognitionComponent.enableObserving()
+                ActionType.Move -> player.isAddingMoveEnabled = true
+                else -> Unit
+            }
+
+            field = value
+        }
+
     override suspend fun Container.sceneInit() {
         loadAssets()
 
@@ -57,7 +71,7 @@ class TutorialScene : Scene(), AssetsManager {
         figureRecognitionComponent.initFigureDrawing(this)
     }
 
-    private fun Container.initGame() {
+    private fun Container.initGame(){
         scale(scale)
 
         initMap()
@@ -92,7 +106,7 @@ class TutorialScene : Scene(), AssetsManager {
         tilesManager.forEachObject(Layer.GameObjects) { pos, id ->
             gameObjects += when (GameObjectId.getTypeById(id)) {
                 GameObjectId.Player ->
-                    Player(map, camera, tilesManager, pos).also { player = it }
+                    Player(map, camera, tilesManager, pos, actionType == ActionType.Move).also { player = it }
                 GameObjectId.Sheep ->
                     Sheep(tilesManager, pos)
                 else ->
@@ -102,31 +116,72 @@ class TutorialScene : Scene(), AssetsManager {
     }
 
     private fun Container.initUI() {
-        uiTextButton {
-            size(28, 4)
-            position(MainModule.size.size.p * Point.Right.point + sizePoint * Point.Left.point * 1.5)
-            textSize = 3.8
-            text = "ClickableButton"
-            textColor = WHITE
-
-            onUp {
-                figureRecognitionComponent.enableObserving()
-            }
+        fun Image.flip() {
+            scale(-scaleX, -scaleY)
+            anchor(1 - anchorX, 1 - anchorY)
         }
 
         image(assetsManager.nextTurnBitmap) {
             smoothing = false
-            anchor(0, 0)
-            size(8, 8)
-            position(10,0)
+            anchor(2, 1)
+            size(16, 16)
+            position(MainModule.size.size.p - Point(4) + Point(.0, 0.5))
 
+            onDown { flip() }
             onUp {
+                flip()
                 makeTurn()
+            }
+        }
+
+        val bottomCenter = MainModule.size.size.p + MainModule.size.size.p * Point.Left.point / 2
+        val buttonAttack = image(assetsManager.buttonAttackBitmap) {
+            smoothing = false
+            anchor(1, 1)
+            size(16, 16)
+            position(bottomCenter + Point.Down.point * 2 + Point.Left.point * 1)
+
+            onDown { flip() }
+            onUp { flip() }
+        }
+        val buttonMisc = image(assetsManager.buttonMiscBitmap) {
+            smoothing = false
+            anchor(0, 1)
+            size(16, 16)
+            position(bottomCenter + Point.Down.point * 2 + Point.Right.point * 1)
+
+            onDown { flip() }
+            onUp { flip() }
+        }
+        image(assetsManager.buttonMoveBitmap) {
+            smoothing = false
+            anchor(1, 1)
+            size(16, 16)
+            setPositionRelativeTo(buttonAttack, -scaledSize * Point.Horizontal + Point.Left.point * 2)
+
+            onDown { flip() }
+            onUp {
+                flip()
+                actionType = ActionType.Move
+            }
+        }
+        image(assetsManager.buttonMagicBitmap) {
+            smoothing = false
+            anchor(0, 1)
+            size(16, 16)
+            setPositionRelativeTo(buttonMisc, +scaledSize * Point.Horizontal + Point.Right.point * 2)
+
+            onDown { flip() }
+            onUp {
+                flip()
+                actionType = ActionType.Magic
             }
         }
     }
 
     private fun makeTurn() {
+        actionType = ActionType.Nothing
+
         gameObjects.forEach {
             it.makeTurn()
         }
