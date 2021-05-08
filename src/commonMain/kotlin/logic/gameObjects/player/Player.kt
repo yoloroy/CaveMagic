@@ -17,18 +17,23 @@ class Player(
     private val map: TiledMapView,
     private val camera: Camera,
     override val tilesManager: MapTilesManager,
-    override var pos: Point = tilesManager.playerPos
+    override var pos: Point = tilesManager.playerPos,
+    var isAddingMoveEnabled: Boolean = false
 ) : GameObject(tilesManager) {
     override val tile = GameObjectId.Player
 
-    private var path = mutableListOf<Pair<Point, Point>>()
+    var actionPointsLimit = 3
+    val remainingActionPoints get() = maxOf(actions.size - actionPointsLimit, 0)
+    val actions = mutableListOf<Pair<ActionType, *>>()
 
     init {
         updateCamera()
 
         map.onClick {
-            if (it.button == MouseButton.RIGHT) // TODO: refactor
-                path = getPath(pos, (it.currentPosLocal / tilesManager.tileSize).int.p, tilesManager[Layer.Walls]).toMutableList()
+            if (isAddingMoveEnabled && it.button == MouseButton.RIGHT) {// TODO: refactor
+                actions += getPath(pos, (it.currentPosLocal / tilesManager.tileSize).int.p, tilesManager[Layer.Walls])
+                    .map { pathPart -> ActionType.Move to pathPart }
+            }
         }
     }
 
@@ -36,12 +41,26 @@ class Player(
     }
 
     override fun makeTurn() {
-        if (path.isNotEmpty() && path.first().first == pos) {
-            val nextPos = path.removeFirst().second
-
-            lastTeleportId = null
-            tilesManager.updatePos(nextPos)
+        if (actions.isNotEmpty()) {
+            repeat(actionPointsLimit) {
+                doAction()
+            }
         }
+    }
+
+    private fun doAction() {
+        val (type, value) = actions.removeFirst()
+
+        @Suppress("UNCHECKED_CAST")
+        when (type) {
+            ActionType.Move -> doMove(value as Pair<Point, Point>)
+            else -> Unit
+        }
+    }
+
+    private fun doMove(pathPart: Pair<Point, Point>) {
+        lastTeleportId = null
+        tilesManager.updatePos(pathPart.second)
     }
 
     private fun MapTilesManager.updatePos(newPos: Point) {
