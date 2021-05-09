@@ -102,8 +102,8 @@ class TutorialScene : Scene(), AssetsManager {
         val lastCursorPos = Point(0)
         map.onMove {
             val pos = (it.currentPosLocal / tilesManager.tileSize).int.p
-            tilesManager[lastCursorPos.xi, lastCursorPos.yi, Layer.StepsPreview] = MapTilesManager.EMPTY
-            tilesManager[pos.xi, pos.yi, Layer.StepsPreview] =
+            tilesManager[lastCursorPos.xi, lastCursorPos.yi, Layer.Cursor] = MapTilesManager.EMPTY
+            tilesManager[pos.xi, pos.yi, Layer.Cursor] =
                 if (actionType != ActionType.Attack || (pos - player.pos).length == 1.0)
                     cursorTileId
                 else
