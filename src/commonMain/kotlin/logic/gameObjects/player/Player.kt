@@ -32,12 +32,20 @@ class Player(
         map.onClick {
             if (isAddingMoveEnabled && it.button == MouseButton.RIGHT) {// TODO: refactor
                 actions += getPath(pos, (it.currentPosLocal / tilesManager.tileSize).int.p, tilesManager[Layer.Walls])
+                    .also { path -> showPath(path) }
                     .map { pathPart -> ActionType.Move to pathPart }
             }
         }
     }
 
     override fun delete() {
+    }
+
+    private fun showPath(path: Collection<Pair<Point, Point>>) {
+        path.forEach {
+            val (x, y) = it.second
+            tilesManager[x.toInt(), y.toInt(), Layer.StepsPreview] = MapTilesManager.TILE_MOVE_CURSOR
+        }
     }
 
     override fun makeTurn() {
@@ -60,6 +68,7 @@ class Player(
 
     private fun doMove(pathPart: Pair<Point, Point>) {
         lastTeleportId = null
+        tilesManager[pathPart.second.xi, pathPart.second.yi, Layer.StepsPreview] = MapTilesManager.EMPTY
         tilesManager.updatePos(pathPart.second)
     }
 
