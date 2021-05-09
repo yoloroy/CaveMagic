@@ -11,6 +11,10 @@ import utils.*
 class MapTilesManager(private val map: TiledMapView) {
     companion object {
         const val EMPTY = 0
+
+        const val TILE_CURSOR = 1439
+        const val TILE_ATTACK_CURSOR = 1438
+        const val TILE_MOVE_CURSOR = 1440
     }
 
     val tileSize get() = map.tileset.run { Point(width, height) }

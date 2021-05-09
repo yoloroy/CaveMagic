@@ -7,6 +7,7 @@ import com.soywiz.korge.tiled.tiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korma.geom.Point
+import com.soywiz.korma.geom.int
 import exceptions.UnknownUnitException
 
 import mainModule.MainModule
@@ -45,15 +46,26 @@ class TutorialScene : Scene(), AssetsManager {
         set(value) {
             figureRecognitionComponent.unableObserving()
             player.isAddingMoveEnabled = false
+            cursorTileId = MapTilesManager.TILE_CURSOR
 
             when (value) {
-                ActionType.Magic -> figureRecognitionComponent.enableObserving()
-                ActionType.Move -> player.isAddingMoveEnabled = true
-                else -> Unit
+                ActionType.Magic -> {
+                    figureRecognitionComponent.enableObserving()
+                }
+                ActionType.Move -> {
+                    player.isAddingMoveEnabled = true
+                    cursorTileId = MapTilesManager.TILE_MOVE_CURSOR
+                }
+                ActionType.Attack -> {
+                    cursorTileId = MapTilesManager.TILE_ATTACK_CURSOR
+                }
+                else -> {}
             }
 
             field = value
         }
+
+    private var cursorTileId = MapTilesManager.TILE_CURSOR
 
     override suspend fun Container.sceneInit() {
         loadAssets()
@@ -85,6 +97,18 @@ class TutorialScene : Scene(), AssetsManager {
                 map = tiledMapView(assetsManager.tiledMap, smoothing = false)
                 tilesManager = MapTilesManager(map)
             }
+        }
+
+        val lastCursorPos = Point(0)
+        map.onMove {
+            val pos = (it.currentPosLocal / tilesManager.tileSize).int.p
+            tilesManager[lastCursorPos.xi, lastCursorPos.yi, Layer.StepsPreview] = MapTilesManager.EMPTY
+            tilesManager[pos.xi, pos.yi, Layer.StepsPreview] =
+                if (actionType != ActionType.Attack || (pos - player.pos).length == 1.0)
+                    cursorTileId
+                else
+                    MapTilesManager.TILE_CURSOR
+            lastCursorPos.setTo(pos)
         }
 
         initGameObjects()
@@ -142,7 +166,10 @@ class TutorialScene : Scene(), AssetsManager {
             position(bottomCenter + Point.Down.point * 2 + Point.Left.point * 1)
 
             onDown { flip() }
-            onUp { flip() }
+            onUp {
+                flip()
+                actionType = ActionType.Attack
+            }
         }
         val buttonMisc = image(assetsManager.buttonMiscBitmap) {
             smoothing = false

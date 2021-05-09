@@ -11,7 +11,8 @@ enum class Layer(val index: Int) {
     Storages(5),
     GameObjects(6),
     MasonGameObjects(7),
-    Teleports(8);
+    Teleports(8),
+    StepsPreview(9);
 }
 
 operator fun List<Int>.get(layer: Layer) = get(layer.index)
