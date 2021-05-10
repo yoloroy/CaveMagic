@@ -23,16 +23,21 @@ class Player(
     override val tile = GameObjectId.Player
 
     var actionPointsLimit = 3
-    val remainingActionPoints get() = maxOf(actions.size - actionPointsLimit, 0)
+    val remainingActionPoints get() = maxOf(actionPointsLimit - actions.size, 0)
     val actions = mutableListOf<Pair<ActionType, *>>()
+    val lastPreviewPos = pos.copy()
 
     init {
         updateCamera()
 
         map.onClick {
             if (isAddingMoveEnabled && it.button == MouseButton.RIGHT) {// TODO: refactor
-                actions += getPath(pos, (it.currentPosLocal / tilesManager.tileSize).int.p, tilesManager[Layer.Walls])
-                    .also { path -> showPath(path) }
+                actions += getPath(lastPreviewPos, (it.currentPosLocal / tilesManager.tileSize).int.p, tilesManager[Layer.Walls])
+                    .take(remainingActionPoints)
+                    .also { path ->
+                        lastPreviewPos.setTo(path.last().second)
+                        showPath(path)
+                    }
                     .map { pathPart -> ActionType.Move to pathPart }
             }
         }

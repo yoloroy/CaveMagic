@@ -19,6 +19,7 @@ import logic.gameObjects.player.Player
 import logic.gameObjects.sheep.Sheep
 import logic.magic.AreaMagic
 import logic.magic.magic
+import logic.pathFinding.getPath
 import recognazingFigure.figures.AreaFigure
 import recognazingFigure.figures.Figure
 import utils.tiledMapView.*
@@ -54,7 +55,6 @@ class TutorialScene : Scene(), AssetsManager {
                 }
                 ActionType.Move -> {
                     player.isAddingMoveEnabled = true
-                    cursorTileId = MapTilesManager.TILE_MOVE_CURSOR
                 }
                 ActionType.Attack -> {
                     cursorTileId = MapTilesManager.TILE_ATTACK_CURSOR
@@ -99,10 +99,28 @@ class TutorialScene : Scene(), AssetsManager {
             }
         }
 
+        // TODO: refactor
+        val previewPath = mutableListOf<Pair<Point, Point>>()
         val lastCursorPos = Point(0)
         map.onMove {
             val pos = (it.currentPosLocal / tilesManager.tileSize).int.p
             tilesManager[lastCursorPos.xi, lastCursorPos.yi, Layer.Cursor] = MapTilesManager.EMPTY
+
+            if (actionType == ActionType.Move) {
+                previewPath
+                    .forEach { (_, pathPoint) ->
+                        tilesManager[pathPoint.xi, pathPoint.yi, Layer.Cursor] = MapTilesManager.EMPTY
+                    }
+
+                previewPath.clear()
+                previewPath.addAll(getPath(player.lastPreviewPos, pos, tilesManager[Layer.Walls]).take(player.remainingActionPoints))
+
+                previewPath
+                    .forEach { (_, pathPoint) ->
+                        tilesManager[pathPoint.xi, pathPoint.yi, Layer.Cursor] = MapTilesManager.TILE_MOVE_CURSOR
+                    }
+            }
+
             tilesManager[pos.xi, pos.yi, Layer.Cursor] =
                 if (actionType != ActionType.Attack || (pos - player.pos).length == 1.0)
                     cursorTileId
