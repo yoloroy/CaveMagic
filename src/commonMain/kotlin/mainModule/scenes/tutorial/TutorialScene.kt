@@ -1,5 +1,6 @@
 package mainModule.scenes.tutorial
 
+import com.soywiz.korev.MouseButton
 import com.soywiz.korge.input.*
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.tiled.TiledMapView
@@ -99,6 +100,13 @@ class TutorialScene : Scene(), AssetsManager {
             }
         }
 
+        initMapActions()
+
+        initGameObjects()
+        initTeleports()
+    }
+
+    private fun initMapActions() {
         // TODO: refactor
         val previewPath = mutableListOf<Pair<Point, Point>>()
         val lastCursorPos = Point(0)
@@ -113,7 +121,13 @@ class TutorialScene : Scene(), AssetsManager {
                     }
 
                 previewPath.clear()
-                previewPath.addAll(getPath(player.lastPreviewPos, pos, tilesManager[Layer.Walls]).take(player.remainingActionPoints))
+                previewPath.addAll(
+                    getPath(
+                        player.lastPreviewPos,
+                        pos,
+                        tilesManager[Layer.Walls]
+                    ).take(player.remainingActionPoints)
+                )
 
                 previewPath
                     .forEach { (_, pathPoint) ->
@@ -129,8 +143,21 @@ class TutorialScene : Scene(), AssetsManager {
             lastCursorPos.setTo(pos)
         }
 
-        initGameObjects()
-        initTeleports()
+        map.onClick {
+            if (player.isAddingMoveEnabled && it.button == MouseButton.RIGHT) {// TODO: refactor
+                player.actions += getPath(
+                    player.lastPreviewPos,
+                    (it.currentPosLocal / tilesManager.tileSize).int.p,
+                    tilesManager[Layer.Walls]
+                )
+                    .take(player.remainingActionPoints)
+                    .also { path ->
+                        player.lastPreviewPos.setTo(path.last().second)
+                        player.showPath(path)
+                    }
+                    .map { pathPart -> ActionType.Move to pathPart }
+            }
+        }
     }
 
     private fun initTeleports() {

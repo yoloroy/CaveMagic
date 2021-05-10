@@ -1,15 +1,11 @@
 package logic.gameObjects.player
 
-import com.soywiz.korev.MouseButton
-import com.soywiz.korge.input.onClick
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.Point
-import com.soywiz.korma.geom.int
 import logic.gameObjects.GameObjectId
 import mainModule.scenes.tutorial.MapTilesManager
 import logic.gameObjects.gameObject.GameObject
-import logic.pathFinding.getPath
 import utils.*
 import utils.tiledMapView.Layer
 
@@ -29,24 +25,13 @@ class Player(
 
     init {
         updateCamera()
-
-        map.onClick {
-            if (isAddingMoveEnabled && it.button == MouseButton.RIGHT) {// TODO: refactor
-                actions += getPath(lastPreviewPos, (it.currentPosLocal / tilesManager.tileSize).int.p, tilesManager[Layer.Walls])
-                    .take(remainingActionPoints)
-                    .also { path ->
-                        lastPreviewPos.setTo(path.last().second)
-                        showPath(path)
-                    }
-                    .map { pathPart -> ActionType.Move to pathPart }
-            }
-        }
     }
 
-    override fun delete() {
+    fun addPath(path: Collection<Pair<Point, Point>>) {
+
     }
 
-    private fun showPath(path: Collection<Pair<Point, Point>>) {
+    fun showPath(path: Collection<Pair<Point, Point>>) {
         path.forEach {
             val (x, y) = it.second
             tilesManager[x.toInt(), y.toInt(), Layer.StepsPreview] = MapTilesManager.TILE_MOVE_CURSOR
@@ -94,5 +79,8 @@ class Player(
 
     private fun updateCamera() {
         camera.setPositionRelativeTo(map, (-pos + Point(-0.5)) * tilesManager.tileSize + camera.sizePoint * Point(1.0, 0.5) / 2)
+    }
+
+    override fun delete() {
     }
 }
