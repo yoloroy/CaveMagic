@@ -107,7 +107,7 @@ class TutorialScene : Scene(), AssetsManager {
     }
 
     private fun initMapActions() {
-        // TODO: refactor
+        // TODO: move to GameMapComponent
         val previewPath = mutableListOf<Pair<Point, Point>>()
         val lastCursorPos = Point(0)
         map.onMove {
