@@ -1,11 +1,11 @@
-package recognazingFigure.adapters
+package algorythms.recognazingFigure.adapters
 
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
-import recognazingFigure.core.ColorMatrix
-import recognazingFigure.core.setRGB
-import recognazingFigure.figures.Figure
+import algorythms.recognazingFigure.core.ColorMatrix
+import algorythms.recognazingFigure.core.setRGB
+import algorythms.recognazingFigure.figures.Figure
 
 suspend fun getFigureMask(figure: Figure): ColorMatrix = resourcesVfs[figure.path].readBitmap().toColorMatrix()
 

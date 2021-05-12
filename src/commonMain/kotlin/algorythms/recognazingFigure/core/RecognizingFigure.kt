@@ -1,11 +1,10 @@
-package recognazingFigure.core
+package algorythms.recognazingFigure.core
 
-import recognazingFigure.adapters.Color
-import recognazingFigure.adapters.color
-import recognazingFigure.figures.MASK_SIZES
-import recognazingFigure.core.*
-import recognazingFigure.figures.Figure
-import recognazingFigure.figures.figureMasks
+import algorythms.recognazingFigure.adapters.Color
+import algorythms.recognazingFigure.adapters.color
+import algorythms.recognazingFigure.figures.MASK_SIZES
+import algorythms.recognazingFigure.figures.Figure
+import algorythms.recognazingFigure.figures.figureMasks
 
 val List<Point>.figure: Figure
     get() {

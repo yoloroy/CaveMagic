@@ -1,4 +1,4 @@
-package logic.pathFinding
+package algorythms.pathFinding
 
 import com.soywiz.kds.IntArray2
 import com.soywiz.korma.geom.Point

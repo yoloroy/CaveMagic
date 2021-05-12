@@ -1,8 +1,8 @@
 package logic.magic
 
 import com.soywiz.korio.lang.UnexpectedException
-import recognazingFigure.figures.AreaFigure
-import recognazingFigure.figures.Figure
+import algorythms.recognazingFigure.figures.AreaFigure
+import algorythms.recognazingFigure.figures.Figure
 
 val Figure.magic: Magic
     get() = when (this) {

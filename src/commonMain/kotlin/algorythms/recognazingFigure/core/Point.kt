@@ -1,4 +1,4 @@
-package recognazingFigure.core
+package algorythms.recognazingFigure.core
 
 data class Point(var x_: Double, var y_: Double) {
     constructor(x: Int, y: Int) : this(x.toDouble(), y.toDouble())

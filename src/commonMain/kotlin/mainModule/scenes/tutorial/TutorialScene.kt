@@ -20,9 +20,9 @@ import logic.gameObjects.player.Player
 import logic.gameObjects.sheep.Sheep
 import logic.magic.AreaMagic
 import logic.magic.magic
-import logic.pathFinding.getPath
-import recognazingFigure.figures.AreaFigure
-import recognazingFigure.figures.Figure
+import algorythms.pathFinding.getPath
+import algorythms.recognazingFigure.figures.AreaFigure
+import algorythms.recognazingFigure.figures.Figure
 import utils.tiledMapView.*
 import utils.*
 

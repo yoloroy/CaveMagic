@@ -7,10 +7,10 @@ import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.vector.StrokeInfo
 import com.soywiz.korma.geom.Point
 import com.soywiz.korma.geom.vector.lineTo
-import recognazingFigure.core.figure
-import recognazingFigure.figures.AreaFigure
-import recognazingFigure.figures.Figure
-import recognazingFigure.core.Point as RecPoint
+import algorythms.recognazingFigure.core.figure
+import algorythms.recognazingFigure.figures.AreaFigure
+import algorythms.recognazingFigure.figures.Figure
+import algorythms.recognazingFigure.core.Point as RecPoint
 import mainModule.MainModule
 import utils.area
 
