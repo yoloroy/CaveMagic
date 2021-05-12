@@ -264,21 +264,22 @@ class TutorialScene : Scene(), AssetsManager {
             turns.removeFirst()()
     }
 
-    private fun checkTeleports() = teleports
-        .forEach { (id, teleportPoints) ->
-            gameObjects.run checkTeleport@{
-                filter { it.pos == teleportPoints.first }.onNotEmpty {
-                    forEach {
-                        it.teleportTo(teleportPoints.second, id)
-                    }
-                }
-                filter { it.pos == teleportPoints.second }.onNotEmpty {
-                    forEach {
-                        it.teleportTo(teleportPoints.first, id)
-                    }
+    private fun checkTeleports() {
+        fun List<GameObject>.checkTeleport(from: Point, destination: Point, id: Int) {
+            filter { it.pos == from }.onNotEmpty {
+                forEach {
+                    it.teleportTo(destination, id)
                 }
             }
         }
+
+        teleports.forEach { (id, teleportPoints) ->
+            gameObjects.run {
+                checkTeleport(teleportPoints.first, teleportPoints.second, id)
+                checkTeleport(teleportPoints.second, teleportPoints.first, id)
+            }
+        }
+    }
 
     private val onNewFigure get() = { figure: Figure ->
         when (figure) {
