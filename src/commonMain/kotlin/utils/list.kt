@@ -1,3 +1,3 @@
 package utils
 
-inline fun <T> List<T>.onNotEmpty(block: List<T>.() -> Unit) = if (isNotEmpty()) block() else Unit
+inline fun <T> List<T>.runIfNotEmpty(block: List<T>.() -> Unit) = if (isNotEmpty()) block() else Unit
