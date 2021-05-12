@@ -271,15 +271,11 @@ class TutorialScene : Scene(), AssetsManager {
                     forEach {
                         it.teleportTo(teleportPoints.second, id)
                     }
-
-                    return@checkTeleport
                 }
                 filter { it.pos == teleportPoints.second }.onNotEmpty {
                     forEach {
                         it.teleportTo(teleportPoints.first, id)
                     }
-
-                    return@checkTeleport
                 }
             }
         }
