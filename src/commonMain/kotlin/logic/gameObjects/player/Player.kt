@@ -68,6 +68,7 @@ class Player(
         updatePos(pos, newPos, tile)
 
         camera.pos = camera.pos - tilesManager.tileSize * deltaPos
+        lastPreviewPos.setTo(newPos)
     }
 
     override fun teleportTo(point: Point, teleportId: Int) = (lastTeleportId != teleportId).also {
