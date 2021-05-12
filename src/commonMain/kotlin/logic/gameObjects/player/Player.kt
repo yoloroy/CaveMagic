@@ -40,7 +40,7 @@ class Player(
 
     override fun makeTurn() {
         if (actions.isNotEmpty()) {
-            repeat(actionPointsLimit) {
+            repeat(actions.size) {
                 doAction()
             }
         }
