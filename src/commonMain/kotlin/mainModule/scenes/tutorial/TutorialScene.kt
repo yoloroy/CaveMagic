@@ -265,13 +265,9 @@ class TutorialScene : Scene(), AssetsManager {
     }
 
     private fun checkTeleports() {
-        fun List<GameObject>.checkTeleport(from: Point, destination: Point, id: Int) {
-            filter { it.pos == from }.runIfNotEmpty {
-                forEach {
-                    it.teleportTo(destination, id)
-                }
-            }
-        }
+        fun List<GameObject>.checkTeleport(from: Point, destination: Point, id: Int) =
+            filter { it.pos == from }
+            .forEach { it.teleportTo(destination, id) }
 
         teleports.forEach { (id, teleportPoints) ->
             gameObjects.run {
