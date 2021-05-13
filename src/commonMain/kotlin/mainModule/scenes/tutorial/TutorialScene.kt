@@ -25,6 +25,7 @@ import algorythms.recognazingFigure.figures.AreaFigure
 import algorythms.recognazingFigure.figures.Figure
 import utils.tiledMapView.*
 import utils.*
+import widgets.valueBar
 
 @Suppress("FunctionName")
 class TutorialScene : Scene(), AssetsManager {
@@ -249,6 +250,8 @@ class TutorialScene : Scene(), AssetsManager {
                 actionType = ActionType.Magic
             }
         }
+
+        valueBar(player.model.healthLimit, player.model.health)
     }
 
     private fun makeTurn() {
