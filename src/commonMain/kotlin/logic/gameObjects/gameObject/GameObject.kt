@@ -1,8 +1,6 @@
 package logic.gameObjects.gameObject
 
 import com.soywiz.korma.geom.Point
-import logic.gameObjects.GameObjectId
-import logic.gameObjects.GameObjectModel
 import logic.gameObjects.logic.MessageHandler
 import logic.gameObjects.logic.Turnable
 import mainModule.scenes.tutorial.MapTilesManager

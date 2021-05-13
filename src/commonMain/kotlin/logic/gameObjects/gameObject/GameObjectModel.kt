@@ -1,4 +1,4 @@
-package logic.gameObjects
+package logic.gameObjects.gameObject
 
 data class GameObjectModel(
     var healthLimit: Int,

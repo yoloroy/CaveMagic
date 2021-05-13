@@ -13,7 +13,7 @@ import exceptions.UnknownUnitException
 
 import mainModule.MainModule
 import mainModule.scenes.abstracts.AssetsManager
-import logic.gameObjects.GameObjectId
+import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.player.ActionType
 import logic.gameObjects.player.Player

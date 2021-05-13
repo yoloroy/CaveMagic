@@ -3,8 +3,8 @@ package logic.gameObjects.player
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.Point
-import logic.gameObjects.GameObjectId
-import logic.gameObjects.GameObjectModel
+import logic.gameObjects.gameObject.GameObjectId
+import logic.gameObjects.gameObject.GameObjectModel
 import mainModule.scenes.tutorial.MapTilesManager
 import logic.gameObjects.gameObject.GameObject
 import utils.*

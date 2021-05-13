@@ -4,7 +4,7 @@ import com.soywiz.kds.IntArray2
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korma.geom.Point
-import logic.gameObjects.GameObjectId
+import logic.gameObjects.gameObject.GameObjectId
 import utils.tiledMapView.Layer
 import utils.*
 

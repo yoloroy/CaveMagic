@@ -1,4 +1,4 @@
-package logic.gameObjects
+package logic.gameObjects.gameObject
 
 enum class GameObjectId(val id: Int) {
     Empty(0),
