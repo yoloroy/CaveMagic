@@ -2,6 +2,7 @@ package logic.gameObjects.sheep
 
 import com.soywiz.korma.geom.Point
 import logic.gameObjects.GameObjectId
+import logic.gameObjects.GameObjectModel
 import logic.gameObjects.gameObject.GameObject
 import mainModule.scenes.tutorial.MapTilesManager
 import utils.*
@@ -13,6 +14,8 @@ class Sheep(
     override val tilesManager: MapTilesManager,
     override var pos: Point = Point(0, 0)
 ) : GameObject(tilesManager) {
+    override val model = GameObjectModel(1, 1)
+
     override val tile = GameObjectId.Sheep
 
     private var destination: Point = pos

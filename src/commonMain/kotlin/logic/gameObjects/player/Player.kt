@@ -4,6 +4,7 @@ import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.Point
 import logic.gameObjects.GameObjectId
+import logic.gameObjects.GameObjectModel
 import mainModule.scenes.tutorial.MapTilesManager
 import logic.gameObjects.gameObject.GameObject
 import utils.*
@@ -18,8 +19,9 @@ class Player(
 ) : GameObject(tilesManager) {
     override val tile = GameObjectId.Player
 
-    var actionPointsLimit = 3
-    val remainingActionPoints get() = maxOf(actionPointsLimit - actions.size, 0)
+    override val model = GameObjectModel(10, 3)
+
+    val remainingActionPoints get() = maxOf(model.actionPointsLimit - actions.size, 0)
     val actions = mutableListOf<Pair<ActionType, *>>()
     val lastPreviewPos = pos.copy()
 
