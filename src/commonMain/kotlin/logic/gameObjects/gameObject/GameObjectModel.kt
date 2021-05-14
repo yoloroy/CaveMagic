@@ -1,7 +1,13 @@
 package logic.gameObjects.gameObject
 
-data class GameObjectModel(
-    var healthLimit: Int,
-    var actionPointsLimit: Int,
-    var health: Int = healthLimit
-)
+import com.soywiz.korio.async.ObservableProperty
+
+open class GameObjectModel(
+    healthLimit: Int,
+    actionPointsLimit: Int,
+    health: Int = healthLimit
+) {
+    var health = ObservableProperty(health)
+    var actionPointsLimit = ObservableProperty(actionPointsLimit)
+    var healthLimit = ObservableProperty(healthLimit)
+}

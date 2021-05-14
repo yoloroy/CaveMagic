@@ -21,7 +21,7 @@ class Player(
 
     override val model = GameObjectModel(10, 3)
 
-    val remainingActionPoints get() = maxOf(model.actionPointsLimit - actions.size, 0)
+    val remainingActionPoints get() = maxOf(model.actionPointsLimit.value - actions.size, 0)
     val actions = mutableListOf<Pair<ActionType, *>>()
     val lastPreviewPos = pos.copy()
 

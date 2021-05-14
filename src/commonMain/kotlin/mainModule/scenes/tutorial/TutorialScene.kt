@@ -251,7 +251,15 @@ class TutorialScene : Scene(), AssetsManager {
             }
         }
 
-        valueBar(player.model.healthLimit, player.model.health)
+        val healthBar = valueBar(player.model.healthLimit.value, player.model.health.value)
+        player.model.apply {
+            health.observe {
+                healthBar.value = it
+            }
+            healthLimit.observe {
+                healthBar.limit = it
+            }
+        }
     }
 
     private fun makeTurn() {
