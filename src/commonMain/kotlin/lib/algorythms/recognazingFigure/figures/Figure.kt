@@ -15,7 +15,7 @@ interface Figure {
 
         override suspend fun loadAssets() {
             figureMasks = mutableMapOf()
-            for (figure in figures) {
+            figures.forEach { figure ->
                 figureMasks[figure] = getFigureMask(figure)
             }
         }
