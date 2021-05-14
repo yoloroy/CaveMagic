@@ -1,4 +1,4 @@
-package mainModule.scenes.tutorial
+package mainModule.scenes.gameScenes.gameScene
 
 import com.soywiz.kds.IntArray2
 import com.soywiz.korge.tiled.TiledMapView

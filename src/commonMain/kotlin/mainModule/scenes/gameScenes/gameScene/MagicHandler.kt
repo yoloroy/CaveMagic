@@ -1,4 +1,4 @@
-package mainModule.scenes.tutorial
+package mainModule.scenes.gameScenes.gameScene
 
 import com.soywiz.kds.IntArray2
 import com.soywiz.korma.geom.Point
@@ -8,8 +8,8 @@ import utils.math.MCircle
 import utils.tiledMapView.Layer
 import kotlin.math.abs
 
-class MagicHandler(private val tutorialScene: TutorialScene) {
-    private val tilesManager get() = tutorialScene.tilesManager
+class MagicHandler(private val gameScene: GameScene) {
+    private val tilesManager get() = gameScene.tilesManager
 
     fun onAreaMagic(magic: AreaMagic, drawingSquare: ClosedRange<Point>) = when(magic) {
         AreaMagic.Square -> onSquare(drawingSquare)
@@ -18,7 +18,7 @@ class MagicHandler(private val tutorialScene: TutorialScene) {
     }
 
     private fun onSquare(square: ClosedRange<Point>) {
-        tutorialScene.gameObjects
+        gameScene.gameObjects
             .filter { it.pos in square }
             .forEach { it.delete() } // TODO: move objects work to tiles manager
 
@@ -30,7 +30,7 @@ class MagicHandler(private val tutorialScene: TutorialScene) {
         val radius = abs(square.start.x - center.x)
         val circle = MCircle(center, radius)
 
-        tutorialScene.gameObjects
+        gameScene.gameObjects
             .filter { it.pos in circle }
             .forEach { it.delete() } // TODO: move to tiles manager
 
@@ -41,7 +41,7 @@ class MagicHandler(private val tutorialScene: TutorialScene) {
         val size = (square.endInclusive - square.start)
         val saved = IntArray(size.yi)
 
-        tutorialScene.addWork(List(size.xi + 1) { x -> onTurn@{
+        gameScene.addWork(List(size.xi + 1) { x -> onTurn@{
             val topPoint = Point(square.start.x + x, square.start.y)
             val bottomPoint = Point(square.start.x + x, square.start.y + size.yi - 1)
 

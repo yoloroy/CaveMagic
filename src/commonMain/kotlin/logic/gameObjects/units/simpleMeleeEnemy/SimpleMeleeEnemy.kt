@@ -7,7 +7,7 @@ import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
 import logic.gameObjects.units.Enemy
-import mainModule.scenes.tutorial.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 import utils.tiledMapView.Layer
 
 open class SimpleMeleeEnemy(

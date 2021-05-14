@@ -1,4 +1,4 @@
-package mainModule.scenes.tutorial
+package mainModule.scenes.gameScenes.gameScene
 
 import com.soywiz.korge.input.onDown
 import com.soywiz.korge.input.onUp
@@ -9,7 +9,7 @@ import mainModule.MainModule
 import utils.*
 import widgets.valueBar
 
-internal fun Container.initUI(scene: TutorialScene) = scene.apply {
+internal fun Container.initUI(scene: GameScene) = scene.apply {
     fun Image.flip() {
         scale(-scaleX, -scaleY)
         anchor(1 - anchorX, 1 - anchorY)

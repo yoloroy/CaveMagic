@@ -5,7 +5,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.Point
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
-import mainModule.scenes.tutorial.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.units.Enemy
 import utils.*

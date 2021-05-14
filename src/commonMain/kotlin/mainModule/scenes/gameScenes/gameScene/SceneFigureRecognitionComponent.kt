@@ -1,4 +1,4 @@
-package mainModule.scenes.tutorial
+package mainModule.scenes.gameScenes.gameScene
 
 import com.soywiz.korge.input.mouse
 import com.soywiz.korge.scene.Scene

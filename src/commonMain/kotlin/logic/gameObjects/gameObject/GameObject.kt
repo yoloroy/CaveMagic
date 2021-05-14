@@ -3,7 +3,7 @@ package logic.gameObjects.gameObject
 import com.soywiz.korma.geom.Point
 import logic.gameObjects.logic.MessageHandler
 import logic.gameObjects.logic.Turnable
-import mainModule.scenes.tutorial.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 
 abstract class GameObject(open val tilesManager: MapTilesManager) : Turnable, MessageHandler {
     abstract val model: GameObjectModel

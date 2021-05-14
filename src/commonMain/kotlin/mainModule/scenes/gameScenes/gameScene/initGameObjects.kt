@@ -1,4 +1,4 @@
-package mainModule.scenes.tutorial
+package mainModule.scenes.gameScenes.gameScene
 
 import exceptions.UnknownUnitException
 import logic.gameObjects.gameObject.GameObjectId
@@ -8,7 +8,7 @@ import logic.gameObjects.sheep.Sheep
 import logic.gameObjects.units.simpleMeleeEnemy.SimpleMeleeEnemy
 import utils.tiledMapView.Layer
 
-fun initGameObjects(scene: TutorialScene) = scene.apply {
+fun initGameObjects(scene: GameScene) = scene.apply {
     tilesManager.forEachObject(Layer.GameObjects) { pos, id ->
         gameObjects += when (GameObjectId.getTypeById(id)) {
             GameObjectId.Player ->

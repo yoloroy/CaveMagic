@@ -1,4 +1,4 @@
-package mainModule.scenes.tutorial
+package mainModule.scenes.gameScenes.gameScene
 
 import algorythms.pathFinding.getPath
 import com.soywiz.korev.MouseButton
@@ -12,7 +12,7 @@ import utils.tiledMapView.Layer
 import utils.xi
 import utils.yi
 
-internal fun initMapActions(scene: TutorialScene) = scene.apply {
+internal fun initMapActions(scene: GameScene) = scene.apply {
     val previewPath = mutableListOf<Pair<Point, Point>>()
     val lastCursorPos = Point(0)
     map.onMove {

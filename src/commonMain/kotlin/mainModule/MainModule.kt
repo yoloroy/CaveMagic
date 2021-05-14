@@ -4,7 +4,7 @@ import com.soywiz.korge.scene.Module
 import com.soywiz.korinject.AsyncInjector
 import com.soywiz.korma.geom.ScaleMode
 import com.soywiz.korma.geom.SizeInt
-import mainModule.scenes.tutorial.TutorialScene
+import mainModule.scenes.gameScenes.TutorialScene
 
 object MainModule : Module() {
     override val mainScene = TutorialScene::class

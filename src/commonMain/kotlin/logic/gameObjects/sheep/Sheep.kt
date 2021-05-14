@@ -4,7 +4,7 @@ import com.soywiz.korma.geom.Point
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
 import logic.gameObjects.gameObject.GameObject
-import mainModule.scenes.tutorial.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 import utils.*
 import utils.tiledMapView.Layer
 import kotlin.math.absoluteValue

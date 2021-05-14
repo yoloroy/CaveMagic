@@ -1,4 +1,4 @@
-package mainModule.scenes.tutorial
+package mainModule.scenes.gameScenes.gameScene
 
 import com.soywiz.korge.tiled.TiledMap
 import com.soywiz.korge.tiled.readTiledMap
@@ -7,7 +7,7 @@ import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
 import mainModule.scenes.abstracts.AssetsManager
 
-class TutorialAssetsManager : AssetsManager {
+open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsManager {
     lateinit var tiledMap: TiledMap
     lateinit var playerBitmap: Bitmap
     lateinit var sheepBitmap: Bitmap
@@ -19,7 +19,7 @@ class TutorialAssetsManager : AssetsManager {
     lateinit var buttonMagicBitmap: Bitmap
 
     override suspend fun loadAssets() {
-        tiledMap = resourcesVfs["gfx/sampleMap.tmx"].readTiledMap()
+        tiledMap = resourcesVfs[tiledMapPath].readTiledMap()
         playerBitmap = resourcesVfs["gfx/korge.png"].readBitmap()
         sheepBitmap = resourcesVfs["gfx/sheep.png"].readBitmap()
 

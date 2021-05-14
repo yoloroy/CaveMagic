@@ -1,26 +1,27 @@
-package mainModule.scenes.tutorial
+package mainModule.scenes.gameScenes.gameScene
 
+import algorythms.recognazingFigure.figures.AreaFigure
+import algorythms.recognazingFigure.figures.Figure
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.tiled.tiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korma.geom.Point
-
-import mainModule.scenes.abstracts.AssetsManager
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.player.ActionType
 import logic.gameObjects.player.Player
 import logic.magic.AreaMagic
 import logic.magic.magic
-import algorythms.recognazingFigure.figures.AreaFigure
-import algorythms.recognazingFigure.figures.Figure
-import utils.tiledMapView.*
-import utils.*
+import mainModule.scenes.abstracts.AssetsManager
+import utils.clamp
+import utils.plus
+import utils.tiledMapView.Layer
+import utils.tiledMapView.getTilesArea
 
-@Suppress("FunctionName")
-class TutorialScene : Scene(), AssetsManager {
-    internal val assetsManager = TutorialAssetsManager()
+@Suppress("LeakingThis")
+open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
+    internal val assetsManager = GameSceneAssetsManager(tiledMapPath)
 
     internal lateinit var tilesManager: MapTilesManager
 
@@ -113,7 +114,7 @@ class TutorialScene : Scene(), AssetsManager {
 
     private fun initGameObjects() = initGameObjects(this)
 
-    private fun Container.initUI() = initUI(this@TutorialScene)
+    private fun Container.initUI() = initUI(this@GameScene)
 
     internal fun makeTurn() {
         actionType = ActionType.Nothing
@@ -131,7 +132,7 @@ class TutorialScene : Scene(), AssetsManager {
     private fun checkTeleports() {
         fun List<GameObject>.checkTeleport(from: Point, destination: Point, id: Int) =
             filter { it.pos == from }
-            .forEach { it.teleportTo(destination, id) }
+                .forEach { it.teleportTo(destination, id) }
 
         teleports.forEach { (id, teleportPoints) ->
             gameObjects.run {
