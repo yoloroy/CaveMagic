@@ -29,6 +29,10 @@ abstract class GameObject(open val tilesManager: MapTilesManager) : Turnable, Me
         return false
     }
 
+    open fun handleAttack(damage: Int) {
+        model.health.value -= damage
+    }
+
     abstract fun delete()
 
     override fun toString(): String {

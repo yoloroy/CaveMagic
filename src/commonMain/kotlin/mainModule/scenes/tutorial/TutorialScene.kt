@@ -23,6 +23,7 @@ import logic.magic.magic
 import algorythms.pathFinding.getPath
 import algorythms.recognazingFigure.figures.AreaFigure
 import algorythms.recognazingFigure.figures.Figure
+import logic.gameObjects.units.simpleMeleeEnemy.SimpleMeleeEnemy
 import utils.tiledMapView.*
 import utils.*
 import widgets.valueBar
@@ -176,11 +177,15 @@ class TutorialScene : Scene(), AssetsManager {
         tilesManager.forEachObject(Layer.GameObjects) { pos, id ->
             gameObjects += when (GameObjectId.getTypeById(id)) {
                 GameObjectId.Player ->
-                    Player(map, camera, tilesManager, pos, actionType == ActionType.Move).also { player = it }
+                    Player(map, camera, gameObjects, tilesManager, pos, actionType == ActionType.Move).also { player = it }
                 GameObjectId.Sheep ->
                     Sheep(tilesManager, pos)
-                else ->
+                GameObjectId.Skeleton ->
+                    SimpleMeleeEnemy(pos, 2, 2, 1, tilesManager, GameObjectId.Skeleton)
+                else -> {
+                    println("$id: ${GameObjectId.getTypeById(id)}")
                     throw UnknownUnitException()
+                }
             }
         }
     }

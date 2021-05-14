@@ -7,12 +7,14 @@ import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
 import mainModule.scenes.tutorial.MapTilesManager
 import logic.gameObjects.gameObject.GameObject
+import logic.gameObjects.units.Enemy
 import utils.*
 import utils.tiledMapView.Layer
 
 class Player(
     private val map: TiledMapView,
     private val camera: Camera,
+    private val gameObjects: List<GameObject>,
     override val tilesManager: MapTilesManager,
     override var pos: Point = tilesManager.playerPos,
     var isAddingMoveEnabled: Boolean = false
@@ -62,7 +64,17 @@ class Player(
         lastTeleportId = null
         tilesManager[pathPart.second.xi, pathPart.second.yi, Layer.StepsPreview] = MapTilesManager.EMPTY
         tilesManager.updatePos(pathPart.second)
+
+        notifyNearbyGameObjects() // TODO
     }
+
+    private fun notifyNearbyGameObjects() = gameObjects // TODO
+        .filter { it.pos.distanceTo(pos) < 5 }
+        .forEach {
+            if (it is Enemy) {
+                it.target = this
+            }
+        }
 
     private fun MapTilesManager.updatePos(newPos: Point) {
         val deltaPos = newPos - pos
