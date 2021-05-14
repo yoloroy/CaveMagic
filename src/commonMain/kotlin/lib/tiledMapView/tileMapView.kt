@@ -1,11 +1,11 @@
-package utils.tiledMapView
+package lib.tiledMapView
 
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.View
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korma.geom.Point
 import mainModule.MainModule
-import utils.sizePoint
+import lib.extensions.sizePoint
 
 operator fun TiledMapView.set(x: Int, y: Int, layer: Int = 0, value: Int) {
     if (layer < size)

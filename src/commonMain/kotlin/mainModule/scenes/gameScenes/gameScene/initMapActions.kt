@@ -1,16 +1,16 @@
 package mainModule.scenes.gameScenes.gameScene
 
-import algorythms.pathFinding.getPath
+import lib.algorythms.pathFinding.getPath
 import com.soywiz.korev.MouseButton
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.input.onMove
 import com.soywiz.korma.geom.Point
 import com.soywiz.korma.geom.int
 import logic.gameObjects.player.ActionType
-import utils.setTo
-import utils.tiledMapView.Layer
-import utils.xi
-import utils.yi
+import lib.extensions.setTo
+import lib.tiledMapView.Layer
+import lib.extensions.xi
+import lib.extensions.yi
 
 internal fun initMapActions(scene: GameScene) = scene.apply {
     val previewPath = mutableListOf<Pair<Point, Point>>()

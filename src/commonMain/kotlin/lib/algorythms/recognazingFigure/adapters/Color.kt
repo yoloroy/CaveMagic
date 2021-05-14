@@ -1,4 +1,4 @@
-package algorythms.recognazingFigure.adapters
+package lib.algorythms.recognazingFigure.adapters
 
 import com.soywiz.korim.color.RGBA
 

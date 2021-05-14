@@ -1,3 +1,3 @@
-package exceptions
+package lib.exceptions
 
 class UnknownUnitException : Exception("Unknown unit")

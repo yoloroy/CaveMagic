@@ -1,4 +1,4 @@
-package utils.tiledMapView
+package lib.tiledMapView
 
 import com.soywiz.korge.view.Container
 

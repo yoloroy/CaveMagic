@@ -7,12 +7,12 @@ import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.vector.StrokeInfo
 import com.soywiz.korma.geom.Point
 import com.soywiz.korma.geom.vector.lineTo
-import algorythms.recognazingFigure.core.figure
-import algorythms.recognazingFigure.figures.AreaFigure
-import algorythms.recognazingFigure.figures.Figure
-import algorythms.recognazingFigure.core.Point as RecPoint
+import lib.algorythms.recognazingFigure.core.figure
+import lib.algorythms.recognazingFigure.figures.AreaFigure
+import lib.algorythms.recognazingFigure.figures.Figure
+import lib.algorythms.recognazingFigure.core.Point as RecPoint
 import mainModule.MainModule
-import utils.area
+import lib.extensions.area
 
 class SceneFigureRecognitionComponent(
     private val scene: Scene,

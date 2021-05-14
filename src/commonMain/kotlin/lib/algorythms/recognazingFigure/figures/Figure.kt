@@ -1,9 +1,9 @@
-package algorythms.recognazingFigure.figures
+package lib.algorythms.recognazingFigure.figures
 
 import com.soywiz.korma.geom.Point
 import mainModule.scenes.abstracts.AssetsManager
-import algorythms.recognazingFigure.adapters.getFigureMask
-import algorythms.recognazingFigure.core.ColorMatrix
+import lib.algorythms.recognazingFigure.adapters.getFigureMask
+import lib.algorythms.recognazingFigure.core.ColorMatrix
 
 const val MASK_SIZES = 16
 

@@ -1,7 +1,7 @@
-package utils.math
+package lib.math
 
 import com.soywiz.korma.geom.Point
-import utils.iterator
+import lib.extensions.iterator
 import kotlin.math.pow
 
 data class MCircle(val center: Point, val radius: Double) {

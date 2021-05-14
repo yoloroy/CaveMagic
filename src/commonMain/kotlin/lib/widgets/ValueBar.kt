@@ -1,10 +1,10 @@
-package widgets
+package lib.widgets
 
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korma.geom.Point
-import utils.x
-import utils.xi
+import lib.extensions.x
+import lib.extensions.xi
 
 private val DEFAULT_SIZE = Point(20, 4)
 private val DEFAULT_POSITION = Point(0) + DEFAULT_SIZE.xi.x / 2

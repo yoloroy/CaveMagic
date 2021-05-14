@@ -5,8 +5,8 @@ import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korma.geom.Point
 import logic.gameObjects.gameObject.GameObjectId
-import utils.tiledMapView.Layer
-import utils.*
+import lib.tiledMapView.Layer
+import lib.extensions.*
 
 class MapTilesManager(private val map: TiledMapView) {
     companion object {

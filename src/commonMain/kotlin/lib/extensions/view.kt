@@ -1,4 +1,4 @@
-package utils
+package lib.extensions
 
 import com.soywiz.korge.ui.UIView
 import com.soywiz.korge.view.Container

@@ -1,12 +1,12 @@
 package mainModule.scenes.gameScenes.gameScene
 
-import exceptions.UnknownUnitException
+import lib.exceptions.UnknownUnitException
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.player.ActionType
 import logic.gameObjects.player.Player
 import logic.gameObjects.sheep.Sheep
 import logic.gameObjects.units.simpleMeleeEnemy.SimpleMeleeEnemy
-import utils.tiledMapView.Layer
+import lib.tiledMapView.Layer
 
 fun initGameObjects(scene: GameScene) = scene.apply {
     tilesManager.forEachObject(Layer.GameObjects) { pos, id ->

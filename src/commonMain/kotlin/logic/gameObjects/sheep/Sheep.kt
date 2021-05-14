@@ -5,8 +5,8 @@ import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
 import logic.gameObjects.gameObject.GameObject
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
-import utils.*
-import utils.tiledMapView.Layer
+import lib.extensions.*
+import lib.tiledMapView.Layer
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 

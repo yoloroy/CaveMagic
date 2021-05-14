@@ -1,8 +1,8 @@
-package algorythms.pathFinding
+package lib.algorythms.pathFinding
 
 import com.soywiz.kds.IntArray2
 import com.soywiz.korma.geom.Point
-import utils.*
+import lib.extensions.*
 
 fun getPath(start: Point, end: Point, walls: IntArray2): List<Pair<Point, Point>> {
     val matrix = IntArray2(walls.width, walls.height, 1000)

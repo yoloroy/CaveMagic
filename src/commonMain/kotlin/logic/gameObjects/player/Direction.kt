@@ -1,8 +1,8 @@
 package logic.gameObjects.player
 
 import com.soywiz.korma.geom.Point
-import utils.point
-import utils.unaryMinus
+import lib.extensions.point
+import lib.extensions.unaryMinus
 
 enum class Direction {
     Nowhere {

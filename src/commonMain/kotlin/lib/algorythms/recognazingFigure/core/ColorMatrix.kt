@@ -1,7 +1,7 @@
-package algorythms.recognazingFigure.core
+package lib.algorythms.recognazingFigure.core
 
-import algorythms.recognazingFigure.adapters.Color
-import algorythms.recognazingFigure.adapters.color
+import lib.algorythms.recognazingFigure.adapters.Color
+import lib.algorythms.recognazingFigure.adapters.color
 
 typealias ColorMatrix = Array<Array<Color>>
 

@@ -1,4 +1,4 @@
-package utils
+package lib.extensions
 
 operator fun <T> Iterator<T>.plus(other: Iterator<T>) = iterator {
     forEach {

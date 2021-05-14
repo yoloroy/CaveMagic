@@ -1,4 +1,4 @@
-package utils
+package lib.extensions
 
 import com.soywiz.kmem.clamp
 import com.soywiz.korma.geom.IPoint

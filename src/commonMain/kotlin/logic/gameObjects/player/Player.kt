@@ -8,8 +8,8 @@ import logic.gameObjects.gameObject.GameObjectModel
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.units.Enemy
-import utils.*
-import utils.tiledMapView.Layer
+import lib.extensions.*
+import lib.tiledMapView.Layer
 
 class Player(
     private val map: TiledMapView,

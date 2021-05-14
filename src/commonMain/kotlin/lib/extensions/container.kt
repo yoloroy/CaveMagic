@@ -1,4 +1,4 @@
-package utils
+package lib.extensions
 
 import com.soywiz.korge.view.Container
 import com.soywiz.korma.geom.Point

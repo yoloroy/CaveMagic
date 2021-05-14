@@ -1,7 +1,7 @@
 package mainModule.scenes.gameScenes.gameScene
 
-import algorythms.recognazingFigure.figures.AreaFigure
-import algorythms.recognazingFigure.figures.Figure
+import lib.algorythms.recognazingFigure.figures.AreaFigure
+import lib.algorythms.recognazingFigure.figures.Figure
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.tiled.tiledMapView
@@ -14,10 +14,10 @@ import logic.gameObjects.player.Player
 import logic.magic.AreaMagic
 import logic.magic.magic
 import mainModule.scenes.abstracts.AssetsManager
-import utils.clamp
-import utils.plus
-import utils.tiledMapView.Layer
-import utils.tiledMapView.getTilesArea
+import lib.extensions.clamp
+import lib.extensions.plus
+import lib.tiledMapView.Layer
+import lib.tiledMapView.getTilesArea
 
 @Suppress("LeakingThis")
 open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
