@@ -120,7 +120,9 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
         actionType = ActionType.Nothing
 
         gameObjects.forEach {
-            it.makeTurn()
+            if (it.isAlive) {
+                it.makeTurn()
+            }
         }
 
         checkTeleports()

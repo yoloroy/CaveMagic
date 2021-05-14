@@ -41,7 +41,7 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
         }
 
         tilesManager[pos.xi, pos.yi, Layer.Cursor] =
-            if (actionType != ActionType.Attack || (pos - player.pos).length == 1.0)
+            if (actionType != ActionType.Attack || (pos - player.lastPreviewPos).length == 1.0)
                 cursorTileId
             else
                 MapTilesManager.TILE_CURSOR
@@ -49,10 +49,12 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
     }
 
     map.onClick {
+        val pos = (it.currentPosLocal / tilesManager.tileSize).int.p
+
         if (player.isAddingMoveEnabled && it.button == MouseButton.RIGHT) {// TODO: refactor
             player.actions += getPath(
                 player.lastPreviewPos,
-                (it.currentPosLocal / tilesManager.tileSize).int.p,
+                pos,
                 tilesManager[Layer.Walls]
             )
                 .take(player.remainingActionPoints)
@@ -61,6 +63,8 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
                     player.showPath(path)
                 }
                 .map { pathPart -> ActionType.Move to pathPart }
+        } else if (actionType == ActionType.Attack) {
+            player.actions += ActionType.Attack to pos
         }
     }
 }

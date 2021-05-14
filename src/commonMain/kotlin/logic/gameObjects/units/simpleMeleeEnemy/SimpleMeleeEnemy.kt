@@ -69,5 +69,5 @@ open class SimpleMeleeEnemyModel(
     damage: Int,
     health: Int = healthLimit
 ) : GameObjectModel(healthLimit, actionPointsLimit, health) {
-    var damage = ObservableProperty(damage)
+    val damage = ObservableProperty(damage)
 }

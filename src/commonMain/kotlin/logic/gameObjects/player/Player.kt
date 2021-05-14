@@ -2,6 +2,7 @@ package logic.gameObjects.player
 
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.*
+import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
@@ -21,7 +22,7 @@ class Player(
 ) : GameObject(tilesManager) {
     override val tile = GameObjectId.Player
 
-    override val model = GameObjectModel(10, 3)
+    override val model = PlayerModel(10, 3, 2)
 
     val remainingActionPoints get() = maxOf(model.actionPointsLimit.value - actions.size, 0)
     val actions = mutableListOf<Pair<ActionType, *>>()
@@ -56,8 +57,15 @@ class Player(
         @Suppress("UNCHECKED_CAST")
         when (type) {
             ActionType.Move -> doMove(value as Pair<Point, Point>)
+            ActionType.Attack -> doAttack(value as Point)
             else -> Unit
         }
+    }
+
+    private fun doAttack(point: Point) {
+        val target = gameObjects.firstOrNull { it.pos == point }
+        target?.handleAttack(model.damage.value)
+        println(target?.model?.health?.value)
     }
 
     private fun doMove(pathPart: Pair<Point, Point>) {
@@ -98,4 +106,13 @@ class Player(
 
     override fun delete() {
     }
+}
+
+class PlayerModel(
+    healthLimit: Int,
+    actionPointsLimit: Int,
+    damage: Int,
+    health: Int = healthLimit
+) : GameObjectModel(healthLimit, actionPointsLimit, health) {
+    val damage = ObservableProperty(damage)
 }

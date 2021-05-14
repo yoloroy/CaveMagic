@@ -7,7 +7,7 @@ open class GameObjectModel(
     actionPointsLimit: Int,
     health: Int = healthLimit
 ) {
-    var health = ObservableProperty(health)
-    var actionPointsLimit = ObservableProperty(actionPointsLimit)
-    var healthLimit = ObservableProperty(healthLimit)
+    val health = ObservableProperty(health)
+    val actionPointsLimit = ObservableProperty(actionPointsLimit)
+    val healthLimit = ObservableProperty(healthLimit)
 }

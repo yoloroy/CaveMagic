@@ -1,6 +1,9 @@
 package logic.gameObjects.gameObject
 
 import com.soywiz.korma.geom.Point
+import lib.extensions.xi
+import lib.extensions.yi
+import lib.tiledMapView.Layer
 import logic.gameObjects.logic.MessageHandler
 import logic.gameObjects.logic.Turnable
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
@@ -31,6 +34,11 @@ abstract class GameObject(open val tilesManager: MapTilesManager) : Turnable, Me
 
     open fun handleAttack(damage: Int) {
         model.health.value -= damage
+
+        if (model.health.value <= 0) {
+            isAlive = false
+            tilesManager[pos.xi, pos.yi, Layer.GameObjects] = GameObjectId.Empty.id
+        }
     }
 
     abstract fun delete()
