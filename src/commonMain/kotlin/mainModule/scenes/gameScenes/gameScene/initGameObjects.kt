@@ -19,7 +19,7 @@ fun initGameObjects(scene: GameScene) = scene.apply {
                 GameObjectId.Sheep ->
                     Sheep(tilesManager, pos)
                 GameObjectId.Skeleton ->
-                    SimpleMeleeEnemy(pos, 2, 2, 1, tilesManager, GameObjectId.Skeleton)
+                    SimpleMeleeEnemy(pos, 2, 2, 1, tilesManager, GameObjectId.Skeleton, corpseTile = 109)
                 else -> {
                     println("$id: ${GameObjectId.getTypeById(id)}")
                     throw UnknownUnitException()

@@ -17,8 +17,9 @@ open class SimpleMeleeEnemy(
     damage: Int,
     tilesManager: MapTilesManager,
     override val tile: GameObjectId,
-    health: Int = healthLimit
-) : GameObject(tilesManager), Enemy {
+    health: Int = healthLimit,
+    corpseTile: Int? = null
+) : GameObject(tilesManager, corpseTile = corpseTile), Enemy {
     override val model: SimpleMeleeEnemyModel = SimpleMeleeEnemyModel(healthLimit, actionPointsLimit, damage, health)
 
     private var state = States.Idle
