@@ -1,4 +1,4 @@
-package lib.widgets
+package mainModule.widgets
 
 import com.soywiz.korge.view.*
 import com.soywiz.korim.color.RGBA

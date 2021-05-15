@@ -1,4 +1,4 @@
-package lib.widgets
+package mainModule.widgets
 
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.ui.uiTextButton

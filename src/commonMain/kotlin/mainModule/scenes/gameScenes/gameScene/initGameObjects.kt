@@ -7,7 +7,6 @@ import logic.gameObjects.player.Player
 import logic.gameObjects.sheep.Sheep
 import logic.gameObjects.units.simpleMeleeEnemy.SimpleMeleeEnemy
 import lib.tiledMapView.Layer
-import lib.widgets.DeathScreen
 
 fun initGameObjects(scene: GameScene, onPlayerDeath: () -> Unit) = scene.apply {
     tilesManager.forEachObject(Layer.GameObjects) { pos, id ->

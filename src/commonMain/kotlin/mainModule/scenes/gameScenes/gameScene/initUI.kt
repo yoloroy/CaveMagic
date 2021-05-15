@@ -7,7 +7,7 @@ import com.soywiz.korma.geom.Point
 import logic.gameObjects.player.ActionType
 import mainModule.MainModule
 import lib.extensions.*
-import lib.widgets.valueBar
+import mainModule.widgets.valueBar
 
 internal fun Container.initUI(scene: GameScene) = scene.apply {
     fun Image.flip() {

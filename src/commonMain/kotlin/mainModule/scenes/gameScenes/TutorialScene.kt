@@ -1,6 +1,6 @@
 package mainModule.scenes.gameScenes
 
-import lib.widgets.DeathScreen
+import mainModule.widgets.DeathScreen
 import mainModule.scenes.gameScenes.gameScene.GameScene
 import mainModule.scenes.gameScenes.gameScene.initGameObjects
 
