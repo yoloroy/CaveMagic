@@ -8,6 +8,7 @@ import com.soywiz.korge.tiled.tiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korma.geom.Point
+import lib.algorythms.recognazingFigure.figures.SymbolFigure
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.player.ActionType
 import logic.gameObjects.player.Player
@@ -18,6 +19,9 @@ import lib.extensions.clamp
 import lib.extensions.plus
 import lib.tiledMapView.Layer
 import lib.tiledMapView.getTilesArea
+import logic.magic.DamageMagic
+import logic.magic.Magic
+import mainModule.scenes.gameScenes.gameScene.MapTilesManager.Companion.TILE_LIGHTNING_CAST_CURSOR
 
 @Suppress("LeakingThis")
 open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
@@ -44,7 +48,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
             cursorTileId = MapTilesManager.TILE_CURSOR
 
             when (value) {
-                ActionType.Magic -> {
+                ActionType.MagicDrawing -> {
                     figureRecognitionComponent.enableObserving()
                 }
                 ActionType.Move -> {
@@ -60,6 +64,8 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
         }
 
     internal var cursorTileId = MapTilesManager.TILE_CURSOR
+
+    internal var savedMagicSymbol: Magic? = null
 
     override suspend fun Container.sceneInit() {
         loadAssets()
@@ -146,11 +152,18 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
     private val onNewFigure get() = { figure: Figure ->
         when (figure) {
-            is AreaFigure -> {
+            is AreaFigure -> { // TODO
                 val square = map.getTilesArea(figure.area) + player.pos
                 square.start.clamp(Point(0)..(map[0] as TileMap).intMap.run { Point(width, height) })
 
                 magicHandler.onAreaMagic(figure.magic as AreaMagic, square)
+            }
+            is SymbolFigure -> {
+                savedMagicSymbol = figure.magic
+                cursorTileId = when (savedMagicSymbol) {
+                    DamageMagic.Lightning -> TILE_LIGHTNING_CAST_CURSOR
+                    else -> throw Error("Unknown magic")
+                }
             }
             else -> Unit
         }

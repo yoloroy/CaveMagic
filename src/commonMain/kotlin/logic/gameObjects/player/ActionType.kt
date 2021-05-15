@@ -5,5 +5,6 @@ enum class ActionType {
     Move,
     Attack,
     UseItem,
-    Magic
+    MagicDrawing,
+    MagicCast
 }

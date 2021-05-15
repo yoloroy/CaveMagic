@@ -7,3 +7,7 @@ enum class AreaMagic : Magic {
     Circle,
     Wave;
 }
+
+enum class DamageMagic : Magic {
+    Lightning
+}

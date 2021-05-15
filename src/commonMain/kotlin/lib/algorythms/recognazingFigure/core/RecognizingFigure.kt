@@ -45,7 +45,7 @@ val ColorMatrix.figure: Figure
         return Figure.figures.maxByOrNull { figure ->
             val figurePic = figureMasks[figure]!!
 
-            getSimilarityValue(points, figurePic)
+            getSimilarityValue(points, figurePic).also { println("$figure : $it") }
         }!!
     }
 

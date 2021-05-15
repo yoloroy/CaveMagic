@@ -63,8 +63,13 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
                     player.showPath(path)
                 }
                 .map { pathPart -> ActionType.Move to pathPart }
+            actionType = ActionType.Nothing
         } else if (actionType == ActionType.Attack) {
             player.actions += ActionType.Attack to pos
+            actionType = ActionType.Nothing
+        } else if (savedMagicSymbol != null) {
+            player.addCastMagicOn(pos, savedMagicSymbol!!)
+            actionType = ActionType.Nothing
         }
     }
 }

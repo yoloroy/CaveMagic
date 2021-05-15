@@ -71,7 +71,7 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         onDown { flip() }
         onUp {
             flip()
-            actionType = ActionType.Magic
+            actionType = ActionType.MagicDrawing
         }
     }
 

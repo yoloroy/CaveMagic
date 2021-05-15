@@ -11,6 +11,8 @@ import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.units.Enemy
 import lib.extensions.*
 import lib.tiledMapView.Layer
+import logic.magic.DamageMagic
+import logic.magic.Magic
 
 class Player(
     private val map: TiledMapView,
@@ -57,14 +59,19 @@ class Player(
         @Suppress("UNCHECKED_CAST")
         when (type) {
             ActionType.Move -> doMove(value as Pair<Point, Point>)
-            ActionType.Attack -> doAttack(value as Point)
+            ActionType.Attack -> {
+                if (value is Point)
+                    doAttack(value)
+                else
+                    (value as Pair<Point, Int>).let { doAttack(it.first, it.second) }
+            }
             else -> Unit
         }
     }
 
-    private fun doAttack(point: Point) {
+    private fun doAttack(point: Point, damage: Int = model.damage.value) {
         val target = gameObjects.firstOrNull { it.pos == point }
-        target?.handleAttack(model.damage.value)
+        target?.handleAttack(damage)
         println(target?.model?.health?.value)
     }
 
@@ -105,6 +112,14 @@ class Player(
     }
 
     override fun delete() {
+    }
+
+    fun addCastMagicOn(pos: Point, magicSymbol: Magic) {
+        when (magicSymbol) {
+            DamageMagic.Lightning -> {
+                actions += ActionType.Attack to (pos to 2)
+            }
+        }
     }
 }
 

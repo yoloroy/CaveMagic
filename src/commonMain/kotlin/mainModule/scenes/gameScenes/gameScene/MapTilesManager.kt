@@ -15,6 +15,7 @@ class MapTilesManager(private val map: TiledMapView) {
         const val TILE_CURSOR = 1439
         const val TILE_ATTACK_CURSOR = 1438
         const val TILE_MOVE_CURSOR = 1440
+        const val TILE_LIGHTNING_CAST_CURSOR = 1437
     }
 
     val tileSize get() = map.tileset.run { Point(width, height) }

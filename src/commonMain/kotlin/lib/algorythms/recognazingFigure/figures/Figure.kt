@@ -11,7 +11,7 @@ interface Figure {
     val path: String
 
     companion object : AssetsManager {
-        val figures: List<Figure> get() = listOf(AreaFigure.Triangle, AreaFigure.Circle, AreaFigure.Square)
+        val figures: List<Figure> get() = AreaFigure.values().toList() + SymbolFigure.values()
 
         override suspend fun loadAssets() {
             figureMasks = mutableMapOf()
@@ -40,6 +40,12 @@ enum class AreaFigure : Figure {
     };
 
     abstract var area: ClosedRange<Point>
+}
+
+enum class SymbolFigure : Figure {
+    Lightning {
+        override val path = "figures/lightning_mask.png"
+    }
 }
 
 lateinit var figureMasks: MutableMap<Figure, ColorMatrix>
