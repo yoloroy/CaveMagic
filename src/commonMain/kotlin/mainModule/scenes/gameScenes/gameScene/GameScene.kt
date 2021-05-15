@@ -105,7 +105,9 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
         initTeleports()
     }
 
-    private fun initMapActions() = initMapActions(this)
+    private fun initMapActions() {
+        initMapActions(this)
+    }
 
     private fun initTeleports() {
         val starts = mutableMapOf<Int, Point>()
@@ -118,9 +120,13 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
         }
     }
 
-    private fun initGameObjects() = initGameObjects(this)
+    internal open fun initGameObjects() {
+        initGameObjects(this) {}
+    }
 
-    private fun Container.initUI() = initUI(this@GameScene)
+    private fun Container.initUI() {
+        initUI(this@GameScene)
+    }
 
     internal fun makeTurn() {
         actionType = ActionType.Nothing

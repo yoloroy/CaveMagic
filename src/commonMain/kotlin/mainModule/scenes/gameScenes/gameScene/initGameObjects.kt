@@ -7,13 +7,19 @@ import logic.gameObjects.player.Player
 import logic.gameObjects.sheep.Sheep
 import logic.gameObjects.units.simpleMeleeEnemy.SimpleMeleeEnemy
 import lib.tiledMapView.Layer
+import lib.widgets.DeathScreen
 
-fun initGameObjects(scene: GameScene) = scene.apply {
+fun initGameObjects(scene: GameScene, onPlayerDeath: () -> Unit) = scene.apply {
     tilesManager.forEachObject(Layer.GameObjects) { pos, id ->
         val type = GameObjectId.getTypeById(id)
 
         if (type == GameObjectId.Player) {
             player = Player(map, camera, gameObjects, tilesManager, pos, actionType == ActionType.Move)
+            player.model.health.observe { // TODO: refactor
+                if (it <= 0) {
+                    onPlayerDeath()
+                }
+            }
         } else {
             gameObjects += when (type) {
                 GameObjectId.Sheep ->

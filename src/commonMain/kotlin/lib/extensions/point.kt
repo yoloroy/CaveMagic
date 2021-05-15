@@ -67,6 +67,10 @@ val Int.x get() = Point(this, 0)
 
 val Int.y get() = Point(0, this)
 
+val Double.x get() = Point(this, .0)
+
+val Double.y get() = Point(.0, this)
+
 fun <T: Number> Pair<T, T>.toPoint(): Point {
     if (first is Int && second is Int)
         return Point(first as Int, second as Int)
