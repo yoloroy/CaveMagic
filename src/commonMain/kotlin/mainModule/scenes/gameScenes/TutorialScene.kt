@@ -7,7 +7,7 @@ import mainModule.scenes.gameScenes.gameScene.initGameObjects
 class TutorialScene : GameScene("gfx/sampleMap.tmx") {
     override fun initGameObjects() {
         initGameObjects(this) {
-            DeathScreen(this).show<TutorialScene>()
+            DeathScreen(this, TutorialScene::class).show()
         }
     }
 }

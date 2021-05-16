@@ -11,9 +11,10 @@ import lib.extensions.sizePoint
 import lib.extensions.y
 import mainModule.MainModule
 import mainModule.scenes.gameScenes.gameScene.GameScene
+import kotlin.reflect.KClass
 
-class DeathScreen(val scene: GameScene) {
-    inline fun <reified SceneType : GameScene> show() = scene.sceneView.apply container@{
+class DeathScreen<SceneType: GameScene>(private val scene: GameScene, private val currentClass: KClass<SceneType>) {
+    fun show() = scene.sceneView.apply container@{
         val center = MainModule.size.size.p / 2
 
         val text = text("YOU DIED") {
@@ -37,7 +38,7 @@ class DeathScreen(val scene: GameScene) {
             position(center + text.height.y / 2)
 
             onClick {
-                launchImmediately(scene.coroutineContext) { scene.sceneContainer.changeTo<SceneType>() }
+                launchImmediately(scene.coroutineContext) { scene.sceneContainer.changeTo(currentClass) }
             }
         }
     }

@@ -5,9 +5,10 @@ import com.soywiz.korinject.AsyncInjector
 import com.soywiz.korma.geom.ScaleMode
 import com.soywiz.korma.geom.SizeInt
 import mainModule.scenes.gameScenes.TutorialScene
+import mainModule.scenes.menuScene.MainMenuScene
 
 object MainModule : Module() {
-    override val mainScene = TutorialScene::class
+    override val mainScene = MainMenuScene::class
 
     override val fullscreen: Boolean get() = true
 
@@ -17,6 +18,7 @@ object MainModule : Module() {
         get() = ScaleMode.COVER
 
     override suspend fun AsyncInjector.configure() {
+        mapPrototype { MainMenuScene() }
         mapPrototype { TutorialScene() }
     }
 }
