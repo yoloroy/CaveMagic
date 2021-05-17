@@ -8,7 +8,8 @@ import com.soywiz.korge.view.position
 import com.soywiz.korge.view.size
 import com.soywiz.korim.text.TextAlignment
 import com.soywiz.korio.async.launchImmediately
-import lib.extensions.sizePoint
+import com.soywiz.korma.geom.Point
+import com.soywiz.korma.geom.Size
 import lib.extensions.y
 import mainModule.MainModule
 import mainModule.scenes.gameScenes.TutorialScene
@@ -20,13 +21,21 @@ class MainMenuScene : Scene() {
     )
 
     override suspend fun Container.sceneInit() {
+        val buttonSizePoint = Point(60.0, 6.4)
+        val buttonSize = Size(buttonSizePoint)
+        val textSize = 6.0
+
+        val deltaPoint = (buttonSizePoint.y + 2).y
+        val centerPoint = MainModule.size.size.p / 2
+        val firstButtonPosition = centerPoint - buttonSizePoint / 2 - deltaPoint * textButtons.size / 2.0
+
         textButtons.forEachIndexed { i, (text, action) ->
             uiTextButton {
                 this.text = text
-                size(60.0, 6.4)
+                size(buttonSize.width, buttonSize.height)
                 textAlignment = TextAlignment.MIDDLE_CENTER
-                textSize = 6.0
-                position(MainModule.size.size.p / 2 - sizePoint / 2 + (sizePoint.y + 2).y * (i - textButtons.size.toDouble() / 2))
+                this.textSize = textSize
+                position(firstButtonPosition + deltaPoint * i)
 
                 onClick { action() }
             }
