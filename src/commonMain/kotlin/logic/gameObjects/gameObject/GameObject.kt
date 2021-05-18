@@ -8,7 +8,7 @@ import logic.gameObjects.logic.MessageHandler
 import logic.gameObjects.logic.Turnable
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 
-abstract class GameObject(open val tilesManager: MapTilesManager, val corpseTile: Int? = null) : Turnable, MessageHandler {
+abstract class GameObject(open val tilesManager: MapTilesManager, val corpseTile: Int? = null, var pos: Point = Point()) : Turnable, MessageHandler {
     abstract val model: GameObjectModel
 
     override val messages = mutableListOf<Int>()
@@ -18,8 +18,6 @@ abstract class GameObject(open val tilesManager: MapTilesManager, val corpseTile
     var lastTeleportId: Int? = null
 
     var isAlive: Boolean = true
-
-    open var pos: Point = Point()
 
     open fun teleportTo(point: Point, teleportId: Int): Boolean {
         if (lastTeleportId != teleportId) {

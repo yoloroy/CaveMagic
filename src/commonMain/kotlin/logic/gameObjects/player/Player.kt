@@ -19,9 +19,13 @@ class Player(
     private val camera: Camera,
     private val gameObjects: List<GameObject>,
     override val tilesManager: MapTilesManager,
-    override var pos: Point = tilesManager.playerPos,
+    pos: Point = tilesManager.playerPos,
     var isAddingMoveEnabled: Boolean = false
 ) : GameObject(tilesManager) {
+    init {
+        this.pos = pos
+    }
+
     override val tile = GameObjectId.Player
 
     override val model = PlayerModel(10, 3, 2)
@@ -32,10 +36,6 @@ class Player(
 
     init {
         updateCamera()
-    }
-
-    fun addPath(path: Collection<Pair<Point, Point>>) {
-
     }
 
     fun showPath(path: Collection<Pair<Point, Point>>) {

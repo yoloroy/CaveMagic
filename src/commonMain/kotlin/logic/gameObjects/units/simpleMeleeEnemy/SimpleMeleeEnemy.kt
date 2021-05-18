@@ -1,17 +1,20 @@
 package logic.gameObjects.units.simpleMeleeEnemy
 
+import com.soywiz.kmem.toIntCeil
 import lib.algorythms.pathFinding.getPath
 import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
+import lib.extensions.setTo
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
 import logic.gameObjects.units.Enemy
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 import lib.tiledMapView.Layer
+import logic.gameObjects.player.ActionType
 
 open class SimpleMeleeEnemy(
-    override var pos: Point,
+    pos: Point,
     healthLimit: Int,
     actionPointsLimit: Int,
     damage: Int,
@@ -19,7 +22,10 @@ open class SimpleMeleeEnemy(
     override val tile: GameObjectId,
     health: Int = healthLimit,
     corpseTile: Int? = null
-) : GameObject(tilesManager, corpseTile = corpseTile), Enemy {
+) :
+    GameObject(tilesManager, corpseTile = corpseTile, pos),
+    Enemy
+{
     override val model: SimpleMeleeEnemyModel = SimpleMeleeEnemyModel(healthLimit, actionPointsLimit, damage, health)
 
     private var state = States.Idle
@@ -30,30 +36,64 @@ open class SimpleMeleeEnemy(
             state = States.Battle
         }
 
-    override fun makeTurn() {
+    private var isTurnCalculated: Boolean = false
+
+    override val actions = mutableListOf<Pair<ActionType, *>>()
+
+    private val lastPreviewPos = pos.copy()
+
+    override fun calculateTurn() {
+        actions.clear()
+        isTurnCalculated = true
         when (state) {
-            States.Battle -> makeBattleTurn()
-            States.Idle -> makeIdleTurn()
+            States.Battle -> run calculating@{
+                repeat(model.actionPointsLimit.value) {
+                    calculateBattleTurn().let {
+                        actions += it
+
+                        if (it.first == ActionType.Attack) {
+                            return@calculating
+                        }
+                    }
+                }
+            }
+            States.Idle -> Unit
         }
     }
 
-    private fun makeBattleTurn() {
-        target?.let { target ->
-            if (target.pos.distanceTo(pos).toInt() == 1) {
-                target.handleAttack(model.damage.value)
-            } else {
-                println("finding path")
-                val path = getPath(pos, target.pos, tilesManager[Layer.Walls])
-                println(path)
+    private fun calculateBattleTurn() = target?.let { target ->
+        if (target.pos.distanceTo(lastPreviewPos).toIntCeil() == 1) {
+            ActionType.Attack to null
+        } else {
+            val path = getPath(lastPreviewPos, target.pos, tilesManager[Layer.Walls]) // TODO: add caching
 
-                tilesManager.updatePos(pos, path.first().second, tile)
+            ActionType.Move to path.first().second.also { lastPreviewPos.setTo(it) }
+        }
+    } ?: ActionType.Nothing to null
+
+    override fun makeTurn() {
+        if (!isTurnCalculated) {
+            calculateTurn()
+        }
+
+        actions.forEach { (type, data) ->
+            when(type) {
+                ActionType.Attack -> doAttack()
+                ActionType.Move -> doMove(data as Point)
+                else -> Unit
             }
         }
+
+        isTurnCalculated = false
     }
 
-    private fun makeIdleTurn() {
+    private fun doAttack() = target?.let { target ->
+        if (target.pos.distanceTo(pos).toIntCeil() == 1) {
+            target.handleAttack(model.damage.value)
+        }
+    } ?: Unit
 
-    }
+    private fun doMove(newPos: Point) = tilesManager.updatePos(pos, newPos, tile)
 
     override fun delete() {
         TODO("Not yet implemented")

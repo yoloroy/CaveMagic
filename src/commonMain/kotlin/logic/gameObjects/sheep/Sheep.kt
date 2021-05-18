@@ -12,8 +12,12 @@ import kotlin.math.sign
 
 class Sheep(
     override val tilesManager: MapTilesManager,
-    override var pos: Point = Point(0, 0)
+    pos: Point = Point(0, 0)
 ) : GameObject(tilesManager) {
+    init {
+        this.pos = pos
+    }
+
     override val model = GameObjectModel(1, 1)
 
     override val tile = GameObjectId.Sheep
