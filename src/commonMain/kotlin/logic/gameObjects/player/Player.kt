@@ -4,6 +4,7 @@ import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
+import lib.algorythms.pathFinding.getPath
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
@@ -31,14 +32,14 @@ class Player(
     override val model = PlayerModel(10, 3, 2)
 
     val remainingActionPoints get() = maxOf(model.actionPointsLimit.value - actions.size, 0)
-    val actions = mutableListOf<Pair<ActionType, *>>()
+    private val actions = mutableListOf<Pair<ActionType, *>>()
     val lastPreviewPos = pos.copy()
 
     init {
         updateCamera()
     }
 
-    fun showPath(path: Collection<Pair<Point, Point>>) {
+    private fun showPath(path: Collection<Pair<Point, Point>>) {
         path.forEach {
             val (x, y) = it.second
             tilesManager[x.toInt(), y.toInt(), Layer.StepsPreview] = MapTilesManager.TILE_MOVE_CURSOR
@@ -120,6 +121,20 @@ class Player(
                 actions += ActionType.Attack to (pos to 2)
             }
         }
+    }
+
+    fun addMoveTo(pos: Point) {
+        actions += getPath(lastPreviewPos, pos, tilesManager[Layer.Walls])
+            .take(remainingActionPoints)
+            .also { path ->
+                lastPreviewPos.setTo(path.last().second)
+                showPath(path)
+            }
+            .map { pathPart -> ActionType.Move to pathPart }
+    }
+
+    fun addAttackOn(pos: Point) {
+        actions += ActionType.Attack to pos
     }
 }
 
