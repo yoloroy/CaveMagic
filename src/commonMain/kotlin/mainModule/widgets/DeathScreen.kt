@@ -11,6 +11,7 @@ import lib.extensions.sizePoint
 import lib.extensions.y
 import mainModule.MainModule
 import mainModule.scenes.gameScenes.gameScene.GameScene
+import mainModule.scenes.menuScene.MainMenuScene
 import kotlin.reflect.KClass
 
 class DeathScreen<SceneType: GameScene>(private val scene: GameScene, private val currentClass: KClass<SceneType>) {
@@ -28,7 +29,7 @@ class DeathScreen<SceneType: GameScene>(private val scene: GameScene, private va
             position(center + text.height.y / 2 + sizePoint * Point.Left.point)
 
             onClick {
-                // TODO: create menu scene
+                launchImmediately(scene.coroutineContext) { scene.sceneContainer.changeTo<MainMenuScene>() }
             }
         }
 
