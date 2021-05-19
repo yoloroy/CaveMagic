@@ -7,6 +7,7 @@ import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.tiled.tiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
+import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
 import lib.algorythms.recognazingFigure.figures.SymbolFigure
 import logic.gameObjects.gameObject.GameObject
@@ -40,6 +41,9 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     private val teleports = mutableMapOf<Int, Pair<Point, Point>>()
 
     private val turns = mutableListOf<() -> Unit>()
+
+    private var currentPhase = TurnPhase.First
+    internal val oCurrentPhase = ObservableProperty(::currentPhase)
 
     internal var actionType: ActionType = ActionType.Nothing
         set(value) {
@@ -129,6 +133,10 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     }
 
     internal fun makeTurn() {
+        oCurrentPhase.apply {
+            value = value.opposite
+        }
+
         actionType = ActionType.Nothing
 
         gameObjects.forEach {
@@ -188,5 +196,17 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
             turns[i + from] = { previousWork(); newWork() }
         }
+    }
+}
+
+enum class TurnPhase(val text: String) {
+    First("First phase"),
+    Second("Second Phase");
+
+    override fun toString() = text
+
+    val opposite get() = when(this) {
+        First -> Second
+        Second -> First
     }
 }

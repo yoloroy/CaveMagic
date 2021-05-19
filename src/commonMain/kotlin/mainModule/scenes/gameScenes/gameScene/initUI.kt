@@ -3,6 +3,7 @@ package mainModule.scenes.gameScenes.gameScene
 import com.soywiz.korge.input.onDown
 import com.soywiz.korge.input.onUp
 import com.soywiz.korge.view.*
+import com.soywiz.korim.text.TextAlignment
 import com.soywiz.korma.geom.Point
 import logic.gameObjects.player.ActionType
 import mainModule.MainModule
@@ -15,7 +16,7 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         anchor(1 - anchorX, 1 - anchorY)
     }
 
-    image(assetsManager.nextTurnBitmap) {
+    val nextTurnButton = image(assetsManager.nextTurnBitmap) {
         smoothing = false
         anchor(2, 1)
         size(16, 16)
@@ -26,6 +27,22 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
             flip()
             makeTurn()
         }
+    }
+
+    text(oCurrentPhase.value.text) {
+        oCurrentPhase.observe {
+            text = it.text
+        }
+
+        textSize = 3.8
+        size(nextTurnButton.width - 4, 4.0)
+
+        alignment = TextAlignment.TOP_CENTER
+
+        setPositionRelativeTo(nextTurnButton,
+            - nextTurnButton.size * nextTurnButton.anchor
+            + sizePoint * Point(0.5, -1.0)
+        )
     }
 
     val bottomCenter = MainModule.size.size.p + MainModule.size.size.p * Point.Left.point / 2

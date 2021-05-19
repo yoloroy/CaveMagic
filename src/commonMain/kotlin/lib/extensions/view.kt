@@ -1,13 +1,11 @@
 package lib.extensions
 
-import com.soywiz.korge.ui.UIView
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.View
-import com.soywiz.korge.view.addTo
-import com.soywiz.korge.view.size
+import com.soywiz.korge.view.*
 import com.soywiz.korma.geom.Point
 
 val View.size get() = Point(width, height)
+
+val Anchorable.anchor get() = Point(anchorX, anchorY)
 
 val View.scaledSize get() = size * scalePoint
 
