@@ -139,10 +139,14 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
         actionType = ActionType.Nothing
 
-        gameObjects.forEach {
-            if (it.isAlive) {
-                it.makeTurn()
+        if (oCurrentPhase.value == TurnPhase.First) {
+            gameObjects.forEach {
+                if (it.isAlive) {
+                    it.makeTurn()
+                }
             }
+        } else {
+            player.makeTurn()
         }
 
         checkTeleports()
