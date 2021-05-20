@@ -20,6 +20,7 @@ import lib.extensions.clamp
 import lib.extensions.plus
 import lib.tiledMapView.Layer
 import lib.tiledMapView.getTilesArea
+import logic.gameObjects.logic.Phasable
 import logic.magic.DamageMagic
 import logic.magic.Magic
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager.Companion.TILE_LIGHTNING_CAST_CURSOR
@@ -133,16 +134,19 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     }
 
     internal fun makeTurn() {
-        oCurrentPhase.apply {
-            value = value.opposite
-        }
-
         actionType = ActionType.Nothing
 
         if (oCurrentPhase.value == TurnPhase.First) {
             gameObjects.forEach {
                 if (it.isAlive) {
                     it.makeTurn()
+                }
+            }
+
+            // next turn is second, so:
+            gameObjects.forEach {
+                if (it.isAlive && it is Phasable) {
+                    it.calculateTurn()
                 }
             }
         } else {
@@ -153,6 +157,10 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
         if (turns.size > 0)
             turns.removeFirst()()
+
+        oCurrentPhase.apply {
+            value = value.opposite
+        }
     }
 
     private fun checkTeleports() {

@@ -11,19 +11,31 @@ import lib.extensions.setTo
 import lib.tiledMapView.Layer
 import lib.extensions.xi
 import lib.extensions.yi
+import logic.gameObjects.logic.Phasable
+import logic.gameObjects.logic.hideAllPreviewActions
+import logic.gameObjects.logic.showPreviewActions
 
 internal fun initMapActions(scene: GameScene) = scene.apply {
     val previewPath = mutableListOf<Pair<Point, Point>>()
     val lastCursorPos = Point(0)
 
-    map.onMove {
-        val pos = (it.currentPosLocal / tilesManager.tileSize).int.p
+    map.onMove { mouse ->
+        val pos = (mouse.currentPosLocal / tilesManager.tileSize).int.p
         tilesManager[lastCursorPos.xi, lastCursorPos.yi, Layer.Cursor] = MapTilesManager.EMPTY
 
         if (actionType == ActionType.Move) {
             showPreviewPathOnMove(previewPath, pos)
         }
 
+        gameObjects // TODO: refactor
+            .firstOrNull { it.pos == pos }
+            .takeIf { it is Phasable }
+            .also {
+                hideAllPreviewActions(tilesManager)
+            }
+            ?.let { it as Phasable
+                it.showPreviewActions(tilesManager)
+            }
         showMapCursor(pos)
         lastCursorPos.setTo(pos)
     }
