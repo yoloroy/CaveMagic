@@ -1,6 +1,9 @@
 package logic.gameObjects.logic
 
 import com.soywiz.korma.geom.Point
+import ktres.TILE_ATTACK_CURSOR
+import ktres.TILE_EMPTY
+import ktres.TILE_MOVE_CURSOR
 import lib.extensions.xi
 import lib.extensions.yi
 import lib.tiledMapView.Layer
@@ -30,7 +33,7 @@ fun Phasable.showPreviewActions(tilesManager: MapTilesManager) {
 fun hideAllPreviewActions(tilesManager: MapTilesManager) {
     involvedPoints.forEach { involvedPoint ->
         involvedPoint.run {
-            tilesManager[xi, yi, Layer.EnemyStepsPreview] = MapTilesManager.EMPTY
+            tilesManager[xi, yi, Layer.EnemyStepsPreview] = TILE_EMPTY
         }
     }
 }
@@ -39,12 +42,12 @@ private fun showMoveAction(pos: Point, tilesManager: MapTilesManager) {
     val (x, y) = pos
     involvedPoints += pos.copy()
 
-    tilesManager[x.toInt(), y.toInt(), Layer.EnemyStepsPreview] = MapTilesManager.TILE_MOVE_CURSOR
+    tilesManager[x.toInt(), y.toInt(), Layer.EnemyStepsPreview] = TILE_MOVE_CURSOR
 }
 
 private fun showAttackAction(pos: Point, tilesManager: MapTilesManager) {
     val (x, y) = pos
     involvedPoints += pos.copy()
 
-    tilesManager[x.toInt(), y.toInt(), Layer.EnemyStepsPreview] = MapTilesManager.TILE_ATTACK_CURSOR
+    tilesManager[x.toInt(), y.toInt(), Layer.EnemyStepsPreview] = TILE_ATTACK_CURSOR
 }

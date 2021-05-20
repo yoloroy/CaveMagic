@@ -4,20 +4,12 @@ import com.soywiz.kds.IntArray2
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korma.geom.Point
-import logic.gameObjects.gameObject.GameObjectId
-import lib.tiledMapView.Layer
+import ktres.TILE_EMPTY
 import lib.extensions.*
+import lib.tiledMapView.Layer
+import logic.gameObjects.gameObject.GameObjectId
 
 class MapTilesManager(private val map: TiledMapView) {
-    companion object {
-        const val EMPTY = 0
-
-        const val TILE_CURSOR = 1439
-        const val TILE_ATTACK_CURSOR = 1438
-        const val TILE_MOVE_CURSOR = 1440
-        const val TILE_LIGHTNING_CAST_CURSOR = 1437
-    }
-
     val tileSize get() = map.tileset.run { Point(width, height) }
 
     val playerPos get() = get(Layer.GameObjects).getPositionsWithValue(1).first().toPoint() // TODO: remove logic.magic value 1
@@ -25,7 +17,7 @@ class MapTilesManager(private val map: TiledMapView) {
     fun forEachObject(layer: Layer, callback: (Point, Int) -> Unit) = get(layer).run {
         repeat(height) { y ->
             repeat(width) { x ->
-                if (get(x, y) != EMPTY)
+                if (get(x, y) != TILE_EMPTY)
                     callback(Point(x, y), get(x, y))
             }
         }

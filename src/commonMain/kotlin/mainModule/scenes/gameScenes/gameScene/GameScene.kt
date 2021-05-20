@@ -1,7 +1,5 @@
 package mainModule.scenes.gameScenes.gameScene
 
-import lib.algorythms.recognazingFigure.figures.AreaFigure
-import lib.algorythms.recognazingFigure.figures.Figure
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.tiled.tiledMapView
@@ -9,21 +7,25 @@ import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
 import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
+import ktres.TILE_ATTACK_CURSOR
+import ktres.TILE_CURSOR
+import ktres.TILE_LIGHTNING_CAST_CURSOR
+import lib.algorythms.recognazingFigure.figures.AreaFigure
+import lib.algorythms.recognazingFigure.figures.Figure
 import lib.algorythms.recognazingFigure.figures.SymbolFigure
-import logic.gameObjects.gameObject.GameObject
-import logic.gameObjects.player.ActionType
-import logic.gameObjects.player.Player
-import logic.magic.AreaMagic
-import logic.magic.magic
-import mainModule.scenes.abstracts.AssetsManager
 import lib.extensions.clamp
 import lib.extensions.plus
 import lib.tiledMapView.Layer
 import lib.tiledMapView.getTilesArea
+import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.logic.Phasable
+import logic.gameObjects.player.ActionType
+import logic.gameObjects.player.Player
+import logic.magic.AreaMagic
 import logic.magic.DamageMagic
 import logic.magic.Magic
-import mainModule.scenes.gameScenes.gameScene.MapTilesManager.Companion.TILE_LIGHTNING_CAST_CURSOR
+import logic.magic.magic
+import mainModule.scenes.abstracts.AssetsManager
 
 @Suppress("LeakingThis")
 open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
@@ -50,7 +52,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
         set(value) {
             figureRecognitionComponent.unableObserving()
             player.isAddingMoveEnabled = false
-            cursorTileId = MapTilesManager.TILE_CURSOR
+            cursorTileId = TILE_CURSOR
 
             when (value) {
                 ActionType.MagicDrawing -> {
@@ -60,7 +62,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
                     player.isAddingMoveEnabled = true
                 }
                 ActionType.Attack -> {
-                    cursorTileId = MapTilesManager.TILE_ATTACK_CURSOR
+                    cursorTileId = TILE_ATTACK_CURSOR
                 }
                 else -> {}
             }
@@ -68,7 +70,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
             field = value
         }
 
-    internal var cursorTileId = MapTilesManager.TILE_CURSOR
+    internal var cursorTileId = TILE_CURSOR
 
     internal var savedMagicSymbol: Magic? = null
 

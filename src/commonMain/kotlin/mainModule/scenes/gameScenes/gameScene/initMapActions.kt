@@ -1,19 +1,22 @@
 package mainModule.scenes.gameScenes.gameScene
 
-import lib.algorythms.pathFinding.getPath
 import com.soywiz.korev.MouseButton
 import com.soywiz.korge.input.onClick
 import com.soywiz.korge.input.onMove
 import com.soywiz.korma.geom.Point
 import com.soywiz.korma.geom.int
-import logic.gameObjects.player.ActionType
+import ktres.TILE_CURSOR
+import ktres.TILE_EMPTY
+import ktres.TILE_MOVE_CURSOR
+import lib.algorythms.pathFinding.getPath
 import lib.extensions.setTo
-import lib.tiledMapView.Layer
 import lib.extensions.xi
 import lib.extensions.yi
+import lib.tiledMapView.Layer
 import logic.gameObjects.logic.Phasable
 import logic.gameObjects.logic.hideAllPreviewActions
 import logic.gameObjects.logic.showPreviewActions
+import logic.gameObjects.player.ActionType
 
 internal fun initMapActions(scene: GameScene) = scene.apply {
     val previewPath = mutableListOf<Pair<Point, Point>>()
@@ -21,7 +24,7 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
 
     map.onMove { mouse ->
         val pos = (mouse.currentPosLocal / tilesManager.tileSize).int.p
-        tilesManager[lastCursorPos.xi, lastCursorPos.yi, Layer.Cursor] = MapTilesManager.EMPTY
+        tilesManager[lastCursorPos.xi, lastCursorPos.yi, Layer.Cursor] = TILE_EMPTY
 
         if (actionType == ActionType.Move) {
             showPreviewPathOnMove(previewPath, pos)
@@ -61,14 +64,14 @@ private fun GameScene.showMapCursor(pos: Point) {
         if (actionType != ActionType.Attack || (pos - player.lastPreviewPos).length == 1.0)
             cursorTileId
         else
-            MapTilesManager.TILE_CURSOR
+            TILE_CURSOR
 }
 
 private fun GameScene.showPreviewPathOnMove(
     previewPath: MutableList<Pair<Point, Point>>, pos: Point
 ) = previewPath.run {
     forEach { (_, pathPoint) ->
-        tilesManager[pathPoint.xi, pathPoint.yi, Layer.Cursor] = MapTilesManager.EMPTY
+        tilesManager[pathPoint.xi, pathPoint.yi, Layer.Cursor] = TILE_EMPTY
     }
 
     clear()
@@ -78,6 +81,6 @@ private fun GameScene.showPreviewPathOnMove(
     )
 
     forEach { (_, pathPoint) ->
-        tilesManager[pathPoint.xi, pathPoint.yi, Layer.Cursor] = MapTilesManager.TILE_MOVE_CURSOR
+        tilesManager[pathPoint.xi, pathPoint.yi, Layer.Cursor] = TILE_MOVE_CURSOR
     }
 }

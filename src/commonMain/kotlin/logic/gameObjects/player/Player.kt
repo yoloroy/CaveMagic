@@ -1,19 +1,22 @@
 package logic.gameObjects.player
 
 import com.soywiz.korge.tiled.TiledMapView
-import com.soywiz.korge.view.*
+import com.soywiz.korge.view.Camera
+import com.soywiz.korge.view.setPositionRelativeTo
 import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
+import ktres.TILE_EMPTY
+import ktres.TILE_MOVE_CURSOR
 import lib.algorythms.pathFinding.getPath
-import logic.gameObjects.gameObject.GameObjectId
-import logic.gameObjects.gameObject.GameObjectModel
-import mainModule.scenes.gameScenes.gameScene.MapTilesManager
-import logic.gameObjects.gameObject.GameObject
-import logic.gameObjects.units.Enemy
 import lib.extensions.*
 import lib.tiledMapView.Layer
+import logic.gameObjects.gameObject.GameObject
+import logic.gameObjects.gameObject.GameObjectId
+import logic.gameObjects.gameObject.GameObjectModel
+import logic.gameObjects.units.Enemy
 import logic.magic.DamageMagic
 import logic.magic.Magic
+import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 
 class Player(
     private val map: TiledMapView,
@@ -44,7 +47,7 @@ class Player(
     private fun showPath(path: Collection<Pair<Point, Point>>) {
         path.forEach {
             val (x, y) = it.second
-            tilesManager[x.toInt(), y.toInt(), Layer.StepsPreview] = MapTilesManager.TILE_MOVE_CURSOR
+            tilesManager[x.toInt(), y.toInt(), Layer.StepsPreview] = TILE_MOVE_CURSOR
         }
     }
 
@@ -80,7 +83,7 @@ class Player(
 
     private fun doMove(pathPart: Pair<Point, Point>) {
         lastTeleportId = null
-        tilesManager[pathPart.second.xi, pathPart.second.yi, Layer.StepsPreview] = MapTilesManager.EMPTY
+        tilesManager[pathPart.second.xi, pathPart.second.yi, Layer.StepsPreview] = TILE_EMPTY
         tilesManager.updatePos(pathPart.second)
 
         notifyNearbyGameObjects() // TODO
