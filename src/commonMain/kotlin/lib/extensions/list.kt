@@ -1,3 +1,5 @@
 package lib.extensions
 
-inline fun <T> List<T>.runIfNotEmpty(block: List<T>.() -> Unit) = if (isNotEmpty()) block() else Unit
+fun <A, R> List<(A) -> R>.callAll(arg1: A) = forEach { it(arg1) }
+
+fun <A, B, R> List<(A, B) -> R>.callAll(arg1: A, arg2: B) = forEach { it(arg1, arg2) }

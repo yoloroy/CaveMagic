@@ -27,6 +27,8 @@ class Player(
         this.pos = pos
     }
 
+    private val positionObservers = mutableListOf<(old: Point, new: Point) -> Unit>()
+
     override val tile = GameObjectId.Player
 
     override val model = PlayerModel(10, 3, 2)
@@ -136,6 +138,12 @@ class Player(
     fun addAttackOn(pos: Point) {
         actions += ActionType.Attack to pos
     }
+
+    fun observePos(callback: (old: Point, new: Point) -> Unit) {
+        positionObservers += callback
+    }
+
+    fun callbackPosObservers(old: Point, new: Point) = positionObservers.callAll(old, new)
 }
 
 class PlayerModel(
