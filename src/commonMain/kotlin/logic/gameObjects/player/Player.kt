@@ -36,6 +36,8 @@ class Player(
 
     override val model = PlayerModel(10, 3, 2)
 
+    private val fogOfWarComponent = FogOfWarComponent(tilesManager, pos)
+
     val remainingActionPoints get() = maxOf(model.actionPointsLimit.value - actions.size, 0)
     private val actions = mutableListOf<Pair<ActionType, *>>()
     val lastPreviewPos = pos.copy()
@@ -57,6 +59,8 @@ class Player(
                 doAction()
             }
         }
+
+        fogOfWarComponent.updateViewArea()
     }
 
     private fun doAction() {
@@ -110,6 +114,7 @@ class Player(
         if (it) {
             lastTeleportId = teleportId
             tilesManager.updatePos(point)
+            fogOfWarComponent.updateViewArea()
         }
     }
 

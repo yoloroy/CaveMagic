@@ -1,8 +1,8 @@
 package lib.extensions
 
 import com.soywiz.kmem.clamp
-import com.soywiz.korma.geom.IPoint
-import com.soywiz.korma.geom.Point
+import com.soywiz.korma.geom.*
+import kotlin.math.absoluteValue
 
 operator fun Point.unaryMinus(): Point = Point(-x, -y)
 
@@ -11,6 +11,10 @@ operator fun Point.unaryPlus(): Point = Point(+x, +y)
 val IPoint.point get() = Point(this)
 
 val Pair<Point, Point>.center get() = (first + second) / 2
+
+val Pair<PointInt, PointInt>.delta get() = (first.absoluteValue - second.absoluteValue).absoluteValue
+
+val PointInt.absoluteValue get() = PointInt(x.absoluteValue, y.absoluteValue)
 
 val List<Point>.area: ClosedRange<Point> get() {
     val start = Point(minByOrNull { it.x }!!.x, minByOrNull { it.y }!!.y)
@@ -82,4 +86,13 @@ fun <T: Number> Pair<T, T>.toPoint(): Point {
         return Point(first as Float, second as Float)
 
     throw ClassCastException()
+}
+
+val PointInt.fourNeighbours get() = let { orig ->
+    sequence {
+        yield(orig + PointInt(+1, 0))
+        yield(orig + PointInt(-1, 0))
+        yield(orig + PointInt(0, +1))
+        yield(orig + PointInt(0, -1))
+    }
 }

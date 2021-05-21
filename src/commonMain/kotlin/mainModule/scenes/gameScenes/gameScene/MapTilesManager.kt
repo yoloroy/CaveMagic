@@ -54,6 +54,9 @@ class MapTilesManager(private val map: TiledMapView) {
         }
     }
 
+    operator fun contains(point: Point): Boolean =
+        (map[0] as TileMap).intMap.let { point.xi < it.width && point.yi < it.height }
+
     fun updatePos(oldPos: Point, newPos: Point, tile: GameObjectId) {
         this[oldPos.xi, oldPos.yi, Layer.GameObjects] = GameObjectId.Empty.id
         oldPos.setTo(newPos.x, newPos.y)

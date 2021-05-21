@@ -14,7 +14,8 @@ enum class Layer(val index: Int) {
     Teleports(8),
     StepsPreview(9),
     Cursor(10),
-    EnemyStepsPreview(11);
+    EnemyStepsPreview(11),
+    FogOfWar(12);
 }
 
 operator fun List<Int>.get(layer: Layer) = get(layer.index)
