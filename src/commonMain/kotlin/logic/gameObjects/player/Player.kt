@@ -56,6 +56,8 @@ class Player(
 
     init {
         updateCamera()
+
+        notifyNearbyGameObjects()
     }
 
     private fun showPath(path: Collection<Pair<Point, Point>>) {
