@@ -7,6 +7,7 @@ import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
 import ktres.TILE_ATTACK_CURSOR
 import ktres.TILE_EMPTY
+import ktres.TILE_LIGHTNING_CAST_CURSOR
 import ktres.TILE_MOVE_CURSOR
 import lib.algorythms.pathFinding.getPath
 import lib.extensions.*
@@ -31,8 +32,6 @@ class Player(
         this.pos = pos
     }
 
-    private val positionObservers = mutableListOf<(old: Point, new: Point) -> Unit>()
-
     override val tile = GameObjectId.Player
 
     override val model = PlayerModel(10, 3, 2)
@@ -41,16 +40,7 @@ class Player(
 
     val remainingActionPoints get() = maxOf(model.actionPointsLimit.value - actions.size, 0)
 
-    // TODO: create inner class Action and fix this :poop: by inheritance
-    /* Actions data:
-    * Move:
-    *     `Pair<Point, Point>`, where `first` - start point, `second` - destination point
-    * Attack:
-    *     `Point` - attack destination, damage = model.damage.value
-    *     `Pair<Point, Int>`, where `first` - attack destination, `second` - damage value
-    *     `Triple<Point, Int, Int>`, where `first` - attack destination, `second` - damage value, `third` - preview tile id
-    **/
-    private val actions = mutableListOf<Pair<ActionType, *>>()
+    private val actions = mutableListOf<Action>()
 
     val lastPreviewPos = pos.copy()
 
@@ -70,33 +60,9 @@ class Player(
     override fun makeTurn() {
         clearPreview()
 
-        if (actions.isNotEmpty()) {
-            repeat(actions.size) {
-                doAction()
-            }
-        }
+        actions.forEach { it() }
 
         fogOfWarComponent.updateViewArea()
-    }
-
-    private fun doAction() {
-        val (type, value) = actions.removeFirst()
-
-        @Suppress("UNCHECKED_CAST")
-        when (type) {
-            ActionType.Move -> doMove(value as Pair<Point, Point>)
-            ActionType.Attack -> {
-                when (value) {
-                    is Point ->
-                        doAttack(value)
-                    is Pair<*, *> ->
-                        (value as Pair<Point, Int>).let { doAttack(it.first, it.second) }
-                    is Triple<*, *, *> ->
-                        (value as Triple<Point, Int, *>).let { doAttack(it.first, it.second) }
-                }
-            }
-            else -> Unit
-        }
     }
 
     private fun doAttack(point: Point, damage: Int = model.damage.value) {
@@ -144,111 +110,76 @@ class Player(
     }
 
     fun addCastMagicOn(pos: Point, magicSymbol: Magic) {
-        val tempActions = mutableListOf<Pair<ActionType, *>>()
-        tempActions.addAll(actions)
-
-        when (magicSymbol) {
-            DamageMagic.Lightning -> {
-                actions += ActionType.Attack to (pos to 2)
+        updateActionsPreview {
+            when (magicSymbol) {
+                DamageMagic.Lightning -> {
+                    add(AttackAction(pos, 2, TILE_LIGHTNING_CAST_CURSOR))
+                }
             }
         }
-
-        updateActionsPreview(previousActions = tempActions)
     }
 
     fun addMoveTo(pos: Point) {
-        val tempActions = mutableListOf<Pair<ActionType, *>>()
-        tempActions.addAll(actions)
-
-        actions += getPath(lastPreviewPos, pos, tilesManager[Layer.Walls])
-            .take(remainingActionPoints)
-            .also { path ->
-                lastPreviewPos.setTo(path.last().second)
-                showPath(path)
-            }
-            .map { pathPart -> ActionType.Move to pathPart }
-
-        updateActionsPreview(previousActions = tempActions)
+        updateActionsPreview {
+            addAll(getPath(lastPreviewPos, pos, tilesManager[Layer.Walls])
+                .take(remainingActionPoints)
+                .also { path ->
+                    lastPreviewPos.setTo(path.last().second)
+                    showPath(path)
+                }
+                .map { MoveAction(it.first, it.second) })
+        }
     }
 
     fun addAttackOn(pos: Point) {
-        val tempActions = mutableListOf<Pair<ActionType, *>>()
-        tempActions.addAll(actions)
-
-        actions += ActionType.Attack to pos
-
-        updateActionsPreview(previousActions = tempActions)
+        updateActionsPreview {
+            add(AttackAction(pos))
+        }
     }
 
     fun removeLastAction() {
-        val tempActions = mutableListOf<Pair<ActionType, *>>()
-        tempActions.addAll(actions)
-
-        @Suppress("UNCHECKED_CAST")
-        actions.removeLastOrNull()?.let {
-            if (it.first == ActionType.Move) {
-                (it.second as Pair<Point, Point>).let { pathPart ->
-                    lastPreviewPos.setTo(pathPart.first)
+        updateActionsPreview {
+            removeLastOrNull()?.let {
+                if (it is MoveAction) {
+                    lastPreviewPos.setTo(it.start)
                 }
             }
         }
-
-        updateActionsPreview(previousActions = tempActions)
     }
 
-    private fun updateActionsPreview(
-        previousActions: List<Pair<ActionType, *>> = actions,
-        newActions: List<Pair<ActionType, *>> = actions
-    ) {
-        clearPreview(previousActions)
-        showPreview(newActions)
+    private inline fun updateActionsPreview(block: MutableList<Action>.() -> Unit = {}) {
+        clearPreview(actions)
+        actions.block()
+        showPreview(actions)
     }
 
-    private fun showPreview(actions: List<Pair<ActionType, *>> = this.actions) { // TODO: refactor
-        actions.forEach { (type, value) ->
-            @Suppress("UNCHECKED_CAST")
-            (when (type) {
-                ActionType.Move -> (value as Pair<Point, Point>).second to TILE_MOVE_CURSOR
-                ActionType.Attack -> {
-                    when (value) {
-                        is Point -> value to TILE_ATTACK_CURSOR
-                        is Pair<*, *> -> (value as Pair<Point, Int>).first to TILE_ATTACK_CURSOR
-                        is Triple<*, *, *> -> (value as Triple<Point, Int, *>).run { first to third as Int }
-                        else -> throw Exception("Wrong data type in actions")
-                    }
-                }
-                else -> return@forEach
-            }).let { (point, tile) ->
-                tilesManager[point.xi, point.yi, Layer.StepsPreview] = tile
-            }
+    private fun showPreview(actions: List<Action> = this.actions) = actions.forEach { it.show() }
+
+    private fun clearPreview(actions: List<Action> = this.actions) = actions.forEach { it.hide() }
+
+    abstract inner class Action(private val position: Point, private val tile: Int) {
+        abstract operator fun invoke()
+
+        fun show() {
+            tilesManager[position.xi, position.yi, Layer.StepsPreview] = tile
+        }
+
+        fun hide() {
+            tilesManager[position.xi, position.yi, Layer.StepsPreview] = TILE_EMPTY
         }
     }
 
-    private fun clearPreview(actions: List<Pair<ActionType, *>> = this.actions) { // TODO: refactor
-        actions.forEach { (type, value) ->
-            @Suppress("UNCHECKED_CAST")
-            (when (type) {
-                ActionType.Move -> (value as Pair<Point, Point>).second
-                ActionType.Attack -> {
-                    when (value) {
-                        is Point -> value
-                        is Pair<*, *> -> (value as Pair<Point, Int>).first
-                        is Triple<*, *, *> -> (value as Triple<Point, Int, *>).first
-                        else -> throw Exception("Wrong data type in actions")
-                    }
-                }
-                else -> return@forEach
-            }).let { point ->
-                tilesManager[point.xi, point.yi, Layer.StepsPreview] = TILE_EMPTY
-            }
-        }
+    inner class MoveAction(val start: Point, val end: Point) : Action(end, TILE_MOVE_CURSOR) {
+        override fun invoke() = doMove(start to end)
     }
 
-    fun observePos(callback: (old: Point, new: Point) -> Unit) {
-        positionObservers += callback
+    inner class AttackAction(
+        private val destination: Point,
+        private val damage: Int = model.damage.value,
+        tile: Int = TILE_ATTACK_CURSOR
+    ) : Action(destination, tile) {
+        override fun invoke() = doAttack(destination, damage)
     }
-
-    fun callbackPosObservers(old: Point, new: Point) = positionObservers.callAll(old, new)
 }
 
 class PlayerModel(
