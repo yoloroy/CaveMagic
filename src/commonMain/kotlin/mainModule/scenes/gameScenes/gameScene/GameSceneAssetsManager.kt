@@ -13,6 +13,8 @@ open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsMana
     lateinit var sheepBitmap: Bitmap
 
     lateinit var nextTurnBitmap: Bitmap
+    lateinit var revertTurnBitmap: Bitmap
+
     lateinit var buttonMoveBitmap: Bitmap
     lateinit var buttonAttackBitmap: Bitmap
     lateinit var buttonMiscBitmap: Bitmap
@@ -24,6 +26,8 @@ open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsMana
         sheepBitmap = resourcesVfs["gfx/sheep.png"].readBitmap()
 
         nextTurnBitmap = resourcesVfs["gfx/nextTurnButton.png"].readBitmap()
+        revertTurnBitmap = resourcesVfs["gfx/buttonReturnTurn.png"].readBitmap()
+
         buttonMoveBitmap = resourcesVfs["gfx/buttonMove.png"].readBitmap()
         buttonAttackBitmap = resourcesVfs["gfx/buttonAttack.png"].readBitmap()
         buttonMiscBitmap = resourcesVfs["gfx/buttonMisc.png"].readBitmap()

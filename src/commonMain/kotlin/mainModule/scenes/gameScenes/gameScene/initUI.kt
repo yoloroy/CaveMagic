@@ -5,9 +5,9 @@ import com.soywiz.korge.input.onUp
 import com.soywiz.korge.view.*
 import com.soywiz.korim.text.TextAlignment
 import com.soywiz.korma.geom.Point
+import lib.extensions.*
 import logic.gameObjects.player.ActionType
 import mainModule.MainModule
-import lib.extensions.*
 import mainModule.widgets.valueBar
 
 internal fun Container.initUI(scene: GameScene) = scene.apply {
@@ -26,6 +26,18 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         onUp {
             flip()
             makeTurn()
+        }
+    }
+    image(assetsManager.revertTurnBitmap) {
+        smoothing = false
+        anchor(1, 1)
+        size(12, 12)
+        position(nextTurnButton.pos + nextTurnButton.size * Point.Left.point * 2 - 1.x)
+
+        onDown { flip() }
+        onUp {
+            flip()
+            player.removeLastAction()
         }
     }
 
