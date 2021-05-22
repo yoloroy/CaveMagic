@@ -41,7 +41,7 @@ class Player(
 
     val remainingActionPoints get() = maxOf(model.actionPointsLimit.value - actions.size, 0)
 
-    // TODO: refactor
+    // TODO: create inner class Action and fix this :poop: by inheritance
     /* Actions data:
     * Move:
     *     `Pair<Point, Point>`, where `first` - start point, `second` - destination point
