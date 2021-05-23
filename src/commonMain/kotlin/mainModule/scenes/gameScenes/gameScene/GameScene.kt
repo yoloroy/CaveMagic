@@ -43,6 +43,8 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     internal val gameObjects = mutableListOf<GameObject>()
     private val teleports = mutableMapOf<Int, Pair<Point, Point>>()
 
+    val events = mutableListOf<GameScene.() -> Unit>()
+
     private val turns = mutableListOf<() -> Unit>()
 
     private var currentPhase = TurnPhase.First
@@ -155,6 +157,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
             player.makeTurn()
         }
 
+        checkEvents()
         checkTeleports()
 
         if (turns.size > 0)
@@ -164,6 +167,8 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
             value = value.opposite
         }
     }
+
+    private fun checkEvents() = events.forEach { it() }
 
     private fun checkTeleports() {
         fun List<GameObject>.checkTeleport(from: Point, destination: Point, id: Int) =
