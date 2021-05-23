@@ -141,20 +141,18 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
         actionType = ActionType.Nothing
 
         if (oCurrentPhase.value == TurnPhase.First) {
-            gameObjects.forEach {
-                if (it.isAlive) {
-                    it.makeTurn()
-                }
-            }
-
-            // next turn is second, so:
+            player.makeTurn()
             gameObjects.forEach {
                 if (it.isAlive && it is Phasable) {
                     it.calculateTurn()
                 }
             }
         } else {
-            player.makeTurn()
+            gameObjects.forEach {
+                if (it.isAlive) {
+                    it.makeTurn()
+                }
+            }
         }
 
         checkEvents()
