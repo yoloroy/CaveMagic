@@ -61,6 +61,7 @@ class Player(
         clearPreview()
 
         actions.forEach { it() }
+        actions.clear()
 
         fogOfWarComponent.updateViewArea()
     }
@@ -78,7 +79,7 @@ class Player(
     }
 
     private fun notifyNearbyGameObjects() = gameObjects // TODO
-        .filter { it.pos.distanceTo(pos) < 5 }
+        .filter { it.pos.distanceTo(pos) < 8 }
         .forEach {
             if (it is Enemy) {
                 it.target = this
