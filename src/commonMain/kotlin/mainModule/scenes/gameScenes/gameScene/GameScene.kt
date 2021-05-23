@@ -108,7 +108,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
         initMapActions()
 
-        initGameObjects()
+        initGameContent()
         initTeleports()
     }
 
@@ -127,7 +127,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
         }
     }
 
-    internal open fun initGameObjects() {
+    internal open fun initGameContent() {
         initGameObjects(this) {}
     }
 
