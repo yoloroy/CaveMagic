@@ -1,6 +1,6 @@
 package mainModule.scenes.menuScene
 
-import com.soywiz.korge.input.onClick
+import com.soywiz.korge.input.onUp
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.ui.uiTextButton
 import com.soywiz.korge.view.Container
@@ -37,7 +37,7 @@ class MainMenuScene : Scene() {
                 this.textSize = textSize
                 position(firstButtonPosition + deltaPoint * i)
 
-                onClick { action() }
+                onUp { action() }
             }
         }
     }

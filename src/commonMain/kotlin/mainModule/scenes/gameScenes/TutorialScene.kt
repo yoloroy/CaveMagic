@@ -1,6 +1,6 @@
 package mainModule.scenes.gameScenes
 
-import com.soywiz.korge.input.onClick
+import com.soywiz.korge.input.onUp
 import com.soywiz.korge.ui.uiTextButton
 import com.soywiz.korge.view.position
 import lib.extensions.size
@@ -31,7 +31,7 @@ private fun TutorialScene.initEvents() {
                         size(MainModule.size.size.p * 2 / 3)
                         position((MainModule.size.size.p - sizePoint) / 2)
 
-                        onClick {
+                        onUp {
                             sceneContainer.removeChild(this)
                         }
                     }
