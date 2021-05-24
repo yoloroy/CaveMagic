@@ -46,15 +46,18 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
     map.onClick {
         val pos = (it.currentPosLocal / tilesManager.tileSize).int.p
 
-        if (player.isAddingMoveEnabled && it.button == MouseButton.RIGHT) {
-            player.addMoveTo(pos)
-            actionType = ActionType.Nothing
-        } else if (actionType == ActionType.Attack) {
-            player.addAttackOn(pos)
-            actionType = ActionType.Nothing
-        } else if (savedMagicSymbol != null) {
-            player.addCastMagicOn(pos, savedMagicSymbol!!)
-            actionType = ActionType.Nothing
+        if (it.button == MouseButton.RIGHT) {
+            if (player.isAddingMoveEnabled) {
+                player.addMoveTo(pos)
+                actionType = ActionType.Nothing
+            } else if (actionType == ActionType.Attack) {
+                player.addAttackOn(pos)
+                actionType = ActionType.Nothing
+            } else if (savedMagicSymbol != null) {
+                player.addCastMagicOn(pos, savedMagicSymbol!!)
+                savedMagicSymbol = null
+                actionType = ActionType.Nothing
+            }
         }
     }
 }
