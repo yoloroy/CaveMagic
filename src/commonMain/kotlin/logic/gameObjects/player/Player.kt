@@ -123,7 +123,7 @@ class Player(
     fun addMoveTo(pos: Point) {
         isAddingMoveEnabled = false
         updateActionsPreview {
-            addAll(getPath(lastPreviewPos, pos, tilesManager[Layer.Walls])
+            addAll(getPath(lastPreviewPos, pos, sum(tilesManager[Layer.Walls], tilesManager[Layer.GameObjects]))
                 .take(remainingActionPoints)
                 .also { path ->
                     lastPreviewPos.setTo(path.last().second)

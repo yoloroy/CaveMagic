@@ -14,7 +14,7 @@ fun getPath(start: Point, end: Point, walls: IntArray2): List<Pair<Point, Point>
 
         frontier.forEach { cur ->
             cur.surroundings.forEach surroundings@{
-                if (walls[it] != 0)
+                if (cur != start && walls[it] != 0)
                     return@surroundings
 
                 if (matrix[it] > matrix[cur] + 1) {

@@ -1,17 +1,18 @@
 package logic.gameObjects.units.simpleMeleeEnemy
 
 import com.soywiz.kmem.toIntCeil
-import lib.algorythms.pathFinding.getPath
 import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
+import lib.algorythms.pathFinding.getPath
 import lib.extensions.setTo
+import lib.extensions.sum
+import lib.tiledMapView.Layer
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
+import logic.gameObjects.player.ActionType
 import logic.gameObjects.units.Enemy
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
-import lib.tiledMapView.Layer
-import logic.gameObjects.player.ActionType
 
 open class SimpleMeleeEnemy(
     pos: Point,
@@ -65,7 +66,7 @@ open class SimpleMeleeEnemy(
         if (target.pos.distanceTo(lastPreviewPos).toIntCeil() == 1) {
             ActionType.Attack to null
         } else {
-            val path = getPath(lastPreviewPos, target.pos, tilesManager[Layer.Walls]) // TODO: add caching
+            val path = getPath(lastPreviewPos, target.pos, sum(tilesManager[Layer.Walls], tilesManager[Layer.GameObjects])) // TODO: add caching
 
             ActionType.Move to path.first().second.also { lastPreviewPos.setTo(it) }
         }
