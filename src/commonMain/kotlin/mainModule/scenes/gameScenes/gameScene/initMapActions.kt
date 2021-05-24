@@ -47,16 +47,28 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
         val pos = (it.currentPosLocal / tilesManager.tileSize).int.p
 
         if (it.button == MouseButton.RIGHT) {
-            if (player.isAddingMoveEnabled) {
-                player.addMoveTo(pos)
-                actionType = ActionType.Nothing
-            } else if (actionType == ActionType.Attack) {
-                player.addAttackOn(pos)
-                actionType = ActionType.Nothing
-            } else if (savedMagicSymbol != null) {
-                player.addCastMagicOn(pos, savedMagicSymbol!!)
-                savedMagicSymbol = null
-                actionType = ActionType.Nothing
+            when {
+                player.isAddingMoveEnabled -> {
+                    previewPath.run { // TODO: refactor
+                        forEach { (_, pathPoint) ->
+                            tilesManager[pathPoint.xi, pathPoint.yi, Layer.Cursor] = TILE_EMPTY
+                        }
+
+                        clear()
+                    }
+
+                    player.addMoveTo(pos)
+                    actionType = ActionType.Nothing
+                }
+                actionType == ActionType.Attack -> {
+                    player.addAttackOn(pos)
+                    actionType = ActionType.Nothing
+                }
+                savedMagicSymbol != null -> {
+                    player.addCastMagicOn(pos, savedMagicSymbol!!)
+                    savedMagicSymbol = null
+                    actionType = ActionType.Nothing
+                }
             }
         }
     }
