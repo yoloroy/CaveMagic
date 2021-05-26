@@ -1,10 +1,17 @@
 package logic.gameObjects.player
 
+import com.soywiz.klock.seconds
 import com.soywiz.korge.tiled.TiledMapView
+import com.soywiz.korge.tween.get
+import com.soywiz.korge.tween.tween
+import com.soywiz.korge.tween.tweenAsync
 import com.soywiz.korge.view.Camera
+import com.soywiz.korge.view.Container
 import com.soywiz.korge.view.setPositionRelativeTo
+import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
+import com.soywiz.korma.interpolation.Easing
 import ktres.TILE_ATTACK_CURSOR
 import ktres.TILE_EMPTY
 import ktres.TILE_LIGHTNING_CAST_CURSOR
@@ -24,19 +31,17 @@ class Player(
     private val map: TiledMapView,
     private val camera: Camera,
     private val gameObjects: List<GameObject>,
-    override val tilesManager: MapTilesManager,
+    tilesManager: MapTilesManager,
+    bitmap: Bitmap,
+    container: Container,
     pos: Point = tilesManager.playerPos,
     var isAddingMoveEnabled: Boolean = false
-) : GameObject(tilesManager) {
-    init {
-        this.pos = pos
-    }
-
+) : GameObject(tilesManager, bitmap = bitmap, container = container, pos = pos) {
     override val tile = GameObjectId.Player
 
     override val model = PlayerModel(10, 3, 2)
 
-    private val fogOfWarComponent = FogOfWarComponent(tilesManager, pos)
+    private val fogOfWarComponent = FogOfWarComponent(tilesManager, pos, gameObjects)
 
     val remainingActionPoints get() = maxOf(model.actionPointsLimit.value - actions.size, 0)
 
@@ -57,21 +62,22 @@ class Player(
         }
     }
 
-    override fun makeTurn() {
+    override suspend fun makeTurn() {
         clearPreview()
 
-        actions.forEach { it() }
+        actions.forEach {
+            it()
+            fogOfWarComponent.updateViewArea()
+        }
         actions.clear()
-
-        fogOfWarComponent.updateViewArea()
     }
 
-    private fun doAttack(point: Point, damage: Int = model.damage.value) {
+    private suspend fun doAttack(point: Point, damage: Int = model.damage.value) {
         val target = gameObjects.firstOrNull { it.pos == point }
         target?.handleAttack(damage)
     }
 
-    private fun doMove(pathPart: Pair<Point, Point>) {
+    private suspend fun doMove(pathPart: Pair<Point, Point>) {
         lastTeleportId = null
         tilesManager.updatePos(pathPart.second)
 
@@ -86,16 +92,24 @@ class Player(
             }
         }
 
-    private fun MapTilesManager.updatePos(newPos: Point) {
-        val deltaPos = newPos - pos
+    private suspend fun MapTilesManager.updatePos(newPos: Point) {
+        moveTo(newPos)
 
-        updatePos(pos, newPos, tile)
-
-        camera.pos = camera.pos - tilesManager.tileSize * deltaPos
         lastPreviewPos.setTo(newPos)
     }
 
-    override fun teleportTo(point: Point, teleportId: Int) = (lastTeleportId != teleportId).also {
+    @Suppress("DeferredResultUnused")
+    override suspend fun moveTo(newPos: Point) {
+        val viewPos = newPos * view.size
+        view.tweenAsync(view::pos[view.pos, viewPos], time = 1.seconds, easing = Easing.LINEAR)
+
+        val deltaPos = newPos - pos
+        camera.tween(camera::pos[camera.pos, camera.pos - tilesManager.tileSize * deltaPos], time = 1.seconds, easing = Easing.EASE_OUT_QUAD)
+
+        tilesManager.updatePos(pos, newPos, tile)
+    }
+
+    override suspend fun teleportTo(point: Point, teleportId: Int) = (lastTeleportId != teleportId).also {
         if (it) {
             lastTeleportId = teleportId
             tilesManager.updatePos(point)
@@ -160,7 +174,7 @@ class Player(
     private fun clearPreview(actions: List<Action> = this.actions) = actions.forEach { it.hide() }
 
     abstract inner class Action(private val position: Point, private val tile: Int) {
-        abstract operator fun invoke()
+        abstract suspend operator fun invoke()
 
         fun show() {
             tilesManager[position.xi, position.yi, Layer.StepsPreview] = tile
@@ -172,7 +186,7 @@ class Player(
     }
 
     inner class MoveAction(val start: Point, val end: Point) : Action(end, TILE_MOVE_CURSOR) {
-        override fun invoke() = doMove(start to end)
+        override suspend fun invoke() = doMove(start to end)
     }
 
     inner class AttackAction(
@@ -180,7 +194,7 @@ class Player(
         private val damage: Int = model.damage.value,
         tile: Int = TILE_ATTACK_CURSOR
     ) : Action(destination, tile) {
-        override fun invoke() = doAttack(destination, damage)
+        override suspend fun invoke() = doAttack(destination, damage)
     }
 }
 

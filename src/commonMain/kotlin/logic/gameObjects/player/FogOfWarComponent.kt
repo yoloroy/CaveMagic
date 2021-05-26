@@ -12,23 +12,29 @@ import lib.extensions.yi
 import lib.math.MCircle
 import lib.math.intPointsLineIterator
 import lib.tiledMapView.Layer
+import logic.gameObjects.gameObject.GameObject
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 
-class FogOfWarComponent(private val tilesManager: MapTilesManager, private val pos: Point) {
+class FogOfWarComponent(private val tilesManager: MapTilesManager, private val pos: Point, val gameObjects: List<GameObject>) {
     private var circle = MCircle(pos.copy(), 5.0)
+    private var notShadowedGameObjects = mutableSetOf<GameObject>()
 
     init {
+        gameObjects.forEach { it.visible = false }
         updateViewArea()
     }
 
     fun updateViewArea() {
-        circle.points.forEach {
+        circle.points.forEach { point ->
+            notShadowedGameObjects
+                .forEach { it.visible = false }
+
             try {
-                if (tilesManager[it.xi, it.yi, Layer.FogOfWar] != TILE_FOG_FULL) {
-                    tilesManager[it.xi, it.yi, Layer.FogOfWar] = TILE_FOG_VISITED
+                if (tilesManager[point.xi, point.yi, Layer.FogOfWar] != TILE_FOG_FULL) {
+                    tilesManager[point.xi, point.yi, Layer.FogOfWar] = TILE_FOG_VISITED
                 }
             } catch (e: IndexOutOfBoundsException) {
-                e.printStackTrace()
+                println(e.message)
             }
         }
 
@@ -36,14 +42,20 @@ class FogOfWarComponent(private val tilesManager: MapTilesManager, private val p
 
         circle.points.forEach { end ->
             run line@{
-                intPointsLineIterator(pos.int, end.int).forEach linePoint@{
-                    if (it.p !in tilesManager) {
+                intPointsLineIterator(pos.int, end.int).forEach linePoint@{ point ->
+                    if (point.p !in tilesManager) {
                         return@linePoint
                     }
 
-                    tilesManager[it.x, it.y, Layer.FogOfWar] = TILE_NO_FOG
+                    tilesManager[point.x, point.y, Layer.FogOfWar] = TILE_NO_FOG
+                    notShadowedGameObjects.clear()
+                    notShadowedGameObjects.addAll(
+                        gameObjects
+                            .filter { it.pos == point.p }
+                            .onEach { go -> go.visible = true }
+                    )
 
-                    if (tilesManager[it.x, it.y, Layer.Walls] != 0 && it != pos.int) {
+                    if (tilesManager[point.x, point.y, Layer.Walls] != 0 && point != pos.int) {
                         return@line
                     }
                 }
@@ -61,7 +73,7 @@ class FogOfWarComponent(private val tilesManager: MapTilesManager, private val p
                     tilesManager[it.xi, it.yi, Layer.FogOfWar] = TILE_FOG_BORDER
                 }
             } catch (e: IndexOutOfBoundsException) {
-                e.printStackTrace()
+                println(e.message)
             }
         }
     }

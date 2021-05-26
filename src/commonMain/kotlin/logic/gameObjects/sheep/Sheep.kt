@@ -1,19 +1,23 @@
 package logic.gameObjects.sheep
 
+import com.soywiz.korge.view.Container
+import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korma.geom.Point
-import logic.gameObjects.gameObject.GameObjectId
-import logic.gameObjects.gameObject.GameObjectModel
-import logic.gameObjects.gameObject.GameObject
-import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 import lib.extensions.*
 import lib.tiledMapView.Layer
+import logic.gameObjects.gameObject.GameObject
+import logic.gameObjects.gameObject.GameObjectId
+import logic.gameObjects.gameObject.GameObjectModel
+import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
 class Sheep(
     override val tilesManager: MapTilesManager,
+    bitmap: Bitmap,
+    container: Container,
     pos: Point = Point(0, 0)
-) : GameObject(tilesManager) {
+) : GameObject(tilesManager, bitmap = bitmap, container = container) {
     init {
         this.pos = pos
     }
@@ -40,7 +44,7 @@ class Sheep(
         isAlive = false
     }
 
-    override fun makeTurn() {
+    override suspend fun makeTurn() {
         if (isAlive) {
             val delta = destination - pos
             val dPos = if (delta.x.absoluteValue > delta.y.absoluteValue) {

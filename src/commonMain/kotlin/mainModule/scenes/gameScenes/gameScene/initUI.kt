@@ -22,10 +22,19 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         size(16, 16)
         position(MainModule.size.size.p - Point(4) + Point(.0, 0.5))
 
-        onDown { flip() }
+        var clickable = true
+        onDown {
+            if (clickable) {
+                flip()
+            }
+        }
         onUp {
-            flip()
-            makeTurn()
+            if (clickable) {
+                clickable = false
+                makeTurn()
+                flip()
+                clickable = true
+            }
         }
     }
     image(assetsManager.revertTurnBitmap) {

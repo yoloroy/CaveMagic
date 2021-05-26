@@ -137,7 +137,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
         initUI(this@GameScene)
     }
 
-    internal fun makeTurn() {
+    internal suspend fun makeTurn() {
         actionType = ActionType.Nothing
 
         if (oCurrentPhase.value == TurnPhase.First) {
@@ -168,8 +168,8 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
     private fun checkEvents() = events.forEach { it() }
 
-    private fun checkTeleports() {
-        fun List<GameObject>.checkTeleport(from: Point, destination: Point, id: Int) =
+    private suspend fun checkTeleports() {
+        suspend fun List<GameObject>.checkTeleport(from: Point, destination: Point, id: Int) =
             filter { it.pos == from }
                 .forEach { it.teleportTo(destination, id) }
 

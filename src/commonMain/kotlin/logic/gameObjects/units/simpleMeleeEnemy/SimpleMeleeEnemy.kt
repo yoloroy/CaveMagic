@@ -1,6 +1,8 @@
 package logic.gameObjects.units.simpleMeleeEnemy
 
 import com.soywiz.kmem.toIntCeil
+import com.soywiz.korge.view.Container
+import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
 import lib.algorythms.pathFinding.getPath
@@ -21,10 +23,12 @@ open class SimpleMeleeEnemy(
     damage: Int,
     tilesManager: MapTilesManager,
     override val tile: GameObjectId,
+    bitmap: Bitmap,
+    container: Container,
     health: Int = healthLimit,
     corpseTile: Int? = null
 ) :
-    GameObject(tilesManager, corpseTile = corpseTile, pos),
+    GameObject(tilesManager, corpseTile = corpseTile, pos, bitmap = bitmap, container = container),
     Enemy
 {
     override val model: SimpleMeleeEnemyModel = SimpleMeleeEnemyModel(healthLimit, actionPointsLimit, damage, health)
@@ -72,7 +76,7 @@ open class SimpleMeleeEnemy(
         }
     } ?: ActionType.Nothing to null
 
-    override fun makeTurn() {
+    override suspend fun makeTurn() {
         if (!isTurnCalculated) {
             calculateTurn()
         }
@@ -88,13 +92,13 @@ open class SimpleMeleeEnemy(
         isTurnCalculated = false
     }
 
-    private fun doAttack() = target?.let { target ->
+    private suspend fun doAttack() = target?.let { target ->
         if (target.pos.distanceTo(pos).toIntCeil() == 1) {
             target.handleAttack(model.damage.value)
         }
     } ?: Unit
 
-    private fun doMove(newPos: Point) = tilesManager.updatePos(pos, newPos, tile)
+    private suspend fun doMove(newPos: Point) = moveTo(newPos)
 
     override fun delete() {
         TODO("Not yet implemented")

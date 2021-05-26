@@ -23,7 +23,7 @@ open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsMana
 
     override suspend fun loadAssets() {
         tiledMap = resourcesVfs[tiledMapPath].readTiledMap()
-        playerBitmap = resourcesVfs["gfx/korge.png"].readBitmap()
+        playerBitmap = resourcesVfs["gfx/player.png"].readBitmap()
         sheepBitmap = resourcesVfs["gfx/sheep.png"].readBitmap()
         skeletonBitmap = resourcesVfs["gfx/skeleton.png"].readBitmap()
 
