@@ -38,7 +38,7 @@ class FogOfWarComponent(private val tilesManager: MapTilesManager, private val p
             }
         }
 
-        circle = MCircle(pos.copy(), 5.0)
+        circle = MCircle(pos.copy(), 8.0)
 
         circle.points.forEach { end ->
             run line@{

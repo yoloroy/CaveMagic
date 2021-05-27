@@ -85,7 +85,7 @@ class Player(
     }
 
     private fun notifyNearbyGameObjects() = gameObjects // TODO
-        .filter { it.pos.distanceTo(pos) < 8 }
+        .filter { it.pos.distanceTo(pos) < 14 }
         .forEach {
             if (it is Enemy) {
                 it.target = this

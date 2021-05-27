@@ -12,7 +12,7 @@ object MainModule : Module() {
 
     override val fullscreen: Boolean get() = true
 
-    override val size: SizeInt = SizeInt(210, 120)
+    override val size: SizeInt = SizeInt(420, 240)
 
     override val scaleMode: ScaleMode
         get() = ScaleMode.COVER
