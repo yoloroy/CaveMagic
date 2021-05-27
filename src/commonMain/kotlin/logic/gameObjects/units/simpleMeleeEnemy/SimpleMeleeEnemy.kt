@@ -50,19 +50,21 @@ open class SimpleMeleeEnemy(
     override fun calculateTurn() {
         actions.clear()
         isTurnCalculated = true
-        when (state) {
-            States.Battle -> run calculating@{
-                repeat(model.actionPointsLimit.value) {
-                    calculateBattleTurn().let {
-                        actions += it
+        if (isAlive) {
+            when (state) {
+                States.Battle -> run calculating@{
+                    repeat(model.actionPointsLimit.value) {
+                        calculateBattleTurn().let {
+                            actions += it
 
-                        if (it.first == ActionType.Attack) {
-                            return@calculating
+                            if (it.first == ActionType.Attack) {
+                                return@calculating
+                            }
                         }
                     }
                 }
+                States.Idle -> Unit
             }
-            States.Idle -> Unit
         }
     }
 

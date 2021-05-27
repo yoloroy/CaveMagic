@@ -29,6 +29,10 @@ abstract class GameObject(
 
     var lastTeleportId: Int? = null
     var isAlive: Boolean = true
+        set(value) {
+            field = value
+            visible = value
+        }
 
     var visible
         get() = view.visible
@@ -61,6 +65,8 @@ abstract class GameObject(
             corpseTile?.let {
                 tilesManager[pos.xi, pos.yi, Layer.BottomDecorations] = it // TODO: add layer for corpses?
             }
+            visible = false
+            view.scale *= 0
         }
     }
 

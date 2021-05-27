@@ -31,7 +31,11 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         onUp {
             if (clickable) {
                 clickable = false
-                makeTurn()
+                try {
+                    makeTurn()
+                } catch (e: Exception) {
+                    print(e.stackTraceToString())
+                }
                 flip()
                 clickable = true
             }

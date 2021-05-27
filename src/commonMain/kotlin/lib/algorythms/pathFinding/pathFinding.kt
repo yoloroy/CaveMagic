@@ -10,6 +10,9 @@ fun getPath(start: Point, end: Point, walls: IntArray2): List<Pair<Point, Point>
 
     matrix[start] = 0
     while (frontier.isNotEmpty()) {
+        if (matrix[end] != 1000)
+            break
+
         val newFrontier = mutableListOf<Point>()
 
         frontier.forEach { cur ->
