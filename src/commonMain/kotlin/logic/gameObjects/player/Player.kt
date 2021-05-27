@@ -73,7 +73,7 @@ class Player(
     }
 
     private suspend fun doAttack(point: Point, damage: Int = model.damage.value) {
-        val target = gameObjects.firstOrNull { it.pos == point }
+        val target = gameObjects.firstOrNull { it.isAlive && it.pos == point }
         target?.handleAttack(damage)
     }
 
@@ -101,10 +101,10 @@ class Player(
     @Suppress("DeferredResultUnused")
     override suspend fun moveTo(newPos: Point) {
         val viewPos = newPos * view.size
-        view.tweenAsync(view::pos[view.pos, viewPos], time = 1.seconds, easing = Easing.LINEAR)
+        view.tweenAsync(view::pos[view.pos, viewPos], time = 0.4.seconds, easing = Easing.LINEAR)
 
         val deltaPos = newPos - pos
-        camera.tween(camera::pos[camera.pos, camera.pos - tilesManager.tileSize * deltaPos], time = 1.seconds, easing = Easing.EASE_OUT_QUAD)
+        camera.tween(camera::pos[camera.pos, camera.pos - tilesManager.tileSize * deltaPos], time = 0.4.seconds, easing = Easing.EASE_OUT_QUAD)
 
         tilesManager.updatePos(pos, newPos, tile)
     }

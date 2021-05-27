@@ -8,6 +8,8 @@ import com.soywiz.korma.geom.Point
 import lib.algorythms.pathFinding.getPath
 import lib.extensions.setTo
 import lib.extensions.sum
+import lib.extensions.xi
+import lib.extensions.yi
 import lib.tiledMapView.Layer
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.gameObject.GameObjectId
@@ -44,6 +46,7 @@ open class SimpleMeleeEnemy(
     private var isTurnCalculated: Boolean = false
 
     override val actions = mutableListOf<Pair<ActionType, *>>()
+        get() = field.takeIf { isAlive } ?: mutableListOf()
 
     private val lastPreviewPos = pos.copy()
 
@@ -82,25 +85,33 @@ open class SimpleMeleeEnemy(
         if (!isTurnCalculated) {
             calculateTurn()
         }
+        isTurnCalculated = false
 
         actions.forEach { (type, data) ->
-            when(type) {
-                ActionType.Attack -> doAttack()
-                ActionType.Move -> doMove(data as Point)
-                else -> Unit
+            if (!when(type) {
+                    ActionType.Attack -> doAttack()
+                    ActionType.Move -> doMove(data as Point)
+                    else -> false
+                }) {
+                return@makeTurn
             }
         }
-
-        isTurnCalculated = false
     }
 
-    private suspend fun doAttack() = target?.let { target ->
-        if (target.pos.distanceTo(pos).toIntCeil() == 1) {
-            target.handleAttack(model.damage.value)
+    private suspend fun doAttack() = true.also {
+        target?.let { target ->
+            if (target.pos.distanceTo(pos).toIntCeil() == 1) {
+                target.handleAttack(model.damage.value)
+            }
         }
-    } ?: Unit
+    }
 
-    private suspend fun doMove(newPos: Point) = moveTo(newPos)
+    private suspend fun doMove(newPos: Point) =
+            (tilesManager[Layer.GameObjects][newPos.xi, newPos.yi] == 0
+            && tilesManager[Layer.Walls][newPos.xi, newPos.yi] == 0
+            && newPos.distanceTo(pos).toIntCeil() == 1).also {
+        if (it) moveTo(newPos)
+    }
 
     override fun delete() {
         TODO("Not yet implemented")

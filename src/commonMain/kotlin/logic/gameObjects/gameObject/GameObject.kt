@@ -72,7 +72,7 @@ abstract class GameObject(
 
     open suspend fun moveTo(newPos: Point) {
         val viewPos = newPos * view.size
-        view.moveTo(viewPos.x, viewPos.y, 1.seconds, Easing.EASE_OUT)
+        view.moveTo(viewPos.x, viewPos.y, 0.4.seconds, Easing.EASE_OUT)
 
         tilesManager.updatePos(pos, newPos, tile)
     }
