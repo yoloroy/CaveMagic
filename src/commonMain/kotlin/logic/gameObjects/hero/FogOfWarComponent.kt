@@ -1,4 +1,4 @@
-package logic.gameObjects.player
+package logic.gameObjects.hero
 
 import com.soywiz.korma.geom.Point
 import com.soywiz.korma.geom.int

@@ -18,9 +18,9 @@ import lib.extensions.plus
 import lib.tiledMapView.Layer
 import lib.tiledMapView.getTilesArea
 import logic.gameObjects.gameObject.GameObject
+import logic.gameObjects.hero.ActionType
+import logic.gameObjects.hero.Hero
 import logic.gameObjects.logic.Phasable
-import logic.gameObjects.player.ActionType
-import logic.gameObjects.player.Player
 import logic.magic.AreaMagic
 import logic.magic.DamageMagic
 import logic.magic.Magic
@@ -39,7 +39,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     internal lateinit var camera: Camera
     internal lateinit var map: TiledMapView
 
-    internal lateinit var player: Player
+    internal lateinit var hero: Hero
     internal val gameObjects = mutableListOf<GameObject>()
     private val teleports = mutableMapOf<Int, Pair<Point, Point>>()
 
@@ -53,7 +53,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     internal var actionType: ActionType = ActionType.Nothing
         set(value) {
             figureRecognitionComponent.unableObserving()
-            player.isAddingMoveEnabled = false
+            hero.isAddingMoveEnabled = false
             cursorTileId = TILE_CURSOR
 
             when (value) {
@@ -61,7 +61,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
                     figureRecognitionComponent.enableObserving()
                 }
                 ActionType.Move -> {
-                    player.isAddingMoveEnabled = true
+                    hero.isAddingMoveEnabled = true
                 }
                 ActionType.Attack -> {
                     cursorTileId = TILE_ATTACK_CURSOR
@@ -141,7 +141,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
         actionType = ActionType.Nothing
 
         if (oCurrentPhase.value == TurnPhase.First) {
-            player.makeTurn()
+            hero.makeTurn()
             gameObjects.forEach {
                 if (it.isAlive && it is Phasable) {
                     it.calculateTurn()
@@ -184,7 +184,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     private val onNewFigure get() = { figure: Figure ->
         when (figure) {
             is AreaFigure -> { // TODO
-                val square = map.getTilesArea(figure.area) + player.pos
+                val square = map.getTilesArea(figure.area) + hero.pos
                 square.start.clamp(Point(0)..(map[0] as TileMap).intMap.run { Point(width, height) })
 
                 magicHandler.onAreaMagic(figure.magic as AreaMagic, square)

@@ -1,4 +1,4 @@
-package logic.gameObjects.player
+package logic.gameObjects.hero
 
 import com.soywiz.kds.flip
 import com.soywiz.korev.Key

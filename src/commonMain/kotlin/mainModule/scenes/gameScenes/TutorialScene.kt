@@ -24,7 +24,7 @@ private fun TutorialScene.initEvents() {
     tilesManager.forEachObject(Layer.Events) { pos, id ->
         when (id) {
             1 -> events += {
-                if (player.pos == pos) {
+                if (hero.pos == pos) {
                     sceneContainer.uiTextButton {
                         text = "Go into door for start test level"
                         textSize = 8.0

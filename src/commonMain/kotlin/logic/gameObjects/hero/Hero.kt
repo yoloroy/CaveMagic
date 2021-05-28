@@ -1,4 +1,4 @@
-package logic.gameObjects.player
+package logic.gameObjects.hero
 
 import com.soywiz.klock.seconds
 import com.soywiz.korge.tiled.TiledMapView
@@ -27,19 +27,19 @@ import logic.magic.DamageMagic
 import logic.magic.Magic
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 
-class Player(
+class Hero(
     private val map: TiledMapView,
     private val camera: Camera,
     private val gameObjects: List<GameObject>,
     tilesManager: MapTilesManager,
     bitmap: Bitmap,
     container: Container,
-    pos: Point = tilesManager.playerPos,
+    pos: Point = tilesManager.heroPos,
     var isAddingMoveEnabled: Boolean = false
 ) : GameObject(tilesManager, bitmap = bitmap, container = container, pos = pos) {
-    override val tile = GameObjectId.Player
+    override val tile = GameObjectId.Hero
 
-    override val model = PlayerModel(10, 3, 2)
+    override val model = HeroModel(10, 3, 2)
 
     private val fogOfWarComponent = FogOfWarComponent(tilesManager, pos, gameObjects)
 
@@ -198,7 +198,7 @@ class Player(
     }
 }
 
-class PlayerModel(
+class HeroModel(
     healthLimit: Int,
     actionPointsLimit: Int,
     damage: Int,

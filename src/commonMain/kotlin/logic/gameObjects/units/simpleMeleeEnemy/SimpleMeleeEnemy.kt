@@ -14,7 +14,7 @@ import lib.tiledMapView.Layer
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
-import logic.gameObjects.player.ActionType
+import logic.gameObjects.hero.ActionType
 import logic.gameObjects.units.Enemy
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 

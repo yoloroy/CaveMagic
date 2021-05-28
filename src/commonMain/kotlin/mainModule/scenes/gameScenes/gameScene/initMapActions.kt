@@ -13,10 +13,10 @@ import lib.extensions.setTo
 import lib.extensions.xi
 import lib.extensions.yi
 import lib.tiledMapView.Layer
+import logic.gameObjects.hero.ActionType
 import logic.gameObjects.logic.Phasable
 import logic.gameObjects.logic.hideAllPreviewActions
 import logic.gameObjects.logic.showPreviewActions
-import logic.gameObjects.player.ActionType
 
 internal fun initMapActions(scene: GameScene) = scene.apply {
     val previewPath = mutableListOf<Pair<Point, Point>>()
@@ -48,7 +48,7 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
 
         if (it.button == MouseButton.RIGHT) {
             when {
-                player.isAddingMoveEnabled -> {
+                hero.isAddingMoveEnabled -> {
                     previewPath.run { // TODO: refactor
                         forEach { (_, pathPoint) ->
                             tilesManager[pathPoint.xi, pathPoint.yi, Layer.Cursor] = TILE_EMPTY
@@ -57,15 +57,15 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
                         clear()
                     }
 
-                    player.addMoveTo(pos)
+                    hero.addMoveTo(pos)
                     actionType = ActionType.Nothing
                 }
                 actionType == ActionType.Attack -> {
-                    player.addAttackOn(pos)
+                    hero.addAttackOn(pos)
                     actionType = ActionType.Nothing
                 }
                 savedMagicSymbol != null -> {
-                    player.addCastMagicOn(pos, savedMagicSymbol!!)
+                    hero.addCastMagicOn(pos, savedMagicSymbol!!)
                     savedMagicSymbol = null
                     actionType = ActionType.Nothing
                 }
@@ -76,7 +76,7 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
 
 private fun GameScene.showMapCursor(pos: Point) {
     tilesManager[pos.xi, pos.yi, Layer.Cursor] =
-        if (actionType != ActionType.Attack || (pos - player.lastPreviewPos).length == 1.0)
+        if (actionType != ActionType.Attack || (pos - hero.lastPreviewPos).length == 1.0)
             cursorTileId
         else
             TILE_CURSOR
@@ -91,8 +91,8 @@ private fun GameScene.showPreviewPathOnMove(
 
     clear()
     addAll(
-        getPath(player.lastPreviewPos, pos, tilesManager[Layer.Walls])
-            .take(player.remainingActionPoints)
+        getPath(hero.lastPreviewPos, pos, tilesManager[Layer.Walls])
+            .take(hero.remainingActionPoints)
     )
 
     forEach { (_, pathPoint) ->

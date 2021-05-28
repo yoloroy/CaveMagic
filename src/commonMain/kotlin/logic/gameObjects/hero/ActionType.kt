@@ -1,4 +1,4 @@
-package logic.gameObjects.player
+package logic.gameObjects.hero
 
 enum class ActionType {
     Nothing,

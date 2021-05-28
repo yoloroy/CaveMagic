@@ -6,7 +6,7 @@ import com.soywiz.korge.view.*
 import com.soywiz.korim.text.TextAlignment
 import com.soywiz.korma.geom.Point
 import lib.extensions.*
-import logic.gameObjects.player.ActionType
+import logic.gameObjects.hero.ActionType
 import mainModule.MainModule
 import mainModule.widgets.valueBar
 
@@ -50,7 +50,7 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         onDown { flip() }
         onUp {
             flip()
-            player.removeLastAction()
+            hero.removeLastAction()
         }
     }
 
@@ -117,8 +117,8 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         }
     }
 
-    val healthBar = valueBar(player.model.healthLimit.value, player.model.health.value)
-    player.model.apply {
+    val healthBar = valueBar(hero.model.healthLimit.value, hero.model.health.value)
+    hero.model.apply {
         health.observe {
             healthBar.value = it
         }

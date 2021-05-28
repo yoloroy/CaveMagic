@@ -4,8 +4,8 @@ import com.soywiz.korma.geom.Point
 import lib.exceptions.UnknownUnitException
 import lib.tiledMapView.Layer
 import logic.gameObjects.gameObject.GameObjectId
-import logic.gameObjects.player.ActionType
-import logic.gameObjects.player.Player
+import logic.gameObjects.hero.ActionType
+import logic.gameObjects.hero.Hero
 import logic.gameObjects.sheep.Sheep
 import logic.gameObjects.units.simpleMeleeEnemy.SimpleMeleeEnemy
 
@@ -15,7 +15,7 @@ fun initGameObjects(scene: GameScene, onPlayerDeath: () -> Unit) = scene.apply {
     tilesManager.forEachObject(Layer.GameObjects) { pos, id ->
         val type = GameObjectId.getTypeById(id)
 
-        if (type == GameObjectId.Player) {
+        if (type == GameObjectId.Hero) {
             playerPos = pos
         } else {
             gameObjects += when (type) {
@@ -32,12 +32,12 @@ fun initGameObjects(scene: GameScene, onPlayerDeath: () -> Unit) = scene.apply {
     }
 
 
-    player = Player(map, camera, gameObjects, tilesManager, assetsManager.playerBitmap, map, playerPos, actionType == ActionType.Move)
-    player.model.health.observe { // TODO: refactor
+    hero = Hero(map, camera, gameObjects, tilesManager, assetsManager.heroBitmap, map, playerPos, actionType == ActionType.Move)
+    hero.model.health.observe { // TODO: refactor
         if (it <= 0) {
             onPlayerDeath()
         }
     }
 
-    gameObjects.add(0, player)
+    gameObjects.add(0, hero)
 }

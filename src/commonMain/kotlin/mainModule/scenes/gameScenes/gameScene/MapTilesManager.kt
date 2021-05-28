@@ -12,7 +12,7 @@ import logic.gameObjects.gameObject.GameObjectId
 class MapTilesManager(private val map: TiledMapView) {
     val tileSize get() = map.tileset.run { Point(width, height) }
 
-    val playerPos get() = get(Layer.GameObjects).getPositionsWithValue(GameObjectId.Player.id).first().toPoint() // TODO: remove logic.magic value 1
+    val heroPos get() = get(Layer.GameObjects).getPositionsWithValue(GameObjectId.Hero.id).first().toPoint()
 
     fun forEachObject(layer: Layer, callback: (Point, Int) -> Unit) = get(layer).run {
         repeat(height) { y ->
