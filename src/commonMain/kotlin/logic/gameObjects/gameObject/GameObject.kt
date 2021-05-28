@@ -1,3 +1,5 @@
+@file:Suppress("DeferredResultUnused")
+
 package logic.gameObjects.gameObject
 
 import com.soywiz.klock.seconds
@@ -6,6 +8,7 @@ import com.soywiz.korge.view.tween.moveTo
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korma.geom.Point
 import com.soywiz.korma.interpolation.Easing
+import lib.animations.animateHandlingAttack
 import lib.extensions.size
 import lib.extensions.xi
 import lib.extensions.yi
@@ -56,8 +59,9 @@ abstract class GameObject(
         return false
     }
 
-    open suspend fun handleAttack(damage: Int) {
+    open suspend fun handleAttack(damage: Int, from: GameObject? = null) {
         model.health.value -= damage
+        animateHandlingAttack(from)
 
         if (model.health.value <= 0) {
             isAlive = false

@@ -6,6 +6,7 @@ import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
 import lib.algorythms.pathFinding.getPath
+import lib.animations.animateMeleeAttackOn
 import lib.extensions.setTo
 import lib.extensions.sum
 import lib.extensions.xi
@@ -77,7 +78,11 @@ open class SimpleMeleeEnemy(
         } else {
             val path = getPath(lastPreviewPos, target.pos, sum(tilesManager[Layer.Walls], tilesManager[Layer.GameObjects])) // TODO: add caching
 
-            ActionType.Move to path.first().second.also { lastPreviewPos.setTo(it) }
+            if (path.isNotEmpty()) {
+                ActionType.Move to path.first().second.also { lastPreviewPos.setTo(it) }
+            } else {
+                ActionType.Nothing to null
+            }
         }
     } ?: ActionType.Nothing to null
 
@@ -101,6 +106,7 @@ open class SimpleMeleeEnemy(
     private suspend fun doAttack() = true.also {
         target?.let { target ->
             if (target.pos.distanceTo(pos).toIntCeil() == 1) {
+                animateMeleeAttackOn(target)
                 target.handleAttack(model.damage.value)
             }
         }

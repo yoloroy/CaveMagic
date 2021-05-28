@@ -17,6 +17,7 @@ import ktres.TILE_EMPTY
 import ktres.TILE_LIGHTNING_CAST_CURSOR
 import ktres.TILE_MOVE_CURSOR
 import lib.algorythms.pathFinding.getPath
+import lib.animations.animateMeleeAttackOn
 import lib.extensions.*
 import lib.tiledMapView.Layer
 import logic.gameObjects.gameObject.GameObject
@@ -72,9 +73,15 @@ class Hero(
         actions.clear()
     }
 
-    private suspend fun doAttack(point: Point, damage: Int = model.damage.value) {
-        val target = gameObjects.firstOrNull { it.isAlive && it.pos == point }
-        target?.handleAttack(damage)
+    private suspend fun doAttack(point: Point, damage: Int = model.damage.value, isMelee: Boolean) {
+        gameObjects
+            .filter { it.isAlive && it.pos == point }
+            .forEach { target ->
+                if (isMelee) {
+                    animateMeleeAttackOn(target)
+                }
+                target.handleAttack(damage, takeIf { isMelee })
+            }
     }
 
     private suspend fun doMove(pathPart: Pair<Point, Point>) {
@@ -128,7 +135,7 @@ class Hero(
         updateActionsPreview {
             when (magicSymbol) {
                 DamageMagic.Lightning -> {
-                    add(AttackAction(pos, 2, TILE_LIGHTNING_CAST_CURSOR))
+                    add(AttackAction(pos, 2, TILE_LIGHTNING_CAST_CURSOR, isMelee = false))
                 }
             }
         }
@@ -149,7 +156,7 @@ class Hero(
 
     fun addAttackOn(pos: Point) {
         updateActionsPreview {
-            add(AttackAction(pos))
+            add(AttackAction(pos, isMelee = true))
         }
     }
 
@@ -192,9 +199,10 @@ class Hero(
     inner class AttackAction(
         private val destination: Point,
         private val damage: Int = model.damage.value,
-        tile: Int = TILE_ATTACK_CURSOR
+        tile: Int = TILE_ATTACK_CURSOR,
+        private val isMelee: Boolean = false
     ) : Action(destination, tile) {
-        override suspend fun invoke() = doAttack(destination, damage)
+        override suspend fun invoke() = doAttack(destination, damage, isMelee)
     }
 }
 
