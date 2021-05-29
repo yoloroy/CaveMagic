@@ -15,12 +15,16 @@ import lib.algorythms.recognazingFigure.figures.Figure
 import lib.algorythms.recognazingFigure.figures.SymbolFigure
 import lib.extensions.clamp
 import lib.extensions.plus
+import lib.extensions.xi
+import lib.extensions.yi
 import lib.tiledMapView.Layer
 import lib.tiledMapView.getTilesArea
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.hero.ActionType
 import logic.gameObjects.hero.Hero
 import logic.gameObjects.logic.Phasable
+import logic.inventory.item.SkullItem
+import logic.inventory.item.itemClass
 import logic.magic.AreaMagic
 import logic.magic.DamageMagic
 import logic.magic.Magic
@@ -142,6 +146,8 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
         if (oCurrentPhase.value == TurnPhase.First) {
             hero.makeTurn()
+            checkItems()
+
             gameObjects.forEach {
                 if (it.isAlive && it is Phasable) {
                     it.calculateTurn()
@@ -151,6 +157,10 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
             gameObjects.forEach {
                 if (it.isAlive) {
                     it.makeTurn()
+                }
+
+                if (it is Hero) { // bad code
+                    checkItems()
                 }
             }
         }
@@ -167,6 +177,19 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     }
 
     private fun checkEvents() = events.forEach { it() }
+
+    private fun checkItems() { // TODO: add containing items not only for hero?
+        tilesManager[hero.pos.xi, hero.pos.yi, Layer.Storage]
+            .takeIf { it != 0 }
+            ?.run {
+                hero.pickUp(when(itemClass) {
+                    SkullItem::class -> SkullItem(assetsManager, hero)
+                    else -> throw Exception("Unknown item")
+                })
+            }
+
+        tilesManager[hero.pos.xi, hero.pos.yi, Layer.Storage] = 0
+    }
 
     private suspend fun checkTeleports() {
         suspend fun List<GameObject>.checkTeleport(from: Point, destination: Point, id: Int) =

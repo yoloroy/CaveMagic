@@ -8,7 +8,7 @@ enum class Layer(val index: Int) {
     BottomDecorations(2),
     TopDecorations(3),
     Events(4),
-    Storages(5),
+    Storage(5),
     GameObjects(6),
     MasonGameObjects(7),
     Teleports(8),

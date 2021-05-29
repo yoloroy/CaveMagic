@@ -2,12 +2,15 @@ package mainModule.scenes.gameScenes.gameScene
 
 import com.soywiz.korma.geom.Point
 import lib.exceptions.UnknownUnitException
+import lib.extensions.xi
+import lib.extensions.yi
 import lib.tiledMapView.Layer
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.hero.ActionType
 import logic.gameObjects.hero.Hero
 import logic.gameObjects.sheep.Sheep
 import logic.gameObjects.units.enemies.melee.simpleMeleeEnemy.SimpleMeleeEnemy
+import logic.inventory.item.SkullItem
 
 fun initGameObjects(scene: GameScene, onPlayerDeath: () -> Unit) = scene.apply {
     var playerPos = Point()
@@ -22,7 +25,13 @@ fun initGameObjects(scene: GameScene, onPlayerDeath: () -> Unit) = scene.apply {
                 GameObjectId.Sheep ->
                     Sheep(tilesManager, assetsManager.sheepBitmap, map, pos)
                 GameObjectId.Skeleton ->
-                    SimpleMeleeEnemy(pos, 2, 2, 1, tilesManager, GameObjectId.Skeleton, assetsManager.skeletonBitmap, map, corpseTile = 109)
+                    object : SimpleMeleeEnemy(pos, 2, 2, 1, tilesManager, GameObjectId.Skeleton, assetsManager.skeletonBitmap, map) {
+                        override fun onDeath() {
+                            super.onDeath()
+
+                            tilesManager[pos.xi, pos.yi, Layer.Storage] = SkullItem.TILE_ID
+                        }
+                    }
                 else -> {
                     println("$id: ${GameObjectId.getTypeById(id)}")
                     throw UnknownUnitException()

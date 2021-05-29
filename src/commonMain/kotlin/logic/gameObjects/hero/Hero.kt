@@ -24,6 +24,7 @@ import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
 import logic.gameObjects.units.enemies.Enemy
+import logic.inventory.item.Item
 import logic.magic.DamageMagic
 import logic.magic.Magic
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
@@ -89,6 +90,10 @@ class Hero(
         tilesManager.updatePos(pathPart.second)
 
         notifyNearbyGameObjects() // TODO
+    }
+
+    fun pickUp(item: Item) {
+        model.items += item
     }
 
     private fun notifyNearbyGameObjects() = gameObjects // TODO
@@ -210,7 +215,10 @@ class HeroModel(
     healthLimit: Int,
     actionPointsLimit: Int,
     damage: Int,
-    health: Int = healthLimit
+    health: Int = healthLimit,
+    items: MutableList<Item> = mutableListOf()
 ) : GameObjectModel(healthLimit, actionPointsLimit, health) {
     val damage = ObservableProperty(damage)
+    val items = ObservableCollection(items)
+
 }

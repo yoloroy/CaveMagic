@@ -7,6 +7,7 @@ import com.soywiz.korim.text.TextAlignment
 import com.soywiz.korma.geom.Point
 import lib.extensions.*
 import logic.gameObjects.hero.ActionType
+import logic.inventory.widgets.inventoryListView
 import mainModule.MainModule
 import mainModule.widgets.valueBar
 
@@ -90,7 +91,28 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         position(bottomCenter + Point.Down.point * 2 + Point.Right.point * 1)
 
         onDown { flip() }
-        onUp { flip() }
+
+        var inventory: Container? = null
+        onUp {
+            flip()
+
+            inventory?.run {
+                removeChildren()
+                removeFromParent()
+
+                inventory = null
+                return@onUp
+            }
+
+            if (hero.model.items.isNotEmpty()) {
+                val resultSize = Point(48, 20 * hero.model.items.size)
+                inventory = inventoryListView(
+                    hero.model.items,
+                    pos + size * Point(1, -1) - resultSize * Point(0, 1),
+                    resultSize
+                )
+            }
+        }
     }
     image(assetsManager.buttonMoveBitmap) {
         smoothing = false

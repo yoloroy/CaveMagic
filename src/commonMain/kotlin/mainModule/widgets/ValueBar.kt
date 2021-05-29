@@ -40,7 +40,7 @@ open class ValueBar(
 
     private val text: Text = container.text(string, color = color) {
         size(this@ValueBar.size.x, this@ValueBar.size.y)
-        position(position)
+        position(position * 2)
     }
 
     private fun notifyView() {

@@ -9,6 +9,7 @@ import mainModule.scenes.abstracts.AssetsManager
 
 open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsManager {
     lateinit var tiledMap: TiledMap
+
     lateinit var heroBitmap: Bitmap
     lateinit var sheepBitmap: Bitmap
     lateinit var skeletonBitmap: Bitmap
@@ -21,8 +22,11 @@ open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsMana
     lateinit var buttonMiscBitmap: Bitmap
     lateinit var buttonMagicBitmap: Bitmap
 
+    lateinit var skullBitmap: Bitmap
+
     override suspend fun loadAssets() {
         tiledMap = resourcesVfs[tiledMapPath].readTiledMap()
+
         heroBitmap = resourcesVfs["gfx/hero.png"].readBitmap()
         sheepBitmap = resourcesVfs["gfx/sheep.png"].readBitmap()
         skeletonBitmap = resourcesVfs["gfx/skeleton.png"].readBitmap()
@@ -34,5 +38,7 @@ open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsMana
         buttonAttackBitmap = resourcesVfs["gfx/buttonAttack.png"].readBitmap()
         buttonMiscBitmap = resourcesVfs["gfx/buttonMisc.png"].readBitmap()
         buttonMagicBitmap = resourcesVfs["gfx/buttonMagic.png"].readBitmap()
+
+        skullBitmap = resourcesVfs["gfx/skull.png"].readBitmap()
     }
 }
