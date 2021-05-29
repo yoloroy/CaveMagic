@@ -1,5 +1,14 @@
 package lib.extensions
 
-fun <A, R> List<(A) -> R>.callAll(arg1: A) = forEach { it(arg1) }
-
-fun <A, B, R> List<(A, B) -> R>.callAll(arg1: A, arg2: B) = forEach { it(arg1, arg2) }
+class ObservableCollection<T>(
+    private val wrapped: MutableCollection<T>,
+    val onChange: (MutableCollection<T>) -> Unit
+) : MutableCollection<T> by wrapped {
+    override fun add(element: T): Boolean {
+        if (wrapped.add(element)) {
+            onChange(this)
+            return true
+        }
+        return false
+    }
+}
