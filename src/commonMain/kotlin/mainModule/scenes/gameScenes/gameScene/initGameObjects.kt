@@ -7,7 +7,7 @@ import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.hero.ActionType
 import logic.gameObjects.hero.Hero
 import logic.gameObjects.sheep.Sheep
-import logic.gameObjects.units.simpleMeleeEnemy.SimpleMeleeEnemy
+import logic.gameObjects.units.enemies.melee.simpleMeleeEnemy.SimpleMeleeEnemy
 
 fun initGameObjects(scene: GameScene, onPlayerDeath: () -> Unit) = scene.apply {
     var playerPos = Point()

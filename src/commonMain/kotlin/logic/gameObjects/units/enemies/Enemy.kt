@@ -1,4 +1,4 @@
-package logic.gameObjects.units
+package logic.gameObjects.units.enemies
 
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.logic.Phasable

@@ -1,4 +1,4 @@
-package logic.gameObjects.units.simpleMeleeEnemy
+package logic.gameObjects.units.enemies.melee.simpleMeleeEnemy
 
 import com.soywiz.kmem.toIntCeil
 import com.soywiz.korge.view.Container
@@ -16,7 +16,7 @@ import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
 import logic.gameObjects.hero.ActionType
-import logic.gameObjects.units.Enemy
+import logic.gameObjects.units.enemies.Enemy
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 
 open class SimpleMeleeEnemy(

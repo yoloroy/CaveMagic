@@ -23,7 +23,7 @@ import lib.tiledMapView.Layer
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
-import logic.gameObjects.units.Enemy
+import logic.gameObjects.units.enemies.Enemy
 import logic.magic.DamageMagic
 import logic.magic.Magic
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager

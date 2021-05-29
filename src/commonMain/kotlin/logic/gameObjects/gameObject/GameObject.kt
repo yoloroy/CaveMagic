@@ -35,6 +35,10 @@ abstract class GameObject(
         set(value) {
             field = value
             visible = value
+            if (!value) {
+                onDeath()
+                view.scale *= 0
+            }
         }
 
     var visible
@@ -65,12 +69,13 @@ abstract class GameObject(
 
         if (model.health.value <= 0) {
             isAlive = false
-            tilesManager[pos.xi, pos.yi, Layer.GameObjects] = GameObjectId.Empty.id
-            corpseTile?.let {
-                tilesManager[pos.xi, pos.yi, Layer.BottomDecorations] = it // TODO: add layer for corpses?
-            }
-            visible = false
-            view.scale *= 0
+        }
+    }
+
+    open fun onDeath() {
+        tilesManager[pos.xi, pos.yi, Layer.GameObjects] = GameObjectId.Empty.id
+        corpseTile?.let {
+            tilesManager[pos.xi, pos.yi, Layer.BottomDecorations] = it // TODO: add layer for corpses?
         }
     }
 
