@@ -12,12 +12,25 @@ import mainModule.MainModule
 import mainModule.widgets.valueBar
 
 internal fun Container.initUI(scene: GameScene) = scene.apply {
-    fun Image.flip() {
-        scale(-scaleX, -scaleY)
-        anchor(1 - anchorX, 1 - anchorY)
-    }
+    initTurnActivityButtons(this@initUI, this)
+    initPlayerActivityButtons(this@initUI, this)
+    initHeroCharacteristicsUI(this@initUI, this)
+}
 
-    val nextTurnButton = image(assetsManager.nextTurnBitmap) {
+private fun initHeroCharacteristicsUI(container: Container, gameScene: GameScene) {
+    val healthBar = container.valueBar(gameScene.hero.model.healthLimit.value, gameScene.hero.model.health.value)
+    gameScene.hero.model.apply {
+        health.observe {
+            healthBar.value = it
+        }
+        healthLimit.observe {
+            healthBar.limit = it
+        }
+    }
+}
+
+private fun initTurnActivityButtons(container: Container, gameScene: GameScene) {
+    val nextTurnButton = container.image(gameScene.assetsManager.nextTurnBitmap) {
         smoothing = false
         anchor(2, 1)
         size(16, 16)
@@ -33,7 +46,7 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
             if (clickable) {
                 clickable = false
                 try {
-                    makeTurn()
+                    gameScene.makeTurn()
                 } catch (e: Exception) {
                     print(e.stackTraceToString())
                 }
@@ -42,7 +55,7 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
             }
         }
     }
-    image(assetsManager.revertTurnBitmap) {
+    container.image(gameScene.assetsManager.revertTurnBitmap) {
         smoothing = false
         anchor(1, 1)
         size(12, 12)
@@ -51,12 +64,12 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         onDown { flip() }
         onUp {
             flip()
-            hero.removeLastAction()
+            gameScene.hero.removeLastAction()
         }
     }
 
-    text(oCurrentPhase.value.text) {
-        oCurrentPhase.observe {
+    container.text(gameScene.oCurrentPhase.value.text) {
+        gameScene.oCurrentPhase.observe {
             text = it.text
         }
 
@@ -65,14 +78,17 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
 
         alignment = TextAlignment.TOP_CENTER
 
-        setPositionRelativeTo(nextTurnButton,
-            - nextTurnButton.size * nextTurnButton.anchor
-            + sizePoint * Point(0.5, -1.0)
+        setPositionRelativeTo(
+            nextTurnButton,
+            -nextTurnButton.size * nextTurnButton.anchor
+                    + sizePoint * Point(0.5, -1.0)
         )
     }
+}
 
+private fun initPlayerActivityButtons(container: Container, gameScene: GameScene) {
     val bottomCenter = MainModule.size.size.p + MainModule.size.size.p * Point.Left.point / 2
-    val buttonAttack = image(assetsManager.buttonAttackBitmap) {
+    val buttonAttack = container.image(gameScene.assetsManager.buttonAttackBitmap) {
         smoothing = false
         anchor(1, 1)
         size(16, 16)
@@ -81,10 +97,10 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         onDown { flip() }
         onUp {
             flip()
-            actionType = ActionType.Attack
+            gameScene.actionType = ActionType.Attack
         }
     }
-    val buttonMisc = image(assetsManager.buttonMiscBitmap) {
+    val buttonMisc = container.image(gameScene.assetsManager.buttonMiscBitmap) {
         smoothing = false
         anchor(0, 1)
         size(16, 16)
@@ -104,17 +120,17 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
                 return@onUp
             }
 
-            if (hero.model.items.isNotEmpty()) {
-                val resultSize = Point(48, 20 * hero.model.items.size)
-                inventory = inventoryListView(
-                    hero.model.items,
+            if (gameScene.hero.model.items.isNotEmpty()) {
+                val resultSize = Point(48, 20 * gameScene.hero.model.items.size)
+                inventory = container.inventoryListView(
+                    gameScene.hero.model.items,
                     pos + size * Point(1, -1) - resultSize * Point(0, 1),
                     resultSize
                 )
             }
         }
     }
-    image(assetsManager.buttonMoveBitmap) {
+    container.image(gameScene.assetsManager.buttonMoveBitmap) {
         smoothing = false
         anchor(1, 1)
         size(16, 16)
@@ -123,10 +139,10 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         onDown { flip() }
         onUp {
             flip()
-            actionType = ActionType.Move
+            gameScene.actionType = ActionType.Move
         }
     }
-    image(assetsManager.buttonMagicBitmap) {
+    container.image(gameScene.assetsManager.buttonMagicBitmap) {
         smoothing = false
         anchor(0, 1)
         size(16, 16)
@@ -135,17 +151,12 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
         onDown { flip() }
         onUp {
             flip()
-            actionType = ActionType.MagicDrawing
+            gameScene.actionType = ActionType.MagicDrawing
         }
     }
+}
 
-    val healthBar = valueBar(hero.model.healthLimit.value, hero.model.health.value)
-    hero.model.apply {
-        health.observe {
-            healthBar.value = it
-        }
-        healthLimit.observe {
-            healthBar.limit = it
-        }
-    }
+private fun Image.flip() {
+    scale(-scaleX, -scaleY)
+    anchor(1 - anchorX, 1 - anchorY)
 }
