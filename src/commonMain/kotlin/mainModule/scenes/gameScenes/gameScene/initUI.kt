@@ -12,24 +12,24 @@ import mainModule.MainModule
 import mainModule.widgets.valueBar
 
 internal fun Container.initUI(scene: GameScene) = scene.apply {
-    initTurnActivityButtons(this@initUI, this)
-    initPlayerActivityButtons(this@initUI, this)
-    initHeroCharacteristicsUI(this@initUI, this)
+    initTurnActivityButtons(this)
+    initPlayerActivityButtons(this)
+    initHeroCharacteristicsUI(this)
 }
 
-private fun initHeroCharacteristicsUI(container: Container, gameScene: GameScene) {
-    initHeroHealthUI(gameScene, container)
-    initHeroExperienceUI(gameScene, container)
+private fun Container.initHeroCharacteristicsUI(gameScene: GameScene) {
+    this.initHeroHealthUI(gameScene)
+    this.initHeroExperienceUI(gameScene)
 }
 
-private fun initHeroExperienceUI(gameScene: GameScene, container: Container) {
+private fun Container.initHeroExperienceUI(gameScene: GameScene) {
 
 }
 
-private fun initHeroHealthUI(gameScene: GameScene, container: Container) {
+private fun Container.initHeroHealthUI(gameScene: GameScene) {
     val model = gameScene.hero.model
 
-    val healthBar = container.valueBar(
+    val healthBar = valueBar(
         model.healthLimit.value,
         gameScene.assetsManager.healthBarBackgroundBitmap,
         model.health.value
@@ -44,8 +44,8 @@ private fun initHeroHealthUI(gameScene: GameScene, container: Container) {
     }
 }
 
-private fun initTurnActivityButtons(container: Container, gameScene: GameScene) {
-    val nextTurnButton = container.image(gameScene.assetsManager.nextTurnBitmap) {
+private fun Container.initTurnActivityButtons(gameScene: GameScene) {
+    val nextTurnButton = image(gameScene.assetsManager.nextTurnBitmap) {
         smoothing = false
         anchor(2, 1)
         size(16, 16)
@@ -70,7 +70,7 @@ private fun initTurnActivityButtons(container: Container, gameScene: GameScene) 
             }
         }
     }
-    container.image(gameScene.assetsManager.revertTurnBitmap) {
+    image(gameScene.assetsManager.revertTurnBitmap) {
         smoothing = false
         anchor(1, 1)
         size(12, 12)
@@ -83,7 +83,7 @@ private fun initTurnActivityButtons(container: Container, gameScene: GameScene) 
         }
     }
 
-    container.text(gameScene.oCurrentPhase.value.text) {
+    text(gameScene.oCurrentPhase.value.text) {
         gameScene.oCurrentPhase.observe {
             text = it.text
         }
@@ -101,9 +101,9 @@ private fun initTurnActivityButtons(container: Container, gameScene: GameScene) 
     }
 }
 
-private fun initPlayerActivityButtons(container: Container, gameScene: GameScene) {
+private fun Container.initPlayerActivityButtons(gameScene: GameScene) {
     val bottomCenter = MainModule.size.size.p + MainModule.size.size.p * Point.Left.point / 2
-    val buttonAttack = container.image(gameScene.assetsManager.buttonAttackBitmap) {
+    val buttonAttack = image(gameScene.assetsManager.buttonAttackBitmap) {
         smoothing = false
         anchor(1, 1)
         size(16, 16)
@@ -115,7 +115,7 @@ private fun initPlayerActivityButtons(container: Container, gameScene: GameScene
             gameScene.actionType = ActionType.Attack
         }
     }
-    val buttonMisc = container.image(gameScene.assetsManager.buttonMiscBitmap) {
+    val buttonMisc = image(gameScene.assetsManager.buttonMiscBitmap) {
         smoothing = false
         anchor(0, 1)
         size(16, 16)
@@ -137,7 +137,7 @@ private fun initPlayerActivityButtons(container: Container, gameScene: GameScene
 
             if (gameScene.hero.model.items.isNotEmpty()) {
                 val resultSize = Point(48, 20 * gameScene.hero.model.items.size)
-                inventory = container.inventoryListView(
+                inventory = inventoryListView(
                     gameScene.hero.model.items,
                     pos + size * Point(1, -1) - resultSize * Point(0, 1),
                     resultSize
@@ -145,7 +145,7 @@ private fun initPlayerActivityButtons(container: Container, gameScene: GameScene
             }
         }
     }
-    container.image(gameScene.assetsManager.buttonMoveBitmap) {
+    image(gameScene.assetsManager.buttonMoveBitmap) {
         smoothing = false
         anchor(1, 1)
         size(16, 16)
@@ -157,7 +157,7 @@ private fun initPlayerActivityButtons(container: Container, gameScene: GameScene
             gameScene.actionType = ActionType.Move
         }
     }
-    container.image(gameScene.assetsManager.buttonMagicBitmap) {
+    image(gameScene.assetsManager.buttonMagicBitmap) {
         smoothing = false
         anchor(0, 1)
         size(16, 16)
