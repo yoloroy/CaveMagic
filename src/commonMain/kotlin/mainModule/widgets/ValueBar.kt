@@ -8,9 +8,9 @@ import lib.extensions.size
 import lib.extensions.x
 import lib.extensions.xi
 
-private val DEFAULT_SIZE = Point(20, 4)
-private val DEFAULT_POSITION = Point(0) + DEFAULT_SIZE.xi.x / 2
-private val DEFAULT_COLOR = RGBA(0xff, 0xff, 0xff, 0xff)
+private val DEFAULT_SIZE get() = Point(20, 4)
+private val DEFAULT_POSITION get() = Point(0) + DEFAULT_SIZE.xi.x / 2
+private val DEFAULT_COLOR get() = RGBA(0xff, 0xff, 0xff, 0xff)
 
 fun Container.valueBar(
     limit: Int,
