@@ -18,6 +18,15 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
 }
 
 private fun initHeroCharacteristicsUI(container: Container, gameScene: GameScene) {
+    initHeroHealthUI(gameScene, container)
+    initHeroExperienceUI(gameScene, container)
+}
+
+private fun initHeroExperienceUI(gameScene: GameScene, container: Container) {
+
+}
+
+private fun initHeroHealthUI(gameScene: GameScene, container: Container) {
     val model = gameScene.hero.model
 
     val healthBar = container.valueBar(
