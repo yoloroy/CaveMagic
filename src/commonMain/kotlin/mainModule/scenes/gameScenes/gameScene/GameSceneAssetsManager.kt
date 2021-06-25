@@ -3,6 +3,8 @@ package mainModule.scenes.gameScenes.gameScene
 import com.soywiz.korge.tiled.TiledMap
 import com.soywiz.korge.tiled.readTiledMap
 import com.soywiz.korim.bitmap.Bitmap
+import com.soywiz.korim.bitmap.Bitmap32
+import com.soywiz.korim.color.Colors
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
 import mainModule.scenes.abstracts.AssetsManager
@@ -22,6 +24,9 @@ open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsMana
     lateinit var buttonMiscBitmap: Bitmap
     lateinit var buttonMagicBitmap: Bitmap
 
+    lateinit var healthBarBackgroundBitmap: Bitmap
+    lateinit var experienceBarBackgroundBitmap: Bitmap
+
     lateinit var skullBitmap: Bitmap
 
     override suspend fun loadAssets() {
@@ -40,5 +45,8 @@ open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsMana
         buttonMagicBitmap = resourcesVfs["gfx/buttonMagic.png"].readBitmap()
 
         skullBitmap = resourcesVfs["gfx/skull.png"].readBitmap()
+
+        healthBarBackgroundBitmap = Bitmap32(1, 1, Colors.ORANGERED)
+        experienceBarBackgroundBitmap = Bitmap32(1, 1, Colors.GOLDENROD)
     }
 }

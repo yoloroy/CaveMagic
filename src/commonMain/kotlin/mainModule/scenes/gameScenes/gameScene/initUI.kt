@@ -18,8 +18,14 @@ internal fun Container.initUI(scene: GameScene) = scene.apply {
 }
 
 private fun initHeroCharacteristicsUI(container: Container, gameScene: GameScene) {
-    val healthBar = container.valueBar(gameScene.hero.model.healthLimit.value, gameScene.hero.model.health.value)
-    gameScene.hero.model.apply {
+    val model = gameScene.hero.model
+
+    val healthBar = container.valueBar(
+        model.healthLimit.value,
+        gameScene.assetsManager.healthBarBackgroundBitmap,
+        model.health.value
+    )
+    model.apply {
         health.observe {
             healthBar.value = it
         }
