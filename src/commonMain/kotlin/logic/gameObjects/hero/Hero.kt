@@ -82,6 +82,10 @@ class Hero(
                     animateMeleeAttackOn(target)
                 }
                 target.handleAttack(damage, takeIf { isMelee })
+
+                if (!target.isAlive) {
+                    model.experience.value += 1 // TODO: various exp increments
+                }
             }
     }
 
@@ -216,9 +220,10 @@ class HeroModel(
     actionPointsLimit: Int,
     damage: Int,
     health: Int = healthLimit,
+    experience: Int = 0,
     items: MutableList<Item> = mutableListOf()
 ) : GameObjectModel(healthLimit, actionPointsLimit, health) {
     val damage = ObservableProperty(damage)
     val items = ObservableCollection(items)
-
+    val experience = ObservableProperty(experience)
 }
