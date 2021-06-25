@@ -23,7 +23,19 @@ private fun Container.initHeroCharacteristicsUI(gameScene: GameScene) {
 }
 
 private fun Container.initHeroExperienceUI(gameScene: GameScene) {
+    val model = gameScene.hero.model
 
+    val expBar = valueBar(
+        10,
+        gameScene.assetsManager.experienceBarBackgroundBitmap,
+        model.experience.value,
+        position = Point(0, 5)
+    )
+    model.apply {
+        experience.observe {
+            expBar.value = it
+        }
+    }
 }
 
 private fun Container.initHeroHealthUI(gameScene: GameScene) {
