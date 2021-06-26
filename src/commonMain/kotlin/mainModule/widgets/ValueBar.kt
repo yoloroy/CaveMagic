@@ -45,6 +45,7 @@ open class ValueBar(
 
     private val background = backgroundTexture?.let {
         container.image(backgroundTexture) {
+            smoothing = false
             position(position * 2)
             size(this@ValueBar.size * Point(value.toDouble() / limit, 1.0))
         }
