@@ -8,17 +8,13 @@ import lib.extensions.size
 import lib.extensions.x
 import lib.extensions.xi
 
-private val DEFAULT_SIZE get() = Point(20, 4)
-private val DEFAULT_POSITION get() = Point(0)
-private val DEFAULT_COLOR get() = RGBA(0xff, 0xff, 0xff, 0xff)
-
 fun Container.valueBar(
     limit: Int,
     backgroundTexture: Bitmap? = null,
     value: Int = limit,
-    size: Point = DEFAULT_SIZE,
-    position: Point = DEFAULT_POSITION,
-    color: RGBA = DEFAULT_COLOR
+    size: Point = ValueBar.DEFAULT_SIZE,
+    position: Point = ValueBar.DEFAULT_POSITION,
+    color: RGBA = ValueBar.DEFAULT_COLOR
 ) = ValueBar(this, limit, backgroundTexture, value, size, position + size.xi.x / 2, color)
 
 open class ValueBar(
@@ -30,6 +26,12 @@ open class ValueBar(
     position: Point = DEFAULT_POSITION,
     color: RGBA = DEFAULT_COLOR
 ) {
+    companion object {
+        val DEFAULT_SIZE get() = Point(20, 4)
+        val DEFAULT_POSITION get() = Point(0)
+        val DEFAULT_COLOR get() = RGBA(0xff, 0xff, 0xff, 0xff)
+    }
+
     var limit = limit
         set(value) {
             field = value
@@ -45,6 +47,7 @@ open class ValueBar(
 
     private val background = backgroundTexture?.let {
         container.image(backgroundTexture) {
+            smoothing = false
             position(position * 2)
             size(this@ValueBar.size * Point(value.toDouble() / limit, 1.0))
         }
