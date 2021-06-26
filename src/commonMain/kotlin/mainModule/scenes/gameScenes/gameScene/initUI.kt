@@ -9,6 +9,7 @@ import lib.extensions.*
 import logic.gameObjects.hero.ActionType
 import logic.inventory.widgets.inventoryListView
 import mainModule.MainModule
+import mainModule.widgets.ValueBar
 import mainModule.widgets.valueBar
 
 internal fun Container.initUI(scene: GameScene) = scene.apply {
@@ -82,7 +83,7 @@ private fun Container.initTurnActivityButtons(gameScene: GameScene) {
             }
         }
     }
-    image(gameScene.assetsManager.revertTurnBitmap) {
+    val revertTurnButton = image(gameScene.assetsManager.revertTurnBitmap) {
         smoothing = false
         anchor(1, 1)
         size(12, 12)
@@ -110,6 +111,21 @@ private fun Container.initTurnActivityButtons(gameScene: GameScene) {
             -nextTurnButton.size * nextTurnButton.anchor
                     + sizePoint * Point(0.5, -1.0)
         )
+    }
+}
+
+private fun Container.initAPViewerBar(gameScene: GameScene, revertTurnButton: View) {
+    val hero = gameScene.hero
+    val model = hero.model
+
+    val bar = valueBar(
+        model.actionPointsLimit.value,
+        gameScene.assetsManager.healthBarBackgroundBitmap,
+        model.actionPointsLimit.value - hero.remainingActionPoints, // TODO: refactor
+        position = revertTurnButton.pos - ValueBar.DEFAULT_SIZE
+    )
+    model.actionPointsLimit.observe {
+
     }
 }
 
