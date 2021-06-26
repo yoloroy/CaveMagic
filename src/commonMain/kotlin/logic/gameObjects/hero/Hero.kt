@@ -41,7 +41,7 @@ class Hero(
 ) : GameObject(tilesManager, bitmap = bitmap, container = container, pos = pos) {
     override val tile = GameObjectId.Hero
 
-    override val model = HeroModel(10, 3, 2)
+    override val model = HeroModel(10, 2, 2)
 
     private val fogOfWarComponent = FogOfWarComponent(tilesManager, pos, gameObjects)
 
