@@ -91,7 +91,7 @@ class Hero(
 
     private suspend fun doMove(pathPart: Pair<Point, Point>) {
         lastTeleportId = null
-        updatePos(pathPart.second)
+        tilesManager.updatePos(pathPart.second)
 
         notifyNearbyGameObjects() // TODO
     }
@@ -108,7 +108,7 @@ class Hero(
             }
         }
 
-    private suspend fun updatePos(newPos: Point) {
+    private suspend fun MapTilesManager.updatePos(newPos: Point) {
         moveTo(newPos)
 
         lastPreviewPos.setTo(newPos)
@@ -128,7 +128,7 @@ class Hero(
     override suspend fun teleportTo(point: Point, teleportId: Int) = (lastTeleportId != teleportId).also {
         if (it) {
             lastTeleportId = teleportId
-            updatePos(point)
+            tilesManager.updatePos(point)
             fogOfWarComponent.updateViewArea()
         }
     }
