@@ -9,7 +9,7 @@ import lib.extensions.x
 import lib.extensions.xi
 
 private val DEFAULT_SIZE get() = Point(20, 4)
-private val DEFAULT_POSITION get() = Point(0) + DEFAULT_SIZE.xi.x / 2
+private val DEFAULT_POSITION get() = Point(0)
 private val DEFAULT_COLOR get() = RGBA(0xff, 0xff, 0xff, 0xff)
 
 fun Container.valueBar(
@@ -19,7 +19,7 @@ fun Container.valueBar(
     size: Point = DEFAULT_SIZE,
     position: Point = DEFAULT_POSITION,
     color: RGBA = DEFAULT_COLOR
-) = ValueBar(this, limit, backgroundTexture, value, size, position, color)
+) = ValueBar(this, limit, backgroundTexture, value, size, position + size.xi.x / 2, color)
 
 open class ValueBar(
     container: Container,
