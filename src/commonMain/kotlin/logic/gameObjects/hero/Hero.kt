@@ -41,7 +41,14 @@ class Hero(
 ) : GameObject(tilesManager, bitmap = bitmap, container = container, pos = pos) {
     override val tile = GameObjectId.Hero
 
-    override val model = HeroModel(10, 3, 2)
+    override val model = HeroModel(10, 2, 2).apply {
+        experience.observe {
+            if (it >= 10) {
+                actionPointsLimit.value++
+                experience.value = 0
+            }
+        }
+    }
 
     private val fogOfWarComponent = FogOfWarComponent(tilesManager, pos, gameObjects)
 
