@@ -3,8 +3,6 @@ package mainModule.scenes.gameScenes.gameScene
 import com.soywiz.korge.tiled.TiledMap
 import com.soywiz.korge.tiled.readTiledMap
 import com.soywiz.korim.bitmap.Bitmap
-import com.soywiz.korim.bitmap.Bitmap32
-import com.soywiz.korim.color.Colors
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
 import mainModule.scenes.abstracts.AssetsManager
@@ -46,7 +44,7 @@ open class GameSceneAssetsManager(private val tiledMapPath: String) : AssetsMana
 
         skullBitmap = resourcesVfs["gfx/skull.png"].readBitmap()
 
-        healthBarBackgroundBitmap = Bitmap32(1, 1, Colors.ORANGERED)
-        experienceBarBackgroundBitmap = Bitmap32(1, 1, Colors.GOLDENROD)
+        healthBarBackgroundBitmap = resourcesVfs["gfx/texture_bar_health.png"].readBitmap()
+        experienceBarBackgroundBitmap = resourcesVfs["gfx/texture_bar_experience.png"].readBitmap()
     }
 }
