@@ -45,8 +45,8 @@ class Hero(
         experience.observe {
             if (it >= 10) {
                 actionPointsLimit.value++
+                experience.value = 0
             }
-            experience.value = 0
         }
     }
 
