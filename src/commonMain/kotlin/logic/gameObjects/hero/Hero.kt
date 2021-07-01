@@ -54,6 +54,8 @@ class Hero(
 
     val remainingActionPoints get() = maxOf(model.actionPointsLimit.value - actions.size, 0)
 
+    val actionsCount get() = actions.count()
+
     private val actions = mutableListOf<Action>()
 
     val lastPreviewPos = pos.copy()
