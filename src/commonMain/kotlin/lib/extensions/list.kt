@@ -1,12 +1,12 @@
 package lib.extensions
 
-class ObservableCollection<T>(
-    private val wrapped: MutableCollection<T>
-) : MutableCollection<T> by wrapped {
+class ObservableCollection<C: MutableCollection<T>, T>(
+    val value: C
+) : MutableCollection<T> by value {
     private val observers = mutableListOf<(Collection<T>) -> Unit>()
 
     override fun add(element: T): Boolean {
-        if (wrapped.add(element)) {
+        if (value.add(element)) {
             onChange()
             return true
         }
