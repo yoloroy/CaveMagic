@@ -54,7 +54,7 @@ class Hero(
 
     val remainingActionPoints get() = maxOf(model.actionPointsLimit.value - actions.size, 0)
 
-    private val actions = mutableListOf<Action>()
+    val actions = ObservableCollection(mutableListOf<Action>())
 
     val lastPreviewPos = pos.copy()
 
@@ -186,15 +186,15 @@ class Hero(
         }
     }
 
-    private inline fun updateActionsPreview(block: MutableList<Action>.() -> Unit = {}) {
-        clearPreview(actions)
+    private inline fun updateActionsPreview(block: ObservableMutableList<Action>.() -> Unit = {}) {
+        clearPreview()
         actions.block()
-        showPreview(actions)
+        showPreview()
     }
 
-    private fun showPreview(actions: List<Action> = this.actions) = actions.forEach { it.show() }
+    private fun showPreview() = actions.forEach { it.show() }
 
-    private fun clearPreview(actions: List<Action> = this.actions) = actions.forEach { it.hide() }
+    private fun clearPreview() = actions.forEach { it.hide() }
 
     abstract inner class Action(private val position: Point, private val tile: Int) {
         abstract suspend operator fun invoke()

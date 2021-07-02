@@ -9,10 +9,11 @@ import lib.extensions.*
 import logic.gameObjects.hero.ActionType
 import logic.inventory.widgets.inventoryListView
 import mainModule.MainModule
+import mainModule.widgets.ValueBar
 import mainModule.widgets.valueBar
 
 internal fun Container.initUI(scene: GameScene) = scene.apply {
-    initTurnActivityButtons(this)
+    initTurnActivityUI(this)
     initPlayerActivityButtons(this)
     initHeroCharacteristicsUI(this)
 }
@@ -29,7 +30,7 @@ private fun Container.initHeroExperienceUI(gameScene: GameScene) {
         10,
         gameScene.assetsManager.experienceBarBackgroundBitmap,
         model.experience.value,
-        position = Point(0, 5)
+        position = (ValueBar.DEFAULT_SIZE.x / 2).x + Point(0, 5)
     )
     model.apply {
         experience.observe {
@@ -44,7 +45,8 @@ private fun Container.initHeroHealthUI(gameScene: GameScene) {
     val healthBar = valueBar(
         model.healthLimit.value,
         gameScene.assetsManager.healthBarBackgroundBitmap,
-        model.health.value
+        model.health.value,
+        position = (ValueBar.DEFAULT_SIZE.x / 2).x
     )
     model.apply {
         health.observe {
@@ -56,7 +58,7 @@ private fun Container.initHeroHealthUI(gameScene: GameScene) {
     }
 }
 
-private fun Container.initTurnActivityButtons(gameScene: GameScene) {
+private fun Container.initTurnActivityUI(gameScene: GameScene) {
     val nextTurnButton = image(gameScene.assetsManager.nextTurnBitmap) {
         smoothing = false
         anchor(2, 1)
@@ -82,7 +84,7 @@ private fun Container.initTurnActivityButtons(gameScene: GameScene) {
             }
         }
     }
-    image(gameScene.assetsManager.revertTurnBitmap) {
+    val revertTurnButton = image(gameScene.assetsManager.revertTurnBitmap) {
         smoothing = false
         anchor(1, 1)
         size(12, 12)
@@ -110,6 +112,27 @@ private fun Container.initTurnActivityButtons(gameScene: GameScene) {
             -nextTurnButton.size * nextTurnButton.anchor
                     + sizePoint * Point(0.5, -1.0)
         )
+    }
+
+    initAPViewerBar(gameScene, revertTurnButton)
+}
+
+private fun Container.initAPViewerBar(gameScene: GameScene, revertTurnButton: Image) {
+    val hero = gameScene.hero
+    val actionPointsLimit = hero.model.actionPointsLimit
+
+    val bar = valueBar(
+        actionPointsLimit.value,
+        value = hero.remainingActionPoints, // TODO: refactor
+        size = Point(12, 4),
+        position = revertTurnButton.pos - revertTurnButton.size * revertTurnButton.anchor - Point(6, 4)
+    )
+
+    actionPointsLimit.observe {
+        bar.limit = it
+    }
+    hero.actions.observe {
+        bar.value = hero.remainingActionPoints
     }
 }
 
