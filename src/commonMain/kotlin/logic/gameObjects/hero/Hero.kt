@@ -186,9 +186,9 @@ class Hero(
         }
     }
 
-    private inline fun updateActionsPreview(block: MutableList<Action>.() -> Unit = {}) {
+    private inline fun updateActionsPreview(block: ObservableMutableList<Action>.() -> Unit = {}) {
         clearPreview()
-        actions.value.block()
+        actions.block()
         showPreview()
     }
 

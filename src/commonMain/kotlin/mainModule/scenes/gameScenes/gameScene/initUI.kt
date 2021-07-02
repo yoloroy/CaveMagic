@@ -13,7 +13,7 @@ import mainModule.widgets.ValueBar
 import mainModule.widgets.valueBar
 
 internal fun Container.initUI(scene: GameScene) = scene.apply {
-    initTurnActivityButtons(this)
+    initTurnActivityUI(this)
     initPlayerActivityButtons(this)
     initHeroCharacteristicsUI(this)
 }
@@ -30,7 +30,7 @@ private fun Container.initHeroExperienceUI(gameScene: GameScene) {
         10,
         gameScene.assetsManager.experienceBarBackgroundBitmap,
         model.experience.value,
-        position = Point(0, 5)
+        position = (ValueBar.DEFAULT_SIZE.x / 2).x + Point(0, 5)
     )
     model.apply {
         experience.observe {
@@ -45,7 +45,8 @@ private fun Container.initHeroHealthUI(gameScene: GameScene) {
     val healthBar = valueBar(
         model.healthLimit.value,
         gameScene.assetsManager.healthBarBackgroundBitmap,
-        model.health.value
+        model.health.value,
+        position = (ValueBar.DEFAULT_SIZE.x / 2).x
     )
     model.apply {
         health.observe {
@@ -57,7 +58,7 @@ private fun Container.initHeroHealthUI(gameScene: GameScene) {
     }
 }
 
-private fun Container.initTurnActivityButtons(gameScene: GameScene) {
+private fun Container.initTurnActivityUI(gameScene: GameScene) {
     val nextTurnButton = image(gameScene.assetsManager.nextTurnBitmap) {
         smoothing = false
         anchor(2, 1)
@@ -112,20 +113,26 @@ private fun Container.initTurnActivityButtons(gameScene: GameScene) {
                     + sizePoint * Point(0.5, -1.0)
         )
     }
+
+    initAPViewerBar(gameScene, revertTurnButton)
 }
 
-private fun Container.initAPViewerBar(gameScene: GameScene, revertTurnButton: View) {
+private fun Container.initAPViewerBar(gameScene: GameScene, revertTurnButton: Image) {
     val hero = gameScene.hero
-    val model = hero.model
+    val actionPointsLimit = hero.model.actionPointsLimit
 
     val bar = valueBar(
-        model.actionPointsLimit.value,
-        gameScene.assetsManager.healthBarBackgroundBitmap,
-        model.actionPointsLimit.value - hero.remainingActionPoints, // TODO: refactor
-        position = revertTurnButton.pos - ValueBar.DEFAULT_SIZE
+        actionPointsLimit.value,
+        value = hero.remainingActionPoints, // TODO: refactor
+        size = Point(12, 4),
+        position = revertTurnButton.pos - revertTurnButton.size * revertTurnButton.anchor - Point(6, 4)
     )
-    model.actionPointsLimit.observe {
 
+    actionPointsLimit.observe {
+        bar.limit = it
+    }
+    hero.actions.observe {
+        bar.value = hero.remainingActionPoints
     }
 }
 
