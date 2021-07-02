@@ -48,14 +48,14 @@ open class ValueBar(
     private val background = backgroundTexture?.let {
         container.image(backgroundTexture) {
             smoothing = false
-            position(position * 2)
+            position(position)
             size(this@ValueBar.size * Point(value.toDouble() / limit, 1.0))
         }
     }
 
     private val text = container.text(string, color = color) {
         size(this@ValueBar.size.x, this@ValueBar.size.y)
-        position(position * 2)
+        position(position)
     }
 
     private fun notifyView() {
