@@ -3,7 +3,6 @@ package mainModule.scenes.gameScenes.gameScene
 import com.soywiz.korge.input.onDown
 import com.soywiz.korge.input.onUp
 import com.soywiz.korge.view.*
-import com.soywiz.korim.text.TextAlignment
 import com.soywiz.korma.geom.Point
 import lib.extensions.*
 import logic.gameObjects.hero.ActionType
@@ -95,23 +94,6 @@ private fun Container.initTurnActivityUI(gameScene: GameScene) {
             flip()
             gameScene.hero.removeLastAction()
         }
-    }
-
-    text(gameScene.oCurrentPhase.value.text) {
-        gameScene.oCurrentPhase.observe {
-            text = it.text
-        }
-
-        textSize = 3.8
-        size(nextTurnButton.width - 4, 4.0)
-
-        alignment = TextAlignment.TOP_CENTER
-
-        setPositionRelativeTo(
-            nextTurnButton,
-            -nextTurnButton.size * nextTurnButton.anchor
-                    + sizePoint * Point(0.5, -1.0)
-        )
     }
 
     initAPViewerBar(gameScene, revertTurnButton)
