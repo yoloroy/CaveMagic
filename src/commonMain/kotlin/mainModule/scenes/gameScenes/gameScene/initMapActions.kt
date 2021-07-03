@@ -14,7 +14,7 @@ import lib.extensions.xi
 import lib.extensions.yi
 import lib.tiledMapView.Layer
 import logic.gameObjects.hero.ActionType
-import logic.gameObjects.logic.Phasable
+import logic.gameObjects.logic.TurnCalculator
 import logic.gameObjects.logic.hideAllPreviewActions
 import logic.gameObjects.logic.showPreviewActions
 
@@ -32,11 +32,11 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
 
         gameObjects // TODO: refactor
             .firstOrNull { it.pos == pos }
-            .takeIf { it is Phasable }
+            .takeIf { it is TurnCalculator }
             .also {
                 hideAllPreviewActions(tilesManager)
             }
-            ?.let { it as Phasable
+            ?.let { it as TurnCalculator
                 it.showPreviewActions(tilesManager)
             }
         showMapCursor(pos)

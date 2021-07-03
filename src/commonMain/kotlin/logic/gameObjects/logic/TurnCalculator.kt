@@ -11,7 +11,7 @@ import logic.gameObjects.hero.ActionType
 import logic.gameObjects.units.enemies.Enemy
 import mainModule.scenes.gameScenes.gameScene.MapTilesManager
 
-interface Phasable {
+interface TurnCalculator {
     val actions: MutableList<Pair<ActionType, *>>
 
     fun calculateTurn()
@@ -19,7 +19,7 @@ interface Phasable {
 
 private val involvedPoints = mutableListOf<Point>()
 
-fun Phasable.showPreviewActions(tilesManager: MapTilesManager) {
+fun TurnCalculator.showPreviewActions(tilesManager: MapTilesManager) {
     actions.forEach { (type, data) ->
         @Suppress("UNCHECKED_CAST")
         when(type) {
