@@ -1,8 +1,8 @@
 package logic.gameObjects.units.enemies
 
 import logic.gameObjects.gameObject.GameObject
-import logic.gameObjects.logic.Phasable
+import logic.gameObjects.logic.TurnCalculator
 
-interface Enemy : Phasable {
+interface Enemy : TurnCalculator {
     var target: GameObject?
 }

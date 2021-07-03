@@ -5,7 +5,6 @@ import com.soywiz.korge.tiled.TiledMapView
 import com.soywiz.korge.tiled.tiledMapView
 import com.soywiz.korge.view.*
 import com.soywiz.korge.view.tiles.TileMap
-import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korma.geom.Point
 import ktres.TILE_ATTACK_CURSOR
 import ktres.TILE_CURSOR
@@ -22,7 +21,6 @@ import lib.tiledMapView.getTilesArea
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.hero.ActionType
 import logic.gameObjects.hero.Hero
-import logic.gameObjects.logic.Phasable
 import logic.inventory.item.SkullItem
 import logic.inventory.item.itemClass
 import logic.magic.AreaMagic
@@ -50,9 +48,6 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     val events = mutableListOf<GameScene.() -> Unit>()
 
     private val turns = mutableListOf<() -> Unit>()
-
-    private var currentPhase = TurnPhase.First
-    internal val oCurrentPhase = ObservableProperty(::currentPhase)
 
     internal var actionType: ActionType = ActionType.Nothing
         set(value) {
@@ -144,24 +139,13 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
     internal suspend fun makeTurn() {
         actionType = ActionType.Nothing
 
-        if (oCurrentPhase.value == TurnPhase.First) {
-            hero.makeTurn()
-            checkItems()
-
-            gameObjects.forEach {
-                if (it.isAlive && it is Phasable) {
-                    it.calculateTurn()
-                }
+        gameObjects.forEach {
+            if (it.isAlive) {
+                it.makeTurn()
             }
-        } else {
-            gameObjects.forEach {
-                if (it.isAlive) {
-                    it.makeTurn()
-                }
 
-                if (it is Hero) { // bad code
-                    checkItems()
-                }
+            if (it is Hero) { // bad code
+                checkItems()
             }
         }
 
@@ -170,10 +154,6 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
         if (turns.size > 0)
             turns.removeFirst()()
-
-        oCurrentPhase.apply {
-            value = value.opposite
-        }
     }
 
     private fun checkEvents() = events.forEach { it() }
@@ -236,17 +216,5 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
             turns[i + from] = { previousWork(); newWork() }
         }
-    }
-}
-
-enum class TurnPhase(val text: String) {
-    First("First phase"),
-    Second("Second Phase");
-
-    override fun toString() = text
-
-    val opposite get() = when(this) {
-        First -> Second
-        Second -> First
     }
 }
