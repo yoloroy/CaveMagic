@@ -96,6 +96,7 @@ open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {
 
         initMap()
         initUI()
+        initKeyActions(this@GameScene)
     }
 
     private fun Container.initMap() {

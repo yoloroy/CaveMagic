@@ -15,8 +15,8 @@ import lib.extensions.yi
 import lib.tiledMapView.Layer
 import logic.gameObjects.hero.ActionType
 
+internal val previewPath = mutableListOf<Pair<Point, Point>>()
 internal fun initMapActions(scene: GameScene) = scene.apply {
-    val previewPath = mutableListOf<Pair<Point, Point>>()
     val lastCursorPos = Point(0)
 
     map.onMove { mouse ->
