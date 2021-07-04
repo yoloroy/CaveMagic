@@ -1,5 +1,6 @@
 package mainModule.scenes.gameScenes.gameScene
 
+import com.soywiz.korev.Key
 import com.soywiz.korge.input.onDown
 import com.soywiz.korge.input.onUp
 import com.soywiz.korge.view.*
@@ -65,6 +66,15 @@ private fun Container.initTurnActivityUI(gameScene: GameScene) {
         position(MainModule.size.size.p - Point(4) + Point(.0, 0.5))
 
         var clickable = true
+        val action = suspend {
+            clickable = false
+            try {
+                gameScene.makeTurn()
+            } catch (e: Exception) {
+                print(e.stackTraceToString())
+            }
+            clickable = true
+        }
         onDown {
             if (clickable) {
                 flip()
@@ -72,16 +82,11 @@ private fun Container.initTurnActivityUI(gameScene: GameScene) {
         }
         onUp {
             if (clickable) {
-                clickable = false
-                try {
-                    gameScene.makeTurn()
-                } catch (e: Exception) {
-                    print(e.stackTraceToString())
-                }
+                action()
                 flip()
-                clickable = true
             }
         }
+        addKeyTurnAction(Key.ENTER, action)
     }
     val revertTurnButton = image(gameScene.assetsManager.revertTurnBitmap) {
         smoothing = false
@@ -89,11 +94,13 @@ private fun Container.initTurnActivityUI(gameScene: GameScene) {
         size(12, 12)
         position(nextTurnButton.pos + nextTurnButton.size * Point.Left.point * 2 - 1.x)
 
+        val action = { gameScene.hero.removeLastAction() }
         onDown { flip() }
         onUp {
             flip()
-            gameScene.hero.removeLastAction()
+            action()
         }
+        addKeyTurnAction(Key.BACKSPACE, action)
     }
 
     initAPViewerBar(gameScene, revertTurnButton)
@@ -126,11 +133,13 @@ private fun Container.initPlayerActivityButtons(gameScene: GameScene) {
         size(16, 16)
         position(bottomCenter + Point.Down.point * 2 + Point.Left.point * 1)
 
+        val action = { gameScene.actionType = ActionType.Attack  }
         onDown { flip() }
         onUp {
             flip()
-            gameScene.actionType = ActionType.Attack
+            action()
         }
+        addKeyTurnAction(Key.A, action) // Attack
     }
     val buttonMisc = image(gameScene.assetsManager.buttonMiscBitmap) {
         smoothing = false
@@ -138,18 +147,14 @@ private fun Container.initPlayerActivityButtons(gameScene: GameScene) {
         size(16, 16)
         position(bottomCenter + Point.Down.point * 2 + Point.Right.point * 1)
 
-        onDown { flip() }
-
         var inventory: Container? = null
-        onUp {
-            flip()
-
+        val action = action@{
             inventory?.run {
                 removeChildren()
                 removeFromParent()
 
                 inventory = null
-                return@onUp
+                return@action
             }
 
             if (gameScene.hero.model.items.isNotEmpty()) {
@@ -161,6 +166,12 @@ private fun Container.initPlayerActivityButtons(gameScene: GameScene) {
                 )
             }
         }
+        onDown { flip() }
+        onUp {
+            flip()
+            action()
+        }
+        addKeyTurnAction(Key.I, action) // Items
     }
     image(gameScene.assetsManager.buttonMoveBitmap) {
         smoothing = false
@@ -168,11 +179,13 @@ private fun Container.initPlayerActivityButtons(gameScene: GameScene) {
         size(16, 16)
         setPositionRelativeTo(buttonAttack, -scaledSize * Point.Horizontal + Point.Left.point * 2)
 
+        val action = { gameScene.actionType = ActionType.Move }
         onDown { flip() }
         onUp {
             flip()
-            gameScene.actionType = ActionType.Move
+            action()
         }
+        addKeyTurnAction(Key.M, action) // Move
     }
     image(gameScene.assetsManager.buttonMagicBitmap) {
         smoothing = false
@@ -180,11 +193,13 @@ private fun Container.initPlayerActivityButtons(gameScene: GameScene) {
         size(16, 16)
         setPositionRelativeTo(buttonMisc, +scaledSize * Point.Horizontal + Point.Right.point * 2)
 
+        val action = { gameScene.actionType = ActionType.MagicDrawing }
         onDown { flip() }
         onUp {
             flip()
-            gameScene.actionType = ActionType.MagicDrawing
+            action()
         }
+        addKeyTurnAction(Key.C, action) // Cast
     }
 }
 
