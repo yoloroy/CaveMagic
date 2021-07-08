@@ -7,6 +7,7 @@ import com.soywiz.korma.geom.Point
 import ktres.TILE_EMPTY
 import lib.extensions.*
 import lib.tiledMapView.Layer
+import lib.tiledMapView.childrenMap
 import logic.gameObjects.gameObject.GameObjectId
 
 class MapTilesManager(private val map: TiledMapView) {
@@ -26,6 +27,8 @@ class MapTilesManager(private val map: TiledMapView) {
     operator fun get(layer: Layer) = (map[layer.index] as TileMap).intMap
 
     operator fun get(x: Int, y: Int, layer: Layer) = get(layer)[x, y]
+
+    operator fun get(x: Int, y: Int) = map.childrenMap { (it as TileMap).intMap[x, y] }
 
     operator fun get(square: ClosedRange<Point>, layer: Layer) =
         List(square.height) { y ->

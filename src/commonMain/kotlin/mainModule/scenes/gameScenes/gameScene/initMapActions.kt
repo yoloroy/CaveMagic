@@ -14,12 +14,9 @@ import lib.extensions.xi
 import lib.extensions.yi
 import lib.tiledMapView.Layer
 import logic.gameObjects.hero.ActionType
-import logic.gameObjects.logic.Phasable
-import logic.gameObjects.logic.hideAllPreviewActions
-import logic.gameObjects.logic.showPreviewActions
 
+internal val previewPath = mutableListOf<Pair<Point, Point>>()
 internal fun initMapActions(scene: GameScene) = scene.apply {
-    val previewPath = mutableListOf<Pair<Point, Point>>()
     val lastCursorPos = Point(0)
 
     map.onMove { mouse ->
@@ -30,15 +27,6 @@ internal fun initMapActions(scene: GameScene) = scene.apply {
             showPreviewPathOnMove(previewPath, pos)
         }
 
-        gameObjects // TODO: refactor
-            .firstOrNull { it.pos == pos }
-            .takeIf { it is Phasable }
-            .also {
-                hideAllPreviewActions(tilesManager)
-            }
-            ?.let { it as Phasable
-                it.showPreviewActions(tilesManager)
-            }
         showMapCursor(pos)
         lastCursorPos.setTo(pos)
     }
