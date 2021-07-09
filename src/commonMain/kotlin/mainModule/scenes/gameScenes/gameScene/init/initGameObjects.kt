@@ -1,4 +1,4 @@
-package mainModule.scenes.gameScenes.gameScene
+package mainModule.scenes.gameScenes.gameScene.init
 
 import com.soywiz.korma.geom.Point
 import lib.exceptions.UnknownUnitException
@@ -11,6 +11,7 @@ import logic.gameObjects.hero.Hero
 import logic.gameObjects.sheep.Sheep
 import logic.gameObjects.units.enemies.melee.simpleMeleeEnemy.SimpleMeleeEnemy
 import logic.inventory.item.SkullItem
+import mainModule.scenes.gameScenes.gameScene.GameScene
 
 fun initGameObjects(scene: GameScene, onPlayerDeath: () -> Unit) = scene.apply {
     var playerPos = Point()

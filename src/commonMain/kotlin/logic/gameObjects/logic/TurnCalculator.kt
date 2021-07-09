@@ -9,7 +9,7 @@ import lib.extensions.yi
 import lib.tiledMapView.Layer
 import logic.gameObjects.hero.ActionType
 import logic.gameObjects.units.enemies.Enemy
-import mainModule.scenes.gameScenes.gameScene.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.managers.MapTilesManager
 
 interface TurnCalculator {
     val actions: MutableList<Pair<ActionType, *>>
