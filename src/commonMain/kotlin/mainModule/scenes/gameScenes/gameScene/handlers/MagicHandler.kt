@@ -1,11 +1,12 @@
-package mainModule.scenes.gameScenes.gameScene
+package mainModule.scenes.gameScenes.gameScene.handlers
 
 import com.soywiz.kds.IntArray2
 import com.soywiz.korma.geom.Point
-import logic.magic.AreaMagic
 import lib.extensions.*
 import lib.math.MCircle
 import lib.tiledMapView.Layer
+import logic.magic.AreaMagic
+import mainModule.scenes.gameScenes.gameScene.GameScene
 import kotlin.math.abs
 
 class MagicHandler(private val gameScene: GameScene) {

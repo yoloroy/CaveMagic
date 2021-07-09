@@ -1,4 +1,4 @@
-package mainModule.scenes.gameScenes.gameScene
+package mainModule.scenes.gameScenes.gameScene.init
 
 import com.soywiz.korev.Key
 import com.soywiz.korge.input.keys
@@ -10,6 +10,7 @@ import lib.extensions.xi
 import lib.extensions.yi
 import lib.tiledMapView.Layer
 import logic.gameObjects.hero.ActionType
+import mainModule.scenes.gameScenes.gameScene.GameScene
 
 internal val collectedTurnActions = mutableMapOf<Key, suspend () -> Unit>()
 internal lateinit var turnActions: MutableMap<Key, Boolean>

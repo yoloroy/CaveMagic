@@ -1,4 +1,4 @@
-package mainModule.scenes.gameScenes.gameScene
+package mainModule.scenes.gameScenes.gameScene.init
 
 import com.soywiz.korev.Key
 import com.soywiz.korge.input.onDown
@@ -9,6 +9,7 @@ import lib.extensions.*
 import logic.gameObjects.hero.ActionType
 import logic.inventory.widgets.inventoryListView
 import mainModule.MainModule
+import mainModule.scenes.gameScenes.gameScene.GameScene
 import mainModule.widgets.ValueBar
 import mainModule.widgets.valueBar
 

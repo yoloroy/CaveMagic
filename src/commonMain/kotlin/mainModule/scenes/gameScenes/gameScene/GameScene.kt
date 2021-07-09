@@ -28,6 +28,14 @@ import logic.magic.DamageMagic
 import logic.magic.Magic
 import logic.magic.magic
 import mainModule.scenes.abstracts.AssetsManager
+import mainModule.scenes.gameScenes.gameScene.components.SceneFigureRecognitionComponent
+import mainModule.scenes.gameScenes.gameScene.handlers.MagicHandler
+import mainModule.scenes.gameScenes.gameScene.init.initGameObjects
+import mainModule.scenes.gameScenes.gameScene.init.initKeyActions
+import mainModule.scenes.gameScenes.gameScene.init.initMapActions
+import mainModule.scenes.gameScenes.gameScene.init.initUI
+import mainModule.scenes.gameScenes.gameScene.managers.GameSceneAssetsManager
+import mainModule.scenes.gameScenes.gameScene.managers.MapTilesManager
 
 @Suppress("LeakingThis")
 open class GameScene(tiledMapPath: String) : Scene(), AssetsManager {

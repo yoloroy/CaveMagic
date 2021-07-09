@@ -8,7 +8,7 @@ import lib.extensions.sizePoint
 import lib.tiledMapView.Layer
 import mainModule.MainModule
 import mainModule.scenes.gameScenes.gameScene.GameScene
-import mainModule.scenes.gameScenes.gameScene.initGameObjects
+import mainModule.scenes.gameScenes.gameScene.init.initGameObjects
 import mainModule.widgets.DeathScreen
 
 class TutorialScene : GameScene("gfx/sampleMap.tmx") {
