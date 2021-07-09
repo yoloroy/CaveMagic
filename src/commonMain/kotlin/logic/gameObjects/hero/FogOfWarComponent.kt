@@ -13,7 +13,7 @@ import lib.math.MCircle
 import lib.math.intPointsLineIterator
 import lib.tiledMapView.Layer
 import logic.gameObjects.gameObject.GameObject
-import mainModule.scenes.gameScenes.gameScene.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.managers.MapTilesManager
 
 class FogOfWarComponent(private val tilesManager: MapTilesManager, private val pos: Point, val gameObjects: List<GameObject>) {
     private var circle = MCircle(pos.copy(), 5.0)

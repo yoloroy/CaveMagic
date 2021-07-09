@@ -15,7 +15,7 @@ import lib.extensions.yi
 import lib.tiledMapView.Layer
 import logic.gameObjects.logic.MessageHandler
 import logic.gameObjects.logic.Turnable
-import mainModule.scenes.gameScenes.gameScene.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.managers.MapTilesManager
 
 abstract class GameObject(
     open val tilesManager: MapTilesManager,

@@ -8,7 +8,7 @@ import lib.tiledMapView.Layer
 import logic.gameObjects.gameObject.GameObject
 import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
-import mainModule.scenes.gameScenes.gameScene.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.managers.MapTilesManager
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 

@@ -17,7 +17,7 @@ import logic.gameObjects.gameObject.GameObjectId
 import logic.gameObjects.gameObject.GameObjectModel
 import logic.gameObjects.hero.ActionType
 import logic.gameObjects.units.enemies.Enemy
-import mainModule.scenes.gameScenes.gameScene.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.managers.MapTilesManager
 
 open class SimpleMeleeEnemy(
     pos: Point,

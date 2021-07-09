@@ -1,4 +1,4 @@
-package mainModule.scenes.gameScenes.gameScene
+package mainModule.scenes.gameScenes.gameScene.init
 
 import com.soywiz.korev.MouseButton
 import com.soywiz.korge.input.onClick
@@ -14,6 +14,7 @@ import lib.extensions.xi
 import lib.extensions.yi
 import lib.tiledMapView.Layer
 import logic.gameObjects.hero.ActionType
+import mainModule.scenes.gameScenes.gameScene.GameScene
 
 internal val previewPath = mutableListOf<Pair<Point, Point>>()
 internal fun initMapActions(scene: GameScene) = scene.apply {

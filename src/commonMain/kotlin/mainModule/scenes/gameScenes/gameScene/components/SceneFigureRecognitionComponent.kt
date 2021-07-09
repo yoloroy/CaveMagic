@@ -1,8 +1,11 @@
-package mainModule.scenes.gameScenes.gameScene
+package mainModule.scenes.gameScenes.gameScene.components
 
 import com.soywiz.korge.input.mouse
 import com.soywiz.korge.scene.Scene
-import com.soywiz.korge.view.*
+import com.soywiz.korge.view.Container
+import com.soywiz.korge.view.Graphics
+import com.soywiz.korge.view.graphics
+import com.soywiz.korge.view.scale
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.vector.StrokeInfo
 import com.soywiz.korma.geom.Point
@@ -10,9 +13,9 @@ import com.soywiz.korma.geom.vector.lineTo
 import lib.algorythms.recognazingFigure.core.figure
 import lib.algorythms.recognazingFigure.figures.AreaFigure
 import lib.algorythms.recognazingFigure.figures.Figure
-import lib.algorythms.recognazingFigure.core.Point as RecPoint
-import mainModule.MainModule
 import lib.extensions.area
+import mainModule.MainModule
+import lib.algorythms.recognazingFigure.core.Point as RecPoint
 
 class SceneFigureRecognitionComponent(
     private val scene: Scene,

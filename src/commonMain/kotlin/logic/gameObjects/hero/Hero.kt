@@ -27,7 +27,7 @@ import logic.gameObjects.units.enemies.Enemy
 import logic.inventory.item.Item
 import logic.magic.DamageMagic
 import logic.magic.Magic
-import mainModule.scenes.gameScenes.gameScene.MapTilesManager
+import mainModule.scenes.gameScenes.gameScene.managers.MapTilesManager
 
 class Hero(
     private val map: TiledMapView,

@@ -1,7 +1,7 @@
 package logic.inventory.item
 
 import logic.gameObjects.gameObject.GameObject
-import mainModule.scenes.gameScenes.gameScene.GameSceneAssetsManager
+import mainModule.scenes.gameScenes.gameScene.managers.GameSceneAssetsManager
 import kotlin.reflect.KClass
 
 class SkullItem(
